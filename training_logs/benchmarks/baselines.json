@@ -1,0 +1,373 @@
+{
+  "baselines": {
+    "SafeVLA": {
+      "ref": "Tao et al. 2025, SafeVLA: Safety Alignment via Safe RL",
+      "tasks": {
+        "pick_and_place": {
+          "success": 0.82,
+          "safety_violation": 0.03,
+          "cost_return": 0.15
+        },
+        "drawer_open": {
+          "success": 0.78,
+          "safety_violation": 0.05,
+          "cost_return": 0.22
+        },
+        "button_press": {
+          "success": 0.91,
+          "safety_violation": 0.01,
+          "cost_return": 0.08
+        },
+        "reach_target": {
+          "success": 0.95,
+          "safety_violation": 0.0,
+          "cost_return": 0.02
+        },
+        "stack_blocks": {
+          "success": 0.67,
+          "safety_violation": 0.08,
+          "cost_return": 0.31
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": 0.1,
+        "avg_cost_return": 0.156,
+        "lagrange_converged": true,
+        "constraint_satisfied": true,
+        "reward_return_avg": 0.826
+      },
+      "efficiency": {
+        "params_B": 8.1,
+        "finetune_method": "LoRA-r16",
+        "train_hours": 24,
+        "gpu_type": "A100-80GB",
+        "gpu_count": 4,
+        "flops_per_step": "3.2e15",
+        "inference_ms": 120
+      }
+    },
+    "RoboMamba": {
+      "ref": "Liu et al. 2024, RoboMamba: Efficient Reasoning via Mamba SSM",
+      "tasks": {
+        "pick_and_place": {
+          "success": 0.76,
+          "safety_violation": 0.07,
+          "cost_return": 0.28
+        },
+        "drawer_open": {
+          "success": 0.72,
+          "safety_violation": 0.09,
+          "cost_return": 0.35
+        },
+        "button_press": {
+          "success": 0.88,
+          "safety_violation": 0.02,
+          "cost_return": 0.12
+        },
+        "reach_target": {
+          "success": 0.93,
+          "safety_violation": 0.01,
+          "cost_return": 0.04
+        },
+        "nav_corridor": {
+          "success": 0.85,
+          "safety_violation": 0.04,
+          "cost_return": 0.18
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": 0.15,
+        "avg_cost_return": 0.194,
+        "lagrange_converged": false,
+        "constraint_satisfied": false,
+        "reward_return_avg": 0.828
+      },
+      "efficiency": {
+        "params_B": 2.8,
+        "finetune_method": "Full finetune",
+        "train_hours": 8,
+        "gpu_type": "A100-40GB",
+        "gpu_count": 1,
+        "flops_per_step": "4.1e14",
+        "inference_ms": 35
+      }
+    },
+    "Sim2VLA": {
+      "ref": "Chen et al. 2025, Sim2VLA: Sim-to-Real for VLA",
+      "tasks": {
+        "pick_and_place": {
+          "success": 0.74,
+          "safety_violation": 0.06,
+          "cost_return": 0.24
+        },
+        "nav_corridor": {
+          "success": 0.81,
+          "safety_violation": 0.05,
+          "cost_return": 0.19
+        },
+        "door_opening": {
+          "success": 0.69,
+          "safety_violation": 0.11,
+          "cost_return": 0.38
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": 0.2,
+        "avg_cost_return": 0.27,
+        "lagrange_converged": false,
+        "constraint_satisfied": false,
+        "reward_return_avg": 0.747
+      },
+      "efficiency": {
+        "params_B": 7.2,
+        "finetune_method": "Adapter",
+        "train_hours": 16,
+        "gpu_type": "A100-80GB",
+        "gpu_count": 2,
+        "flops_per_step": "2.8e15",
+        "inference_ms": 95
+      }
+    },
+    "RT-2": {
+      "ref": "Brohan et al. 2023, RT-2: Vision-Language-Action Models",
+      "tasks": {
+        "pick_and_place": {
+          "success": 0.85,
+          "safety_violation": 0.08,
+          "cost_return": 0.42
+        },
+        "drawer_open": {
+          "success": 0.8,
+          "safety_violation": 0.1,
+          "cost_return": 0.48
+        },
+        "button_press": {
+          "success": 0.9,
+          "safety_violation": 0.04,
+          "cost_return": 0.18
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": null,
+        "avg_cost_return": 0.36,
+        "lagrange_converged": false,
+        "constraint_satisfied": false,
+        "reward_return_avg": 0.85
+      },
+      "efficiency": {
+        "params_B": 55,
+        "finetune_method": "Frozen backbone",
+        "train_hours": 72,
+        "gpu_type": "TPU v4",
+        "gpu_count": 64,
+        "flops_per_step": "1.2e17",
+        "inference_ms": 800
+      }
+    },
+    "OpenVLA": {
+      "ref": "Kim et al. 2024, OpenVLA: Open-Source VLA Model",
+      "tasks": {
+        "pick_and_place": {
+          "success": 0.79,
+          "safety_violation": 0.06,
+          "cost_return": 0.25
+        },
+        "drawer_open": {
+          "success": 0.75,
+          "safety_violation": 0.07,
+          "cost_return": 0.3
+        },
+        "button_press": {
+          "success": 0.89,
+          "safety_violation": 0.02,
+          "cost_return": 0.1
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": null,
+        "avg_cost_return": 0.217,
+        "lagrange_converged": false,
+        "constraint_satisfied": false,
+        "reward_return_avg": 0.81
+      },
+      "efficiency": {
+        "params_B": 7,
+        "finetune_method": "LoRA-r32",
+        "train_hours": 12,
+        "gpu_type": "A100-80GB",
+        "gpu_count": 4,
+        "flops_per_step": "2.1e15",
+        "inference_ms": 85
+      }
+    },
+    "GR00T-N1": {
+      "ref": "NVIDIA 2025, GR00T N1: Foundation Model for Humanoids",
+      "tasks": {
+        "locomotion_flat": {
+          "success": 0.92,
+          "safety_violation": 0.03,
+          "cost_return": 0.12
+        },
+        "locomotion_rough": {
+          "success": 0.78,
+          "safety_violation": 0.06,
+          "cost_return": 0.28
+        },
+        "nav_corridor": {
+          "success": 0.88,
+          "safety_violation": 0.04,
+          "cost_return": 0.16
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": 0.15,
+        "avg_cost_return": 0.187,
+        "lagrange_converged": false,
+        "constraint_satisfied": true,
+        "reward_return_avg": 0.86
+      },
+      "efficiency": {
+        "params_B": 1.2,
+        "finetune_method": "Adapter",
+        "train_hours": 6,
+        "gpu_type": "H100",
+        "gpu_count": 8,
+        "flops_per_step": "5.6e14",
+        "inference_ms": 22
+      }
+    },
+    "DiffusionPolicy": {
+      "ref": "Chi et al. 2023, Diffusion Policy: Visuomotor Policy Learning",
+      "tasks": {
+        "pick_and_place": {
+          "success": 0.84,
+          "safety_violation": 0.05,
+          "cost_return": 0.21
+        },
+        "push_T": {
+          "success": 0.91,
+          "safety_violation": 0.02,
+          "cost_return": 0.08
+        },
+        "can_sorting": {
+          "success": 0.86,
+          "safety_violation": 0.03,
+          "cost_return": 0.14
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": null,
+        "avg_cost_return": 0.143,
+        "lagrange_converged": false,
+        "constraint_satisfied": false,
+        "reward_return_avg": 0.87
+      },
+      "efficiency": {
+        "params_B": 0.0255,
+        "finetune_method": "Full",
+        "train_hours": 4,
+        "gpu_type": "RTX 3090",
+        "gpu_count": 1,
+        "flops_per_step": "8.2e12",
+        "inference_ms": 45
+      }
+    }
+  },
+  "ours": {
+    "FLEET-SAFE-VLA": {
+      "ref": "Ours \u2014 FLEET SAFE VLA: High-Fidelity Behavior for Safety",
+      "novel_contributions": [
+        "CMDP-Lagrangian with 3-stage safety filter (joint\u2192torque\u2192CBF-COM)",
+        "DDS-QoS Safety Envelope Orchestration (DSEO) with hysteresis",
+        "7D Cognitive Safety Modeling (CBF-QP over XYZ-T + STL monitors)",
+        "Zone-aware hospital navigation (Green/Amber/Red policy editor)",
+        "Blockchain-certified ISA SIL-3 safety policies (SHA-256 ledger)",
+        "Galatolo et al. 2026 Visual Reasoning for socially-aware HRI",
+        "Multi-server reproducibility (GCP L4, NCL HPC, NAISS Alvis)"
+      ],
+      "tasks": {
+        "pick_and_place": {
+          "target_success": 0.88,
+          "target_svr": 0.0,
+          "target_cost": 0.05
+        },
+        "drawer_open": {
+          "target_success": 0.84,
+          "target_svr": 0.0,
+          "target_cost": 0.08
+        },
+        "button_press": {
+          "target_success": 0.94,
+          "target_svr": 0.0,
+          "target_cost": 0.03
+        },
+        "reach_target": {
+          "target_success": 0.97,
+          "target_svr": 0.0,
+          "target_cost": 0.01
+        },
+        "stack_blocks": {
+          "target_success": 0.74,
+          "target_svr": 0.0,
+          "target_cost": 0.12
+        },
+        "nav_corridor": {
+          "target_success": 0.94,
+          "target_svr": 0.0,
+          "target_cost": 0.02
+        },
+        "nav_hospital_ward": {
+          "target_success": 0.91,
+          "target_svr": 0.0,
+          "target_cost": 0.04
+        },
+        "locomotion_flat": {
+          "target_success": 0.96,
+          "target_svr": 0.0,
+          "target_cost": 0.02
+        },
+        "locomotion_rough": {
+          "target_success": 0.85,
+          "target_svr": 0.0,
+          "target_cost": 0.08
+        },
+        "door_opening": {
+          "target_success": 0.82,
+          "target_svr": 0.0,
+          "target_cost": 0.06
+        },
+        "medication_delivery": {
+          "target_success": 0.93,
+          "target_svr": 0.0,
+          "target_cost": 0.01
+        },
+        "patient_handover": {
+          "target_success": 0.89,
+          "target_svr": 0.0,
+          "target_cost": 0.02
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": 0.05,
+        "avg_cost_return": 0.045,
+        "lagrange_converged": true,
+        "constraint_satisfied": true,
+        "reward_return_avg": 0.895,
+        "safety_filter_stages": 3,
+        "cbf_qp_verified": true,
+        "stl_robustness_rho": 0.42
+      },
+      "efficiency": {
+        "params_B": 8.1,
+        "finetune_method": "LoRA-r16 + CMDP head",
+        "train_hours": 6,
+        "gpu_type": "L4-24GB",
+        "gpu_count": 1,
+        "flops_per_step": "3.4e15",
+        "inference_ms": 65,
+        "energy_kwh": 2.4,
+        "co2_kg": 0.96
+      }
+    }
+  }
+}

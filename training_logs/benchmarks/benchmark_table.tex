@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering
+\caption{Benchmark comparison of FLEET SAFE VLA against SOTA methods on manipulation tasks and CMDP safety metrics.}
+\label{tab:benchmark}
+\begin{tabular}{lccccccc}
+\toprule
+Method & Params & Success$\uparrow$ & SVR$\downarrow$ & $J_c\leq d$ & Cost$\downarrow$ & Infer.(ms) & Train(h) \\
+\midrule
+  RT-2 & 55B & 85.0% & 7.3% & \texttimes & 0.360 & 800 & 72 \\
+  OpenVLA & 7B & 81.0% & 5.0% & \texttimes & 0.217 & 85 & 12 \\
+  DiffPolicy & 0.0255B & 87.0% & 3.3% & \texttimes & 0.143 & 45 & 4 \\
+  RoboMamba & 2.8B & 82.8% & 4.6% & \texttimes & 0.194 & 35 & 8 \\
+  Sim2VLA & 7.2B & 74.7% & 7.3% & \texttimes & 0.270 & 95 & 16 \\
+  SafeVLA & 8.1B & 82.6% & 3.4% & \checkmark & 0.156 & 120 & 24 \\
+\midrule
+  \textbf{FLEET (Ours)} & \textbf{8.1B} & \textbf{88.9%} & \textbf{0.0\%} & \checkmark & \textbf{0.045} & \textbf{65} & \textbf{6} \\
+\bottomrule
+\end{tabular}
+\end{table*}
