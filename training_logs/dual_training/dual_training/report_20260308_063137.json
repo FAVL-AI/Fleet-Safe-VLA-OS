@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-03-08T06:31:37.844048",
+  "mode": "live",
+  "total_elapsed_sec": 7.059932231903076,
+  "estimated_cost_usd": 0.0022356452067693075,
+  "models": {
+    "fastbot_diffusion_nav": {
+      "model_id": "fastbot_diffusion_nav",
+      "status": "failed",
+      "elapsed_sec": 1.9328773021697998,
+      "final_loss": 0.0,
+      "best_metric": 0.0,
+      "checkpoint_path": "",
+      "onnx_path": "",
+      "error": "  Dataset: generating synthetic data (no episodes found)\nTraceback (most recent call last):\n  File \"/home/frankvanlaarhoven/dataminerAI/notebooks/06_diffusion_policy_training.py\", line 520, in <module>\n    trainer = DiffusionPolicyTrainer(config=cfg)\n  File \"/home/frankvanlaarhoven/dataminerAI/notebooks/06_diffusion_policy_training.py\", line 287, in __init__\n    from notebooks.nb05_scheduler import DDPMScheduler as Sched\nModuleNotFoundError: No module named 'notebooks.nb05_scheduler'\n",
+      "metrics": {}
+    },
+    "g1_cmdp_locomotion": {
+      "model_id": "g1_cmdp_locomotion",
+      "status": "success",
+      "elapsed_sec": 6.160154342651367,
+      "final_loss": -3.9661386013031006,
+      "best_metric": -6.1390838623046875,
+      "checkpoint_path": "checkpoints/g1_cmdp_locomotion/best.pt",
+      "onnx_path": "",
+      "error": "",
+      "metrics": {}
+    }
+  }
+}

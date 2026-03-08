@@ -1,0 +1,21 @@
+{
+  "model_id": "g1_cmdp_locomotion",
+  "status": "dry-run",
+  "elapsed_sec": 3.7234981060028076,
+  "final_loss": -1.9364872143040468,
+  "best_metric": 0.629889836265936,
+  "checkpoint_path": "",
+  "onnx_path": "",
+  "error": "",
+  "metrics": {
+    "final_reward": 1.9364872143040468,
+    "final_cost": 0.0004826332427295905,
+    "lagrange_lambda": 0.10495794819614772,
+    "com_margin": 0.629889836265936,
+    "safety_filter_pass_rate": 1.0,
+    "base_height_dev": 0.012,
+    "contact_force_max_N": 285.3,
+    "svr": 0.0,
+    "stl_robustness": 0.42
+  }
+}

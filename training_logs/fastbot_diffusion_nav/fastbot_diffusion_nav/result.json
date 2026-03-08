@@ -1,0 +1,20 @@
+{
+  "model_id": "fastbot_diffusion_nav",
+  "status": "success",
+  "elapsed_sec": 123.98590898513794,
+  "final_loss": 0.08776264391839504,
+  "best_metric": 0.8932791948318481,
+  "checkpoint_path": "checkpoints/fastbot_diffusion_nav/best.pt",
+  "onnx_path": "checkpoints/fastbot_diffusion_nav/fastbot_policy.onnx",
+  "metrics": {
+    "final_loss": 0.08776264391839504,
+    "nav_reward": 0.8932791948318481,
+    "zone_compliance": 0.5078125,
+    "collision_rate": 0.0008933980325012935,
+    "dmr": 0.0006467566129509156,
+    "svr": 0.0,
+    "action_smoothness": 0.6401759088039398,
+    "dataset_episodes": 800,
+    "parameters": 178818
+  }
+}

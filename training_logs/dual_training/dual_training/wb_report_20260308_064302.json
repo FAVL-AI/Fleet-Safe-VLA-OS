@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-03-08T06:43:02.239656",
+  "mode": "live",
+  "total_elapsed_sec": 124.91042947769165,
+  "cost_usd": 0.039554969334602355,
+  "models": {
+    "g1_cmdp_locomotion": {
+      "model_id": "g1_cmdp_locomotion",
+      "status": "failed",
+      "error": "could not broadcast input array from shape (32,2) into shape (32,)",
+      "elapsed_sec": 7.157581567764282
+    },
+    "fastbot_diffusion_nav": {
+      "model_id": "fastbot_diffusion_nav",
+      "status": "success",
+      "elapsed_sec": 123.98590898513794,
+      "final_loss": 0.08776264391839504,
+      "best_metric": 0.8932791948318481,
+      "checkpoint_path": "checkpoints/fastbot_diffusion_nav/best.pt",
+      "onnx_path": "checkpoints/fastbot_diffusion_nav/fastbot_policy.onnx",
+      "metrics": {
+        "final_loss": 0.08776264391839504,
+        "nav_reward": 0.8932791948318481,
+        "zone_compliance": 0.5078125,
+        "collision_rate": 0.0008933980325012935,
+        "dmr": 0.0006467566129509156,
+        "svr": 0.0,
+        "action_smoothness": 0.6401759088039398,
+        "dataset_episodes": 800,
+        "parameters": 178818
+      }
+    }
+  }
+}

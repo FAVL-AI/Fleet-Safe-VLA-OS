@@ -1,0 +1,21 @@
+{
+  "model_id": "g1_cmdp_locomotion",
+  "status": "success",
+  "elapsed_sec": 17.457130908966064,
+  "final_loss": -4.182641506195068,
+  "best_metric": -4.719157695770264,
+  "checkpoint_path": "checkpoints/g1_cmdp_locomotion/best.pt",
+  "onnx_path": "checkpoints/g1_cmdp_locomotion/g1_locomotion.onnx",
+  "metrics": {
+    "best_reward": -4.719157695770264,
+    "final_cost": 0.000336277240421623,
+    "lambda": -0.1521133929491043,
+    "com_margin": 1.8441426736250426,
+    "stl_robustness": 0.67,
+    "safety_filter_pass": 1.0,
+    "svr": 0.0,
+    "base_height_dev": 0.0012801086523730083,
+    "dataset_episodes": 1000,
+    "parameters": 194096
+  }
+}
