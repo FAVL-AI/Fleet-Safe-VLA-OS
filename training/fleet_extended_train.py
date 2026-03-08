@@ -681,8 +681,8 @@ MODEL_CONFIGS = {
     },
     "7": {
         "name": "benchmark_suite",
-        "config": {"obs_dim": 32, "act_dim": 8, "epochs": 200, "batch_size": 64, "lr": 3e-4, "n_layers": 12},
-        "data_fn": lambda: generate_zone_dataset(800, 50),  # Reuse zone data for aggregated evaluation
+        "config": {"obs_dim": 28, "act_dim": 2, "epochs": 200, "batch_size": 64, "lr": 3e-4, "n_layers": 12},
+        "data_fn": lambda: generate_zone_dataset(800, 50),  # Reuse zone data (obs=28, act=2)
         "tags": ["benchmark", "aggregate", "8-metrics"],
         "description": "Comprehensive Benchmark Suite — all 8 safety metrics",
     },
