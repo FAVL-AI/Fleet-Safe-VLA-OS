@@ -1,0 +1,14 @@
+{
+  "model": "dseo_monitor",
+  "parameters": 57633796,
+  "epochs": 150,
+  "final_loss": 2.666969245398431e-06,
+  "best_loss": 2.666969245398431e-06,
+  "final_svr": 0.0,
+  "final_barrier_mean": 0.1667186113519635,
+  "training_time_s": 1083.385351896286,
+  "dataset_episodes": 800,
+  "dataset_steps": 48000,
+  "device": "cuda",
+  "timestamp": "2026-03-08T19:54:30.220482"
+}

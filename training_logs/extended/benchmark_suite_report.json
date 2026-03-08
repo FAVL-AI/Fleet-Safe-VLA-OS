@@ -1,0 +1,14 @@
+{
+  "model": "benchmark_suite",
+  "parameters": 86005379,
+  "epochs": 200,
+  "final_loss": 0.00040940682027632225,
+  "best_loss": 0.0003924012084891542,
+  "final_svr": 0.0,
+  "final_barrier_mean": 0.15725220657782857,
+  "training_time_s": 1193.6661870479584,
+  "dataset_episodes": 800,
+  "dataset_steps": 40000,
+  "device": "cuda",
+  "timestamp": "2026-03-08T23:09:35.173032"
+}

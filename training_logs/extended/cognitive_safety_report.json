@@ -1,0 +1,14 @@
+{
+  "model": "cognitive_safety",
+  "parameters": 71818756,
+  "epochs": 300,
+  "final_loss": 0.0007026200527304484,
+  "best_loss": 0.0004951530603734899,
+  "final_svr": 0.0,
+  "final_barrier_mean": 0.18481132384440646,
+  "training_time_s": 1926.0490992069244,
+  "dataset_episodes": 900,
+  "dataset_steps": 54000,
+  "device": "cuda",
+  "timestamp": "2026-03-08T21:17:07.135569"
+}

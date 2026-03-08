@@ -1,0 +1,14 @@
+{
+  "model": "zone_navigator",
+  "parameters": 86005379,
+  "epochs": 250,
+  "final_loss": 0.000400491988656517,
+  "best_loss": 0.00039974027427717345,
+  "final_svr": 0.0,
+  "final_barrier_mean": 0.1744238672145186,
+  "training_time_s": 2396.274091243744,
+  "dataset_episodes": 1000,
+  "dataset_steps": 60000,
+  "device": "cuda",
+  "timestamp": "2026-03-08T20:34:33.130795"
+}

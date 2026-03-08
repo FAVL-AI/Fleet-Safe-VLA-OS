@@ -1,0 +1,14 @@
+{
+  "model": "sim2real",
+  "parameters": 86007943,
+  "epochs": 250,
+  "final_loss": 0.048750012613287784,
+  "best_loss": 0.047010195055385916,
+  "final_svr": 9.433915783272504e-05,
+  "final_barrier_mean": 0.17949036011722722,
+  "training_time_s": 1285.5528292655945,
+  "dataset_episodes": 700,
+  "dataset_steps": 42000,
+  "device": "cuda",
+  "timestamp": "2026-03-08T21:38:39.897478"
+}

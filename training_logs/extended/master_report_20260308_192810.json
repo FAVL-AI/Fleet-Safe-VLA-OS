@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-03-08T19:28:10.847842",
+  "total_time_s": 20.76041531562805,
+  "device": "cuda",
+  "models": {
+    "3": {
+      "model": "dseo_monitor",
+      "error": "WANDB_API_KEY invalid: API key must have 40+ characters, has 17."
+    },
+    "4": {
+      "model": "zone_navigator",
+      "error": "WANDB_API_KEY invalid: API key must have 40+ characters, has 17."
+    },
+    "5": {
+      "model": "robopocket",
+      "error": "WANDB_API_KEY invalid: API key must have 40+ characters, has 17."
+    },
+    "6": {
+      "model": "cognitive_safety",
+      "error": "WANDB_API_KEY invalid: API key must have 40+ characters, has 17."
+    },
+    "7": {
+      "model": "benchmark_suite",
+      "error": "WANDB_API_KEY invalid: API key must have 40+ characters, has 17."
+    },
+    "8": {
+      "model": "sim2real",
+      "error": "WANDB_API_KEY invalid: API key must have 40+ characters, has 17."
+    },
+    "9": {
+      "model": "fleet_coord",
+      "error": "module 'numpy.random' has no attribute 'softmax_replacement'"
+    },
+    "10": {
+      "model": "semantic_collector",
+      "error": "WANDB_API_KEY invalid: API key must have 40+ characters, has 17."
+    }
+  }
+}

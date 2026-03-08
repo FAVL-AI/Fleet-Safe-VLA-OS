@@ -1,0 +1,14 @@
+{
+  "model": "fleet_coord",
+  "parameters": 86045577,
+  "epochs": 200,
+  "final_loss": 0.01334363086005816,
+  "best_loss": 0.012881461895094851,
+  "final_svr": 0.0019029446362830086,
+  "final_barrier_mean": 0.17853174195586047,
+  "training_time_s": 1979.9399263858795,
+  "dataset_episodes": 500,
+  "dataset_steps": 40000,
+  "device": "cuda",
+  "timestamp": "2026-03-08T22:11:46.850327"
+}
