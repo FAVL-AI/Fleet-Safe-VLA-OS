@@ -8,7 +8,7 @@ project:
   description: "State-of-the-art VLA pipeline for hospital robot navigation"
   author: "Frank Van Laarhoven"
   institution: "Newcastle University"
-  email: "***REDACTED_EMAIL***"
+  email: "${CONSTRUCT_EMAIL}"
 
 robot:
   embodiment: UNITREE_G1
