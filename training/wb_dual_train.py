@@ -91,25 +91,11 @@ class SyntheticHospitalDataset:
             ])[:, :self.obs_dim]
             obs = base_obs + self.noise_std * np.random.randn(steps, self.obs_dim)
 
-            # Actions: smooth control signals
-            if task in ("nav_corridor", "nav_ward"):
-                # Navigation: velocity commands (vx, vy)
-                actions = np.column_stack([
-                    0.8 * np.sin(t) + 0.02 * np.random.randn(steps),
-                    0.3 * np.cos(t * 1.5) + 0.02 * np.random.randn(steps),
-                ])
-            elif task == "locomotion":
-                # Locomotion: joint torques (need more dims)
-                actions = np.column_stack([
-                    0.6 * np.sin(t + k * 0.5) + 0.03 * np.random.randn(steps)
-                    for k in range(self.act_dim)
-                ])
-            else:
-                # Manipulation: end-effector deltas
-                actions = np.column_stack([
-                    0.4 * np.sin(t * 2) + 0.015 * np.random.randn(steps),
-                    0.4 * np.cos(t * 2) + 0.015 * np.random.randn(steps),
-                ])
+            # Actions: smooth control signals — always self.act_dim columns
+            actions = np.column_stack([
+                0.6 * np.sin(t + k * 0.5) + self.noise_std * np.random.randn(steps)
+                for k in range(self.act_dim)
+            ])
 
             # Safety labels
             human_proximity = np.clip(
@@ -550,7 +536,7 @@ def train_g1_cmdp_wb(dry_run: bool, result_queue: mp.Queue):
         # ── Generate synthetic locomotion dataset ────────────────────
         dataset = SyntheticHospitalDataset(
             num_episodes=1000, horizon=32, obs_dim=48, act_dim=23,
-            noise_std=0.03, seed=123,
+            img_size=64, noise_std=0.03, seed=123,
         )
 
         # ── W&B Logger ───────────────────────────────────────────────
