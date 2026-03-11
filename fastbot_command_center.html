@@ -2603,17 +2603,313 @@ function buildG1Humanoid(color=0xa855f7){
   return root;
 }
 
+// ═══════════════════════════════════════════════════════════════════
+//  GO2 QUADRUPED ROBOT (12-DOF, Unitree Go2)
+// ═══════════════════════════════════════════════════════════════════
+function buildGo2(color=0x22c55e){
+  const root=new THREE.Group();
+  const bodyMat=new THREE.MeshStandardMaterial({color:0x333333,metalness:.5,roughness:.3});
+  const legMat=new THREE.MeshStandardMaterial({color:0x555555,metalness:.4,roughness:.4});
+  const accentMat=new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.15,metalness:.4,roughness:.3});
+  // Body
+  const body=new THREE.Mesh(new THREE.BoxGeometry(.4,.12,.2),bodyMat);
+  body.position.y=.28;body.castShadow=true;root.add(body);
+  // Top accent stripe
+  const stripe=new THREE.Mesh(new THREE.BoxGeometry(.38,.02,.18),accentMat);
+  stripe.position.y=.35;root.add(stripe);
+  // Head
+  const head=new THREE.Mesh(new THREE.BoxGeometry(.08,.06,.12),bodyMat);
+  head.position.set(.24,.3,0);root.add(head);
+  // Camera (RealSense)
+  const cam=new THREE.Mesh(new THREE.BoxGeometry(.06,.02,.04),
+    new THREE.MeshStandardMaterial({color:0x00ffe5,emissive:0x00ffe5,emissiveIntensity:.3}));
+  cam.position.set(.28,.32,0);root.add(cam);
+  // LiDAR on top
+  const lidar=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.02,12),
+    new THREE.MeshStandardMaterial({color:0x3b82f6,emissive:0x3b82f6,emissiveIntensity:.2}));
+  lidar.position.set(0,.37,0);root.add(lidar);
+  // 4 Legs (each: hip + upper + lower + foot)
+  const legPositions=[{x:.15,z:.08,label:'FL'},{x:.15,z:-.08,label:'FR'},
+                      {x:-.15,z:.08,label:'RL'},{x:-.15,z:-.08,label:'RR'}];
+  legPositions.forEach(lp=>{
+    const leg=new THREE.Group();
+    // Hip joint
+    const hip=new THREE.Mesh(new THREE.SphereGeometry(.025,8,8),legMat);
+    hip.position.set(0,.22,0);leg.add(hip);
+    // Upper leg
+    const upper=new THREE.Mesh(new THREE.CylinderGeometry(.018,.015,.12,8),legMat);
+    upper.position.set(0,.16,0);leg.add(upper);
+    // Knee joint
+    const knee=new THREE.Mesh(new THREE.SphereGeometry(.02,6,6),accentMat);
+    knee.position.set(0,.1,0);leg.add(knee);
+    // Lower leg
+    const lower=new THREE.Mesh(new THREE.CylinderGeometry(.015,.012,.12,8),legMat);
+    lower.position.set(0,.04,0);leg.add(lower);
+    // Foot
+    const foot=new THREE.Mesh(new THREE.SphereGeometry(.015,6,6),accentMat);
+    foot.position.y=-.02;leg.add(foot);
+    leg.position.set(lp.x,0,lp.z);
+    root.add(leg);
+  });
+  // IMU indicator
+  const imu=new THREE.Mesh(new THREE.BoxGeometry(.03,.01,.03),
+    new THREE.MeshStandardMaterial({color:0xfacc15,emissive:0xfacc15,emissiveIntensity:.3}));
+  imu.position.set(0,.36,0);root.add(imu);
+  // Glow ring
+  const gr=new THREE.Mesh(new THREE.RingGeometry(.15,.3,32),
+    new THREE.MeshBasicMaterial({color,transparent:true,opacity:.1,side:THREE.DoubleSide}));
+  gr.rotation.x=-Math.PI/2;gr.position.y=.005;root.add(gr);
+  root.userData={model:'unitree_go2',dof:12,totalMass:15,embodiment:'quadruped',
+    sensors:['imu','camera','lidar'],joints:['FL_hip','FL_thigh','FL_calf','FR_hip','FR_thigh','FR_calf','RL_hip','RL_thigh','RL_calf','RR_hip','RR_thigh','RR_calf']};
+  return root;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  TURTLEBOT3 DIFFERENTIAL DRIVE (2-DOF)
+// ═══════════════════════════════════════════════════════════════════
+function buildTurtleBot3(color=0x3b82f6){
+  const root=new THREE.Group();
+  const bodyMat=new THREE.MeshStandardMaterial({color:0x2a2a2a,roughness:.6,metalness:.3});
+  const plateMat=new THREE.MeshStandardMaterial({color:0x445566,roughness:.5,metalness:.2});
+  const accentMat=new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.12});
+  // Base plate (circular)
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,.04,24),bodyMat);
+  base.position.y=.05;base.castShadow=true;root.add(base);
+  // Second tier
+  const tier2=new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,.03,24),plateMat);
+  tier2.position.y=.1;root.add(tier2);
+  // Third tier (top)
+  const tier3=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.02,24),plateMat);
+  tier3.position.y=.14;root.add(tier3);
+  // Standoffs
+  for(let a=0;a<4;a++){
+    const angle=a*Math.PI/2+Math.PI/4;
+    const standoff=new THREE.Mesh(new THREE.CylinderGeometry(.006,.006,.08,6),
+      new THREE.MeshStandardMaterial({color:0x888888,metalness:.6}));
+    standoff.position.set(Math.cos(angle)*.07,.1,Math.sin(angle)*.07);root.add(standoff);
+  }
+  // LiDAR on top
+  const lidar=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,.03,16),
+    new THREE.MeshStandardMaterial({color:0x0055aa,metalness:.5,roughness:.3}));
+  lidar.position.set(0,.17,0);root.add(lidar);
+  // LiDAR spinning indicator
+  const lidarSpin=new THREE.Mesh(new THREE.BoxGeometry(.03,.005,.005),
+    new THREE.MeshStandardMaterial({color:0x00ffe5,emissive:0x00ffe5,emissiveIntensity:.5}));
+  lidarSpin.position.set(0,.19,0);root.add(lidarSpin);
+  // Wheels (left + right)
+  [-1,1].forEach(side=>{
+    const whl=new THREE.Mesh(new THREE.CylinderGeometry(.033,.033,.02,12),
+      new THREE.MeshStandardMaterial({color:0x111111,roughness:.9}));
+    whl.position.set(0,.033,side*.1);whl.rotation.x=Math.PI/2;root.add(whl);
+    // Wheel rim accent
+    const rim=new THREE.Mesh(new THREE.TorusGeometry(.03,.004,6,16),accentMat);
+    rim.position.set(0,.033,side*.105);root.add(rim);
+  });
+  // Caster wheel (front)
+  const caster=new THREE.Mesh(new THREE.SphereGeometry(.015,8,8),
+    new THREE.MeshStandardMaterial({color:0x444444}));
+  caster.position.set(.08,.015,0);root.add(caster);
+  // Camera
+  const cam=new THREE.Mesh(new THREE.BoxGeometry(.03,.02,.015),
+    new THREE.MeshStandardMaterial({color:0x00ffe5,emissive:0x00ffe5,emissiveIntensity:.3}));
+  cam.position.set(.09,.08,0);root.add(cam);
+  // Glow ring
+  const gr=new THREE.Mesh(new THREE.RingGeometry(.1,.18,32),
+    new THREE.MeshBasicMaterial({color,transparent:true,opacity:.08,side:THREE.DoubleSide}));
+  gr.rotation.x=-Math.PI/2;gr.position.y=.005;root.add(gr);
+  root.userData={model:'turtlebot3_burger',dof:2,totalMass:1.0,embodiment:'diff_drive',
+    sensors:['lidar','camera'],joints:['wheel_left','wheel_right']};
+  return root;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  FETCH MOBILE MANIPULATOR (10-DOF)
+// ═══════════════════════════════════════════════════════════════════
+function buildFetch(color=0xf97316){
+  const root=new THREE.Group();
+  const bodyMat=new THREE.MeshStandardMaterial({color:0x444444,metalness:.4,roughness:.4});
+  const armMat=new THREE.MeshStandardMaterial({color:0x666666,metalness:.5,roughness:.3});
+  const accentMat=new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.12});
+  const whiteMat=new THREE.MeshStandardMaterial({color:0xcccccc,roughness:.5});
+  // Base (cylindrical mobile base)
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(.28,.3,.15,24),bodyMat);
+  base.position.y=.12;base.castShadow=true;root.add(base);
+  // Bumper ring
+  const bumper=new THREE.Mesh(new THREE.TorusGeometry(.3,.02,8,32),
+    new THREE.MeshStandardMaterial({color:0x222222,roughness:.8}));
+  bumper.rotation.x=-Math.PI/2;bumper.position.y=.08;root.add(bumper);
+  // Torso column
+  const torso=new THREE.Mesh(new THREE.CylinderGeometry(.08,.1,.6,12),whiteMat);
+  torso.position.y=.5;root.add(torso);
+  // Torso lift mechanism
+  const liftPlate=new THREE.Mesh(new THREE.BoxGeometry(.15,.03,.12),armMat);
+  liftPlate.position.y=.82;root.add(liftPlate);
+  // Head (pan-tilt)
+  const head=new THREE.Mesh(new THREE.BoxGeometry(.12,.1,.1),bodyMat);
+  head.position.set(0,.92,0);root.add(head);
+  // Camera eyes
+  [-1,1].forEach(side=>{
+    const eye=new THREE.Mesh(new THREE.SphereGeometry(.02,8,8),
+      new THREE.MeshStandardMaterial({color:0x00ffe5,emissive:0x00ffe5,emissiveIntensity:.4}));
+    eye.position.set(.06,.92,side*.03);root.add(eye);
+  });
+  // 7-DOF Arm
+  const shoulderBase=new THREE.Group();shoulderBase.position.set(0,.78,.12);root.add(shoulderBase);
+  const upperArm=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.25,8),armMat);
+  upperArm.position.set(0,-.12,.05);upperArm.rotation.x=Math.PI/6;shoulderBase.add(upperArm);
+  const elbow=new THREE.Mesh(new THREE.SphereGeometry(.035,8,8),accentMat);
+  elbow.position.set(0,-.28,.1);shoulderBase.add(elbow);
+  const forearm=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,.2,8),armMat);
+  forearm.position.set(0,-.42,.15);forearm.rotation.x=Math.PI/8;shoulderBase.add(forearm);
+  const wrist=new THREE.Mesh(new THREE.SphereGeometry(.025,8,8),accentMat);
+  wrist.position.set(0,-.52,.2);shoulderBase.add(wrist);
+  // Gripper
+  [-1,1].forEach(side=>{
+    const finger=new THREE.Mesh(new THREE.BoxGeometry(.01,.06,.02),armMat);
+    finger.position.set(0,-.58,.2+side*.015);shoulderBase.add(finger);
+  });
+  // LiDAR on base
+  const lidar=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.03,12),
+    new THREE.MeshStandardMaterial({color:0x3b82f6,emissive:0x3b82f6,emissiveIntensity:.2}));
+  lidar.position.set(0,.21,0);root.add(lidar);
+  // Caster wheels
+  [[-1,-.2],[1,-.2]].forEach(([side,fwd])=>{
+    const whl=new THREE.Mesh(new THREE.SphereGeometry(.04,8,8),
+      new THREE.MeshStandardMaterial({color:0x111111}));
+    whl.position.set(fwd,.04,side*.22);root.add(whl);
+  });
+  // Drive wheels
+  [-1,1].forEach(side=>{
+    const whl=new THREE.Mesh(new THREE.CylinderGeometry(.065,.065,.03,12),
+      new THREE.MeshStandardMaterial({color:0x222222,roughness:.8}));
+    whl.position.set(.15,.065,side*.28);whl.rotation.x=Math.PI/2;root.add(whl);
+  });
+  // Glow ring
+  const gr=new THREE.Mesh(new THREE.RingGeometry(.25,.4,32),
+    new THREE.MeshBasicMaterial({color,transparent:true,opacity:.08,side:THREE.DoubleSide}));
+  gr.rotation.x=-Math.PI/2;gr.position.y=.005;root.add(gr);
+  root.userData={model:'fetch_mobile_manipulator',dof:10,totalMass:70.0,embodiment:'manipulator',
+    sensors:['camera','lidar'],joints:['base_l','base_r','torso_lift','shoulder_pan','shoulder_lift','upperarm_roll','elbow_flex','forearm_roll','wrist_flex','wrist_roll','gripper']};
+  return root;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  MEDICINE DELIVERY TASK (End-to-End Autonomous)
+//  Go to pharmacy → Pick up medicine → Navigate corridors → Deliver → Return
+// ═══════════════════════════════════════════════════════════════════
+const DELIVERY_TASKS={
+  medicine:{name:'Medicine Delivery',phases:[
+    {id:'goto_pharmacy',label:'→ Pharmacy',wp:'pharmacy',action:'navigate',zone:'corridor'},
+    {id:'pick_medicine',label:'Pick Medicine',wp:'pharmacy',action:'interact',duration:3000},
+    {id:'nav_corridor',label:'→ Corridor',wp:'dock',action:'navigate',zone:'corridor',constraint:'narrow_corridor'},
+    {id:'nav_ward',label:'→ Ward A',wp:'ward_a',action:'navigate',zone:'ward',constraint:'dense_clutter'},
+    {id:'deliver',label:'Deliver',wp:'ward_a',action:'interact',duration:2000},
+    {id:'return_base',label:'→ Base',wp:'dock',action:'navigate',zone:'lobby'},
+  ]},
+};
+
+let activeDelivery=null;
+function startDeliveryTask(taskId,entId){
+  const task=DELIVERY_TASKS[taskId];
+  if(!task)return;
+  const ent=entId?entities.find(e=>e.id===entId):(selectedEntity||entities[0]);
+  if(!ent){toast('No robot selected');return;}
+  activeDelivery={task:taskId,entity:ent,phaseIdx:0,startTime:performance.now(),
+    phases:task.phases.map(p=>({...p,status:'pending',startT:0,endT:0})),
+    log:[]};
+  activeDelivery.phases[0].status='active';
+  activeDelivery.phases[0].startT=performance.now();
+  // Set entity patrol to follow the delivery waypoints
+  ent.patrol=task.phases.filter(p=>p.wp).map(p=>p.wp);
+  ent.patrolIdx=0;
+  toast(`🏥 ${ent.name}: ${task.name} started`);
+  addLog(`DELIVERY: ${ent.name} starting ${task.name}`,'c');
+  updateDeliveryUI();
+}
+
+function updateDeliveryTask(dt){
+  if(!activeDelivery)return;
+  const ad=activeDelivery;
+  const phase=ad.phases[ad.phaseIdx];
+  if(!phase||phase.status==='done')return;
+  const ent=ad.entity;
+  const now=performance.now();
+
+  if(phase.action==='navigate'){
+    // Check if entity reached the waypoint
+    const wp=WPS[phase.wp];
+    if(wp){
+      const dx=ent.x-wp.x,dy=ent.y-wp.y;
+      if(Math.sqrt(dx*dx+dy*dy)<0.5){
+        phase.status='done';phase.endT=now;
+        addLog(`✅ ${ent.name}: ${phase.label} complete`,'g');
+        advanceDelivery();
+      }
+    }
+  } else if(phase.action==='interact'){
+    if(now-phase.startT>phase.duration){
+      phase.status='done';phase.endT=now;
+      addLog(`✅ ${ent.name}: ${phase.label} complete`,'g');
+      advanceDelivery();
+    }
+  }
+  updateDeliveryUI();
+}
+
+function advanceDelivery(){
+  if(!activeDelivery)return;
+  activeDelivery.phaseIdx++;
+  if(activeDelivery.phaseIdx>=activeDelivery.phases.length){
+    const elapsed=((performance.now()-activeDelivery.startTime)/1000).toFixed(1);
+    toast(`🏆 ${activeDelivery.entity.name}: Delivery complete in ${elapsed}s!`);
+    addLog(`DELIVERY COMPLETE: ${activeDelivery.entity.name} (${elapsed}s)`,'g');
+    activeDelivery=null;
+    return;
+  }
+  const next=activeDelivery.phases[activeDelivery.phaseIdx];
+  next.status='active';next.startT=performance.now();
+  // Update entity patrol target
+  const ent=activeDelivery.entity;
+  const wpIdx=ent.patrol.indexOf(next.wp);
+  if(wpIdx>=0)ent.patrolIdx=wpIdx;
+  addLog(`📦 ${ent.name}: ${next.label}`,'c');
+}
+
+function updateDeliveryUI(){
+  const panel=document.getElementById('delivery-status');
+  if(!panel)return;
+  if(!activeDelivery){panel.innerHTML='<div style="color:var(--dim);font-size:10px;text-align:center;padding:8px">No active delivery</div>';return;}
+  const ad=activeDelivery;
+  panel.innerHTML=`<div style="font-size:9px;font-weight:700;color:var(--cyan);margin-bottom:6px">${ad.entity.name}: ${DELIVERY_TASKS[ad.task].name}</div>`+
+    ad.phases.map((p,i)=>{
+      const st=p.status==='done'?'✅':p.status==='active'?'🔄':'⬜';
+      const cls=p.status==='done'?'color:var(--green)':p.status==='active'?'color:var(--cyan)':'color:var(--dim)';
+      const constraint=p.constraint?` <span style="color:var(--yellow);font-size:8px">[${p.constraint}]</span>`:'';
+      return `<div style="${cls};font-size:10px;padding:2px 0">${st} ${p.label}${constraint}</div>`;
+    }).join('');
+}
+
 function spawnEntity(type='fastbot',x,y,color){
   const id='ent_'+(entityIdCounter++);
-  const cols={fastbot:[0x00ffe5,0x22c55e,0x3b82f6,0xf97316],g1:[0xa855f7,0xf43f5e,0x06b6d4,0xf59e0b]};
+  const cols={fastbot:[0x00ffe5,0x22c55e,0x3b82f6,0xf97316],g1:[0xa855f7,0xf43f5e,0x06b6d4,0xf59e0b],
+    go2:[0x22c55e,0x06b6d4,0xf59e0b,0x8b5cf6],turtlebot3:[0x3b82f6,0x06b6d4,0x22c55e,0xf97316],
+    fetch:[0xf97316,0xef4444,0xa855f7,0x22c55e]};
   const palette=cols[type]||cols.fastbot;
   if(!color)color=palette[entities.filter(e=>e.type===type).length%palette.length];
   if(x===undefined)x=1+Math.random()*8;
   if(y===undefined)y=1+Math.random()*3;
-  const mesh=type==='g1'?buildG1Humanoid(color):buildFastBot(color);
+  let mesh;
+  const names={fastbot:'FB-',g1:'G1-',go2:'Go2-',turtlebot3:'TB3-',fetch:'Fetch-'};
+  switch(type){
+    case 'g1':mesh=buildG1Humanoid(color);break;
+    case 'go2':mesh=buildGo2(color);break;
+    case 'turtlebot3':mesh=buildTurtleBot3(color);break;
+    case 'fetch':mesh=buildFetch(color);break;
+    default:mesh=buildFastBot(color);
+  }
   mesh.position.set(x,0,y);
   scene.add(mesh);
-  const ent={id,type,name:(type==='g1'?'G1-':'FB-')+entityIdCounter,mesh,color,
+  const ent={id,type,name:(names[type]||'R-')+entityIdCounter,mesh,color,
     x,y,th:0,speed:0,visible:true,patrol:[...PATROL],patrolIdx:0,steps:0,viols:0,
     trail:[],trailLine:null,navPath:[],navPathIdx:0,pathLine:null};
   // Trail
@@ -2623,7 +2919,7 @@ function spawnEntity(type='fastbot',x,y,color){
   scene.add(ent.trailLine);
   entities.push(ent);
   toast(`Spawned ${ent.name} (${type.toUpperCase()}) at (${x.toFixed(1)},${y.toFixed(1)})`);
-  addLog(`+Entity: ${ent.name}`,'g');
+  addLog(`+Entity: ${ent.name} [${mesh.userData.model||type}]`,'g');
   updateEntityList();
   return ent;
 }
@@ -2661,9 +2957,17 @@ function updateEntityList(){
         <button class="ent-vis" onclick="event.stopPropagation();toggleEntVis('${e.id}')">${e.visible?'👁':'🚫'}</button>
         <button class="ent-del" onclick="event.stopPropagation();removeEntity('${e.id}')">✕</button>
       </div>`).join('')+`
-      <div style="display:flex;gap:4px;margin-top:6px">
+      <div style="display:flex;gap:4px;margin-top:6px;flex-wrap:wrap">
         <button class="btn" onclick="spawnEntity('fastbot')">+ FastBot</button>
         <button class="btn" onclick="spawnEntity('g1')">+ G1 Humanoid</button>
+        <button class="btn" onclick="spawnEntity('go2')">+ Go2 Dog</button>
+        <button class="btn" onclick="spawnEntity('turtlebot3')">+ TurtleBot3</button>
+        <button class="btn" onclick="spawnEntity('fetch')">+ Fetch Arm</button>
+      </div>
+      <div style="margin-top:6px;border-top:1px solid var(--bd);padding-top:6px">
+        <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:4px">🏥 Medicine Delivery Task</div>
+        <button class="btn" onclick="startDeliveryTask('medicine')" style="width:100%;text-align:center">▶ Start Medicine Delivery</button>
+        <div id="delivery-status" style="margin-top:4px"></div>
       </div>`;
   });
 }
@@ -3162,11 +3466,22 @@ const origAnimate=animate;
         ent.trailLine.geometry.dispose();ent.trailLine.geometry=g;
       }
     });
+    // Update medicine delivery task
+    updateDeliveryTask(DT);
     // Step parallel eps
     stepParallelEps();
   }
   _origRAF(v2Loop);
 })();
+
+// Auto-spawn hospital fleet (all URDF robot types)
+setTimeout(()=>{
+  spawnEntity('go2',    3.0, 1.0);   // Go2 at lobby
+  spawnEntity('turtlebot3', 5.5, 4.0); // TurtleBot3 in corridor
+  spawnEntity('fetch',  8.0, 3.0);   // Fetch at ward entrance
+  spawnEntity('g1',     1.5, 3.5);   // G1 humanoid in lobby
+  addLog('🏥 Hospital fleet deployed: 4 URDF robots','c');
+}, 1500);
 
 // ═══════════════════════════════════════════════════════════════════
 //  v2: JOINT STATE PUBLISHER

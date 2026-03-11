@@ -126,6 +126,9 @@ class PipelineRequest(BaseModel):
     stage: str
     config: Optional[dict] = None
 
+class InferenceRequest(BaseModel):
+    observation: List[float] = []
+
 
 # ═══════════════════════════════════════════════════════════════════
 #  Fleet REST Endpoints
@@ -279,6 +282,8 @@ async def ws_gamepad(ws: WebSocket, robot_id: str):
 
 @app.get("/api/health")
 async def health():
+    from server.model_registry import get_registry
+    registry = get_registry()
     return {
         "status": "ok",
         "version": "1.0.0",
@@ -286,6 +291,7 @@ async def health():
         "fleet_available": FLEET_AVAILABLE,
         "robots": len(fleet.robots),
         "ws_clients": len(fleet.ws_clients),
+        "models": len(registry),
     }
 
 
@@ -299,6 +305,104 @@ async def webrtc_config():
         ],
         "signalingUrl": os.environ.get('SIGNALING_URL', 'ws://localhost:8765'),
     }
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  Model Registry & Inference Endpoints
+# ═══════════════════════════════════════════════════════════════════
+
+@app.get("/api/models")
+async def list_models(category: Optional[str] = None):
+    """List all 13 FLEET-Safe VLA trained models.
+
+    Optional query: ?category=core|extended|safety|vla|policy
+    """
+    from server.model_registry import get_registry
+    registry = get_registry()
+    if category:
+        return registry.list_by_category(category)
+    return registry.list_models()
+
+
+@app.get("/api/models/{model_id}")
+async def get_model(model_id: str):
+    """Get details for a single model including training results."""
+    from server.model_registry import get_registry
+    model = get_registry().get_model(model_id)
+    if model is None:
+        return JSONResponse(
+            status_code=404,
+            content={"error": f"Model '{model_id}' not found",
+                     "available": get_registry().model_ids},
+        )
+    return model
+
+
+@app.post("/api/models/{model_id}/infer")
+async def infer_model(model_id: str, req: InferenceRequest):
+    """Run inference on a trained model.
+
+    Body: {"observation": [0.1, 0.2, ...]}
+    Returns: action + safety metrics
+    """
+    from server.inference_gateway import get_gateway
+    try:
+        result = get_gateway().infer(model_id, req.observation)
+        return result
+    except ValueError as e:
+        return JSONResponse(status_code=404, content={"error": str(e)})
+
+
+@app.get("/api/models/{model_id}/metrics")
+async def get_model_metrics(model_id: str):
+    """Get training metrics/results for a specific model."""
+    from server.model_registry import get_registry
+    model = get_registry().get_model(model_id)
+    if model is None:
+        return JSONResponse(status_code=404, content={"error": f"Model '{model_id}' not found"})
+    return {
+        "model_id": model_id,
+        "training_status": model["training_status"],
+        "parameters": model["parameters"],
+        "epochs": model["epochs"],
+        "final_loss": model["final_loss"],
+        "final_svr": model["final_svr"],
+        "training_time_s": model["training_time_s"],
+        "training_results": model["training_results"],
+        "wandb_url": model["wandb_url"],
+    }
+
+
+@app.get("/api/training/summary")
+async def training_summary():
+    """Aggregate training summary across all 13 FLEET models."""
+    from server.model_registry import get_registry
+    return get_registry().training_summary()
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  Robot URDF Registry Endpoints
+# ═══════════════════════════════════════════════════════════════════
+
+@app.get("/api/robots")
+async def list_robots():
+    """List all registered robot models parsed from URDF files."""
+    from robots.registry import get_robot_registry
+    return get_robot_registry().list_robots()
+
+
+@app.get("/api/robots/{robot_id}")
+async def get_robot(robot_id: str):
+    """Get full URDF detail for a robot: joints, links, physics, sensors."""
+    from robots.registry import get_robot_registry
+    robot = get_robot_registry().get_robot(robot_id)
+    if robot is None:
+        return JSONResponse(
+            status_code=404,
+            content={"error": f"Robot '{robot_id}' not found",
+                     "available": get_robot_registry().robot_ids},
+        )
+    return robot
 
 
 # ═══════════════════════════════════════════════════════════════════

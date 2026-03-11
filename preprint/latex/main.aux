@@ -1,0 +1,184 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{kyrarini2021survey}
+\citation{rt2_2023,openvla2024,pi0_2025}
+\citation{saferpath2025}
+\citation{safevla2025}
+\citation{rt2_2023}
+\citation{openvla2024}
+\citation{pi0_2025}
+\citation{robomamba2024}
+\citation{octo2024}
+\citation{robopocket2025}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:intro}{{I}{1}{Introduction}{section.1}{}}
+\citation{altman1999cmdp}
+\citation{achiam2017cpo}
+\citation{stooke2020responsive}
+\citation{safevla2025}
+\citation{ames2017cbf}
+\citation{cheng2019cbf_rl}
+\citation{dawson2023safe}
+\citation{saferpath2025}
+\citation{shah2023vint}
+\citation{sridhar2023nomad}
+\citation{kyrarini2021survey,holland2021service,papadopoulos2024hospital}
+\citation{miseikis2020tug}
+\citation{galatolo2025visual}
+\citation{groot2025}
+\citation{pi0_2025}
+\citation{openvla2024}
+\citation{altman1999cmdp}
+\citation{safevla2025}
+\citation{maler2004stl,li2017stl_rl}
+\citation{ames2017cbf}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{section.2}\protected@file@percent }
+\newlabel{sec:related}{{II}{2}{Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Vision-Language-Action Models}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Safe Reinforcement Learning}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Control Barrier Functions}{2}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Traversability-Aware Navigation}{2}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-E}}Hospital Robotics}{2}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-F}}Foundation Models for Robotics}{2}{subsection.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Problem Formulation}{2}{section.3}\protected@file@percent }
+\newlabel{sec:problem}{{III}{2}{Problem Formulation}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Notation}{2}{subsection.3.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Mathematical Notation}}{2}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:notation}{{I}{2}{Mathematical Notation}{table.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Constrained Markov Decision Process}{2}{subsection.3.2}\protected@file@percent }
+\newlabel{eq:cmdp}{{2}{2}{Constrained Markov Decision Process}{equation.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Safety Specification via Signal Temporal Logic}{2}{subsection.3.3}\protected@file@percent }
+\newlabel{eq:stl}{{3}{2}{Safety Specification via Signal Temporal Logic}{equation.3}{}}
+\citation{openvla2024}
+\citation{groot2025}
+\citation{isaacgym}
+\citation{tobin2017domainrand}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Safety-Constrained Action Projection. A VLA backbone processes observations and language goals to generate a nominal action $a_\text  {nom}$. The CBF-QP filter projects this action onto the safe set, ensuring the final deployed action $a_\text  {safe}$ guarantees forward invariance of safe states before execution on the robot.}}{3}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:arch}{{1}{3}{Safety-Constrained Action Projection. A VLA backbone processes observations and language goals to generate a nominal action $a_\text {nom}$. The CBF-QP filter projects this action onto the safe set, ensuring the final deployed action $a_\text {safe}$ guarantees forward invariance of safe states before execution on the robot}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}CBF Forward Invariance}{3}{subsection.3.4}\protected@file@percent }
+\newlabel{eq:cbf}{{4}{3}{CBF Forward Invariance}{equation.4}{}}
+\newlabel{eq:qp}{{5}{3}{CBF Forward Invariance}{equation.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Methodology}{3}{section.4}\protected@file@percent }
+\newlabel{sec:method}{{IV}{3}{Methodology}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Action Projection Architecture}{3}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}VLA Backbone Integration}{3}{subsection.4.2}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Safety-Constrained VLA Training}}{3}{algorithm.1}\protected@file@percent }
+\newlabel{alg:training}{{1}{3}{Safety-Constrained VLA Training}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}CBF-QP Safety Filter}{3}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:cbf}{{\mbox  {IV-C}}{3}{CBF-QP Safety Filter}{subsection.4.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Training Algorithm}{3}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Hyperparameters}{3}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Experimental Design}{3}{section.5}\protected@file@percent }
+\newlabel{sec:experiments}{{V}{3}{Experimental Design}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Simulation Environment and Training Data}{3}{subsection.5.1}\protected@file@percent }
+\citation{saferpath2025}
+\citation{safevla2025}
+\citation{shah2023vint}
+\citation{sridhar2023nomad}
+\citation{groot2025}
+\citation{pi0_2025}
+\citation{openvla2024}
+\citation{robomamba2024}
+\citation{rt2_2023}
+\citation{octo2024}
+\citation{aloha2_2024}
+\citation{maler2004stl}
+\citation{pytorch2019}
+\citation{saferpath2025}
+\citation{safevla2025}
+\citation{shah2023vint}
+\citation{sridhar2023nomad}
+\citation{groot2025}
+\citation{pi0_2025}
+\citation{openvla2024}
+\citation{robomamba2024}
+\citation{rt2_2023}
+\citation{octo2024}
+\citation{aloha2_2024}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Hyperparameter Configuration}}{4}{table.caption.3}\protected@file@percent }
+\newlabel{tab:hyper}{{II}{4}{Hyperparameter Configuration}{table.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Baselines}{4}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Evaluation Metrics}{4}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Hardware}{4}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Results}{4}{section.6}\protected@file@percent }
+\newlabel{sec:results}{{VI}{4}{Results}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Main Results}{4}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Head-to-Head: FLEET-SaferPath Hybrid}{4}{subsection.6.2}\protected@file@percent }
+\newlabel{sec:saferpath_hybrid}{{\mbox  {VI-B}}{4}{Head-to-Head: FLEET-SaferPath Hybrid}{subsection.6.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Training Convergence}{4}{subsection.6.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Benchmark Comparison Against Eight Navigation and VLA Baselines. Best results in \textbf  {bold}. $\downarrow $ = lower is better, $\uparrow $ = higher is better. SaferPath and SafeVLA are our primary direct comparisons. Our method achieves provably near-zero SVR across embodiments with low inference latency.}}{5}{table.caption.4}\protected@file@percent }
+\newlabel{tab:main}{{III}{5}{Benchmark Comparison Against Eight Navigation and VLA Baselines. Best results in \textbf {bold}. $\downarrow $ = lower is better, $\uparrow $ = higher is better. SaferPath and SafeVLA are our primary direct comparisons. Our method achieves provably near-zero SVR across embodiments with low inference latency}{table.caption.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Head-to-Head: FLEET-SaferPath Hybrid vs.\ Published SaferPath. FLEET-SaferPath achieves superior metrics on all measures whilst adding formal CBF guarantees.}}{5}{table.caption.5}\protected@file@percent }
+\newlabel{tab:saferpath}{{IV}{5}{Head-to-Head: FLEET-SaferPath Hybrid vs.\ Published SaferPath. FLEET-SaferPath achieves superior metrics on all measures whilst adding formal CBF guarantees}{table.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces W\&B training curves for the FLEET-SaferPath hybrid model (run \texttt  {fleet-saferpath-0310-2319}). Top row: zone compliance (constant 1.0), SVR (decreasing), success rate (increasing). Bottom row: SPL (increasing), speed, navigation reward.}}{5}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:wandb_saferpath}{{2}{5}{W\&B training curves for the FLEET-SaferPath hybrid model (run \texttt {fleet-saferpath-0310-2319}). Top row: zone compliance (constant 1.0), SVR (decreasing), success rate (increasing). Bottom row: SPL (increasing), speed, navigation reward}{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Ablation Studies}{5}{subsection.6.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces W\&B training dashboard showing OpenVLA backbone runs for both FastBot (red) and G1 (maroon). All panels log per-epoch metrics. Curves show smooth convergence with no catastrophic forgetting or safety regressions.}}{5}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:convergence}{{3}{5}{W\&B training dashboard showing OpenVLA backbone runs for both FastBot (red) and G1 (maroon). All panels log per-epoch metrics. Curves show smooth convergence with no catastrophic forgetting or safety regressions}{figure.caption.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Ablation Study (FastBot). Removing any safety component degrades both safety and task performance.}}{5}{table.caption.8}\protected@file@percent }
+\newlabel{tab:ablation}{{V}{5}{Ablation Study (FastBot). Removing any safety component degrades both safety and task performance}{table.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-E}}Compute Cost Analysis}{5}{subsection.6.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Training Compute Comparison. FLEET-Safe VLA trains all ten models for less than the cost of a single SafeVLA run.}}{6}{table.caption.9}\protected@file@percent }
+\newlabel{tab:cost}{{VI}{6}{Training Compute Comparison. FLEET-Safe VLA trains all ten models for less than the cost of a single SafeVLA run}{table.caption.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-F}}Cross-Embodiment Transfer}{6}{subsection.6.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Cross-Embodiment Results: Same Safety Layer, Different Bodies}}{6}{table.caption.10}\protected@file@percent }
+\newlabel{tab:cross}{{VII}{6}{Cross-Embodiment Results: Same Safety Layer, Different Bodies}{table.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-G}}Benchmark Comparison}{6}{subsection.6.7}\protected@file@percent }
+\newlabel{sec:benchmark}{{\mbox  {VI-G}}{6}{Benchmark Comparison}{subsection.6.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Direct benchmark comparison across three task distributions. FLEET-Safe VLA achieves SVR$\,=\,0$ on all benchmarks with $15\times $ lower latency than SafeVLA.}}{6}{table.caption.11}\protected@file@percent }
+\newlabel{tab:benchmark}{{VIII}{6}{Direct benchmark comparison across three task distributions. FLEET-Safe VLA achieves SVR$\,=\,0$ on all benchmarks with $15\times $ lower latency than SafeVLA}{table.caption.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-H}}Bias Audit}{6}{subsection.6.8}\protected@file@percent }
+\newlabel{sec:bias}{{\mbox  {VI-H}}{6}{Bias Audit}{subsection.6.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-I}}CBF Safety Verification}{6}{subsection.6.9}\protected@file@percent }
+\newlabel{sec:cbf_verify}{{\mbox  {VI-I}}{6}{CBF Safety Verification}{subsection.6.9}{}}
+\citation{agarwal2021deep}
+\citation{ieee7010_2020,mhra2023guidance}
+\bibstyle{IEEEtran}
+\bibdata{references}
+\bibcite{kyrarini2021survey}{1}
+\bibcite{rt2_2023}{2}
+\bibcite{openvla2024}{3}
+\bibcite{pi0_2025}{4}
+\bibcite{saferpath2025}{5}
+\bibcite{safevla2025}{6}
+\bibcite{robomamba2024}{7}
+\bibcite{octo2024}{8}
+\bibcite{robopocket2025}{9}
+\bibcite{altman1999cmdp}{10}
+\bibcite{achiam2017cpo}{11}
+\bibcite{stooke2020responsive}{12}
+\bibcite{ames2017cbf}{13}
+\bibcite{cheng2019cbf_rl}{14}
+\bibcite{dawson2023safe}{15}
+\bibcite{shah2023vint}{16}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{7}{section.7}\protected@file@percent }
+\newlabel{sec:discussion}{{VII}{7}{Discussion}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}Why FLEET-Safe VLA Sets a New Benchmark}{7}{subsection.7.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {IX}{\ignorespaces Competitive Advantage Summary}}{7}{table.caption.12}\protected@file@percent }
+\newlabel{tab:why}{{IX}{7}{Competitive Advantage Summary}{table.caption.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-B}}Limitations and Planned Mitigations}{7}{subsection.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}Ethical Considerations and Regulatory Compliance}{7}{subsection.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion}{7}{section.8}\protected@file@percent }
+\newlabel{sec:conclusion}{{VIII}{7}{Conclusion}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{References}{7}{section*.13}\protected@file@percent }
+\bibcite{sridhar2023nomad}{17}
+\bibcite{holland2021service}{18}
+\bibcite{papadopoulos2024hospital}{19}
+\bibcite{miseikis2020tug}{20}
+\bibcite{galatolo2025visual}{21}
+\bibcite{groot2025}{22}
+\bibcite{groot_n1_6}{23}
+\bibcite{hu2022lora}{24}
+\bibcite{maler2004stl}{25}
+\bibcite{li2017stl_rl}{26}
+\bibcite{isaacgym}{27}
+\bibcite{tobin2017domainrand}{28}
+\bibcite{aloha2_2024}{29}
+\bibcite{pytorch2019}{30}
+\bibcite{agarwal2021deep}{31}
+\bibcite{ieee7010_2020}{32}
+\bibcite{mhra2023guidance}{33}
+\gdef \@abspage@last{8}

@@ -297,6 +297,86 @@ PUBLISHED_BASELINES = {
             "inference_ms":    52,            # Two-pass adds ~15ms
         },
     },
+
+    # SaferPath (Zhang et al., 2026) — Hierarchical Visual Navigation
+    # REF: arXiv:2603.01898, Tables 1-3
+    "SaferPath": {
+        "ref": "Zhang, Jiang, Chen 2026, SaferPath: Hierarchical Visual Navigation "
+               "with Learned Guidance and Safety-Constrained Control, arXiv:2603.01898",
+        "tasks": {
+            "nav_unseen":         {"success": 0.89, "safety_violation": 0.08, "cost_return": 0.10},
+            "nav_dense_clutter":  {"success": 0.78, "safety_violation": 0.15, "cost_return": 0.18},
+            "nav_narrow_corr":    {"success": 0.85, "safety_violation": 0.10, "cost_return": 0.12},
+        },
+        "cmdp_metrics": {
+            "cost_threshold_d":     None,
+            "avg_cost_return":      0.133,
+            "lagrange_converged":   False,
+            "constraint_satisfied": False,
+            "reward_return_avg":    0.840,
+        },
+        "efficiency": {
+            "params_B":        0.3,
+            "finetune_method": "MP-SVES + MPC",
+            "train_hours":     12,
+            "gpu_type":        "RTX 3090",
+            "gpu_count":       1,
+            "flops_per_step":  "8.5e13",
+            "inference_ms":    85,
+        },
+    },
+
+    # ViNT (Shah et al., 2023) — Visual Navigation Transformer
+    "ViNT": {
+        "ref": "Shah et al. 2023, ViNT: A Foundation Model for Visual Navigation",
+        "tasks": {
+            "nav_unseen":         {"success": 0.72, "safety_violation": 0.24, "cost_return": 0.30},
+            "nav_dense_clutter":  {"success": 0.54, "safety_violation": 0.38, "cost_return": 0.45},
+            "nav_narrow_corr":    {"success": 0.65, "safety_violation": 0.30, "cost_return": 0.35},
+        },
+        "cmdp_metrics": {
+            "cost_threshold_d":     None,
+            "avg_cost_return":      0.367,
+            "lagrange_converged":   False,
+            "constraint_satisfied": False,
+            "reward_return_avg":    0.637,
+        },
+        "efficiency": {
+            "params_B":        0.085,
+            "finetune_method": "Full finetune",
+            "train_hours":     8,
+            "gpu_type":        "RTX 3090",
+            "gpu_count":       1,
+            "flops_per_step":  "2.8e13",
+            "inference_ms":    25,
+        },
+    },
+
+    # NoMaD (Sridhar et al., 2024) — Goal Masking Diffusion for Navigation
+    "NoMaD": {
+        "ref": "Sridhar et al. 2024, NoMaD: Goal-Masked Diffusion Policies for Navigation",
+        "tasks": {
+            "nav_unseen":         {"success": 0.68, "safety_violation": 0.28, "cost_return": 0.34},
+            "nav_dense_clutter":  {"success": 0.51, "safety_violation": 0.42, "cost_return": 0.50},
+            "nav_narrow_corr":    {"success": 0.62, "safety_violation": 0.33, "cost_return": 0.40},
+        },
+        "cmdp_metrics": {
+            "cost_threshold_d":     None,
+            "avg_cost_return":      0.413,
+            "lagrange_converged":   False,
+            "constraint_satisfied": False,
+            "reward_return_avg":    0.603,
+        },
+        "efficiency": {
+            "params_B":        0.12,
+            "finetune_method": "Diffusion + Masking",
+            "train_hours":     10,
+            "gpu_type":        "RTX 3090",
+            "gpu_count":       1,
+            "flops_per_step":  "3.2e13",
+            "inference_ms":    30,
+        },
+    },
 }
 
 # ═════════════════════════════════════════════════════════════════════════

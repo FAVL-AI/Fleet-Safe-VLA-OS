@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<!-- Unitree Go2 Quadruped — 12-DOF (3 per leg × 4 legs) -->
+<robot name="unitree_go2">
+  <material name="black"><color rgba="0.1 0.1 0.1 1.0"/></material>
+  <material name="silver"><color rgba="0.75 0.75 0.78 1.0"/></material>
+
+  <link name="base_link">
+    <visual><geometry><box size="0.40 0.18 0.08"/></geometry><material name="black"/></visual>
+    <collision><geometry><box size="0.40 0.18 0.08"/></geometry></collision>
+    <inertial><mass value="6.0"/><inertia ixx="0.024" ixy="0" ixz="0" iyy="0.08" iyz="0" izz="0.09"/></inertial>
+  </link>
+
+  <!-- Front-Left Leg -->
+  <link name="fl_hip"><visual><geometry><cylinder radius="0.02" length="0.04"/></geometry><material name="silver"/></visual><collision><geometry><cylinder radius="0.02" length="0.04"/></geometry></collision><inertial><mass value="0.7"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0005"/></inertial></link>
+  <joint name="fl_hip_joint" type="revolute"><parent link="base_link"/><child link="fl_hip"/><origin xyz="0.19 0.05 0" rpy="0 0 0"/><axis xyz="1 0 0"/><limit lower="-0.86" upper="0.86" effort="23.7" velocity="30.1"/></joint>
+
+  <link name="fl_thigh"><visual><geometry><cylinder radius="0.018" length="0.20"/></geometry><origin xyz="0 0 -0.10"/><material name="black"/></visual><collision><geometry><cylinder radius="0.018" length="0.20"/></geometry><origin xyz="0 0 -0.10"/></collision><inertial><mass value="1.0"/><origin xyz="0 0 -0.10"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.001"/></inertial></link>
+  <joint name="fl_thigh_joint" type="revolute"><parent link="fl_hip"/><child link="fl_thigh"/><origin xyz="0 0.08 0"/><axis xyz="0 1 0"/><limit lower="-1.05" upper="4.19" effort="23.7" velocity="30.1"/></joint>
+
+  <link name="fl_calf"><visual><geometry><cylinder radius="0.015" length="0.20"/></geometry><origin xyz="0 0 -0.10"/><material name="silver"/></visual><collision><geometry><cylinder radius="0.015" length="0.20"/></geometry><origin xyz="0 0 -0.10"/></collision><inertial><mass value="0.2"/><origin xyz="0 0 -0.10"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0002"/></inertial></link>
+  <joint name="fl_calf_joint" type="revolute"><parent link="fl_thigh"/><child link="fl_calf"/><origin xyz="0 0 -0.20"/><axis xyz="0 1 0"/><limit lower="-2.72" upper="-0.84" effort="35.55" velocity="28.6"/></joint>
+
+  <!-- Front-Right Leg -->
+  <link name="fr_hip"><visual><geometry><cylinder radius="0.02" length="0.04"/></geometry><material name="silver"/></visual><collision><geometry><cylinder radius="0.02" length="0.04"/></geometry></collision><inertial><mass value="0.7"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0005"/></inertial></link>
+  <joint name="fr_hip_joint" type="revolute"><parent link="base_link"/><child link="fr_hip"/><origin xyz="0.19 -0.05 0" rpy="0 0 0"/><axis xyz="1 0 0"/><limit lower="-0.86" upper="0.86" effort="23.7" velocity="30.1"/></joint>
+
+  <link name="fr_thigh"><visual><geometry><cylinder radius="0.018" length="0.20"/></geometry><origin xyz="0 0 -0.10"/><material name="black"/></visual><collision><geometry><cylinder radius="0.018" length="0.20"/></geometry><origin xyz="0 0 -0.10"/></collision><inertial><mass value="1.0"/><origin xyz="0 0 -0.10"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.001"/></inertial></link>
+  <joint name="fr_thigh_joint" type="revolute"><parent link="fr_hip"/><child link="fr_thigh"/><origin xyz="0 -0.08 0"/><axis xyz="0 1 0"/><limit lower="-1.05" upper="4.19" effort="23.7" velocity="30.1"/></joint>
+
+  <link name="fr_calf"><visual><geometry><cylinder radius="0.015" length="0.20"/></geometry><origin xyz="0 0 -0.10"/><material name="silver"/></visual><collision><geometry><cylinder radius="0.015" length="0.20"/></geometry><origin xyz="0 0 -0.10"/></collision><inertial><mass value="0.2"/><origin xyz="0 0 -0.10"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0002"/></inertial></link>
+  <joint name="fr_calf_joint" type="revolute"><parent link="fr_thigh"/><child link="fr_calf"/><origin xyz="0 0 -0.20"/><axis xyz="0 1 0"/><limit lower="-2.72" upper="-0.84" effort="35.55" velocity="28.6"/></joint>
+
+  <!-- Rear-Left Leg -->
+  <link name="rl_hip"><visual><geometry><cylinder radius="0.02" length="0.04"/></geometry><material name="silver"/></visual><collision><geometry><cylinder radius="0.02" length="0.04"/></geometry></collision><inertial><mass value="0.7"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0005"/></inertial></link>
+  <joint name="rl_hip_joint" type="revolute"><parent link="base_link"/><child link="rl_hip"/><origin xyz="-0.19 0.05 0"/><axis xyz="1 0 0"/><limit lower="-0.86" upper="0.86" effort="23.7" velocity="30.1"/></joint>
+
+  <link name="rl_thigh"><visual><geometry><cylinder radius="0.018" length="0.20"/></geometry><origin xyz="0 0 -0.10"/><material name="black"/></visual><collision><geometry><cylinder radius="0.018" length="0.20"/></geometry><origin xyz="0 0 -0.10"/></collision><inertial><mass value="1.0"/><origin xyz="0 0 -0.10"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.001"/></inertial></link>
+  <joint name="rl_thigh_joint" type="revolute"><parent link="rl_hip"/><child link="rl_thigh"/><origin xyz="0 0.08 0"/><axis xyz="0 1 0"/><limit lower="-1.05" upper="4.19" effort="23.7" velocity="30.1"/></joint>
+
+  <link name="rl_calf"><visual><geometry><cylinder radius="0.015" length="0.20"/></geometry><origin xyz="0 0 -0.10"/><material name="silver"/></visual><collision><geometry><cylinder radius="0.015" length="0.20"/></geometry><origin xyz="0 0 -0.10"/></collision><inertial><mass value="0.2"/><origin xyz="0 0 -0.10"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0002"/></inertial></link>
+  <joint name="rl_calf_joint" type="revolute"><parent link="rl_thigh"/><child link="rl_calf"/><origin xyz="0 0 -0.20"/><axis xyz="0 1 0"/><limit lower="-2.72" upper="-0.84" effort="35.55" velocity="28.6"/></joint>
+
+  <!-- Rear-Right Leg -->
+  <link name="rr_hip"><visual><geometry><cylinder radius="0.02" length="0.04"/></geometry><material name="silver"/></visual><collision><geometry><cylinder radius="0.02" length="0.04"/></geometry></collision><inertial><mass value="0.7"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0005"/></inertial></link>
+  <joint name="rr_hip_joint" type="revolute"><parent link="base_link"/><child link="rr_hip"/><origin xyz="-0.19 -0.05 0"/><axis xyz="1 0 0"/><limit lower="-0.86" upper="0.86" effort="23.7" velocity="30.1"/></joint>
+
+  <link name="rr_thigh"><visual><geometry><cylinder radius="0.018" length="0.20"/></geometry><origin xyz="0 0 -0.10"/><material name="black"/></visual><collision><geometry><cylinder radius="0.018" length="0.20"/></geometry><origin xyz="0 0 -0.10"/></collision><inertial><mass value="1.0"/><origin xyz="0 0 -0.10"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.001"/></inertial></link>
+  <joint name="rr_thigh_joint" type="revolute"><parent link="rr_hip"/><child link="rr_thigh"/><origin xyz="0 -0.08 0"/><axis xyz="0 1 0"/><limit lower="-1.05" upper="4.19" effort="23.7" velocity="30.1"/></joint>
+
+  <link name="rr_calf"><visual><geometry><cylinder radius="0.015" length="0.20"/></geometry><origin xyz="0 0 -0.10"/><material name="silver"/></visual><collision><geometry><cylinder radius="0.015" length="0.20"/></geometry><origin xyz="0 0 -0.10"/></collision><inertial><mass value="0.2"/><origin xyz="0 0 -0.10"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0002"/></inertial></link>
+  <joint name="rr_calf_joint" type="revolute"><parent link="rr_thigh"/><child link="rr_calf"/><origin xyz="0 0 -0.20"/><axis xyz="0 1 0"/><limit lower="-2.72" upper="-0.84" effort="35.55" velocity="28.6"/></joint>
+
+  <!-- Sensors -->
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed"><parent link="base_link"/><child link="imu_link"/><origin xyz="0 0 0"/></joint>
+  <link name="camera_link"/>
+  <joint name="camera_joint" type="fixed"><parent link="base_link"/><child link="camera_link"/><origin xyz="0.22 0 0.02"/></joint>
+  <link name="lidar_link"/>
+  <joint name="lidar_joint" type="fixed"><parent link="base_link"/><child link="lidar_link"/><origin xyz="0 0 0.05"/></joint>
+</robot>

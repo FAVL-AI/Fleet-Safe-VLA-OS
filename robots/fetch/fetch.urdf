@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<!-- Fetch Mobile Manipulator — base (2-DOF) + arm (7-DOF) + gripper (2-DOF) = 11 DOF -->
+<robot name="fetch">
+  <material name="fetch_gray"><color rgba="0.6 0.6 0.6 1.0"/></material>
+  <material name="fetch_dark"><color rgba="0.2 0.2 0.2 1.0"/></material>
+
+  <link name="base_link">
+    <visual><geometry><cylinder radius="0.28" length="0.20"/></geometry><material name="fetch_gray"/></visual>
+    <collision><geometry><cylinder radius="0.28" length="0.20"/></geometry></collision>
+    <inertial><mass value="55.0"/><inertia ixx="0.5" ixy="0" ixz="0" iyy="0.5" iyz="0" izz="0.8"/></inertial>
+  </link>
+
+  <link name="left_wheel"><visual><geometry><cylinder radius="0.065" length="0.02"/></geometry><material name="fetch_dark"/></visual><collision><geometry><cylinder radius="0.065" length="0.02"/></geometry></collision><inertial><mass value="0.5"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/></inertial></link>
+  <joint name="l_wheel_joint" type="continuous"><parent link="base_link"/><child link="left_wheel"/><origin xyz="0 0.19 -0.05" rpy="-1.5708 0 0"/><axis xyz="0 0 1"/></joint>
+
+  <link name="right_wheel"><visual><geometry><cylinder radius="0.065" length="0.02"/></geometry><material name="fetch_dark"/></visual><collision><geometry><cylinder radius="0.065" length="0.02"/></geometry></collision><inertial><mass value="0.5"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/></inertial></link>
+  <joint name="r_wheel_joint" type="continuous"><parent link="base_link"/><child link="right_wheel"/><origin xyz="0 -0.19 -0.05" rpy="-1.5708 0 0"/><axis xyz="0 0 1"/></joint>
+
+  <link name="torso_link">
+    <visual><geometry><box size="0.10 0.10 0.55"/></geometry><origin xyz="0 0 0.275"/><material name="fetch_gray"/></visual>
+    <collision><geometry><box size="0.10 0.10 0.55"/></geometry><origin xyz="0 0 0.275"/></collision>
+    <inertial><mass value="8.0"/><origin xyz="0 0 0.275"/><inertia ixx="0.3" ixy="0" ixz="0" iyy="0.3" iyz="0" izz="0.02"/></inertial>
+  </link>
+  <joint name="torso_lift_joint" type="prismatic"><parent link="base_link"/><child link="torso_link"/><origin xyz="-0.085 0 0.38"/><axis xyz="0 0 1"/><limit lower="0" upper="0.40" effort="450" velocity="0.1"/></joint>
+
+  <!-- 7-DOF Arm (simplified) -->
+  <link name="shoulder_pan_link"><visual><geometry><cylinder radius="0.04" length="0.06"/></geometry><material name="fetch_dark"/></visual><collision><geometry><cylinder radius="0.04" length="0.06"/></geometry></collision><inertial><mass value="2.5"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.003"/></inertial></link>
+  <joint name="shoulder_pan_joint" type="revolute"><parent link="torso_link"/><child link="shoulder_pan_link"/><origin xyz="0.12 0 0.55"/><axis xyz="0 0 1"/><limit lower="-1.605" upper="1.605" effort="33.82" velocity="1.256"/></joint>
+
+  <link name="shoulder_lift_link"><visual><geometry><cylinder radius="0.035" length="0.30"/></geometry><origin xyz="0 0 -0.15"/><material name="fetch_gray"/></visual><collision><geometry><cylinder radius="0.035" length="0.30"/></geometry><origin xyz="0 0 -0.15"/></collision><inertial><mass value="3.0"/><origin xyz="0 0 -0.15"/><inertia ixx="0.03" ixy="0" ixz="0" iyy="0.03" iyz="0" izz="0.003"/></inertial></link>
+  <joint name="shoulder_lift_joint" type="revolute"><parent link="shoulder_pan_link"/><child link="shoulder_lift_link"/><origin xyz="0.12 0 0"/><axis xyz="0 1 0"/><limit lower="-1.220" upper="1.518" effort="131.76" velocity="1.454"/></joint>
+
+  <link name="upperarm_roll_link"><visual><geometry><cylinder radius="0.03" length="0.05"/></geometry><material name="fetch_dark"/></visual><collision><geometry><cylinder radius="0.03" length="0.05"/></geometry></collision><inertial><mass value="1.5"/><inertia ixx="0.002" ixy="0" ixz="0" iyy="0.002" iyz="0" izz="0.001"/></inertial></link>
+  <joint name="upperarm_roll_joint" type="continuous"><parent link="shoulder_lift_link"/><child link="upperarm_roll_link"/><origin xyz="0 0 -0.30"/><axis xyz="1 0 0"/></joint>
+
+  <link name="elbow_flex_link"><visual><geometry><cylinder radius="0.03" length="0.28"/></geometry><origin xyz="0 0 -0.14"/><material name="fetch_gray"/></visual><collision><geometry><cylinder radius="0.03" length="0.28"/></geometry><origin xyz="0 0 -0.14"/></collision><inertial><mass value="2.0"/><origin xyz="0 0 -0.14"/><inertia ixx="0.015" ixy="0" ixz="0" iyy="0.015" iyz="0" izz="0.001"/></inertial></link>
+  <joint name="elbow_flex_joint" type="revolute"><parent link="upperarm_roll_link"/><child link="elbow_flex_link"/><origin xyz="0 0 0"/><axis xyz="0 1 0"/><limit lower="-2.251" upper="2.251" effort="76.94" velocity="1.521"/></joint>
+
+  <link name="forearm_roll_link"><visual><geometry><cylinder radius="0.025" length="0.04"/></geometry><material name="fetch_dark"/></visual><collision><geometry><cylinder radius="0.025" length="0.04"/></geometry></collision><inertial><mass value="0.5"/><inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0005" iyz="0" izz="0.0003"/></inertial></link>
+  <joint name="forearm_roll_joint" type="continuous"><parent link="elbow_flex_link"/><child link="forearm_roll_link"/><origin xyz="0 0 -0.28"/><axis xyz="1 0 0"/></joint>
+
+  <link name="wrist_flex_link"><visual><geometry><cylinder radius="0.025" length="0.06"/></geometry><material name="fetch_gray"/></visual><collision><geometry><cylinder radius="0.025" length="0.06"/></geometry></collision><inertial><mass value="0.5"/><inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0005" iyz="0" izz="0.0003"/></inertial></link>
+  <joint name="wrist_flex_joint" type="revolute"><parent link="forearm_roll_link"/><child link="wrist_flex_link"/><origin xyz="0 0 0"/><axis xyz="0 1 0"/><limit lower="-2.160" upper="2.160" effort="8.85" velocity="1.521"/></joint>
+
+  <link name="wrist_roll_link"><visual><geometry><cylinder radius="0.020" length="0.04"/></geometry><material name="fetch_dark"/></visual><collision><geometry><cylinder radius="0.020" length="0.04"/></geometry></collision><inertial><mass value="0.3"/><inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.00005"/></inertial></link>
+  <joint name="wrist_roll_joint" type="continuous"><parent link="wrist_flex_link"/><child link="wrist_roll_link"/><origin xyz="0 0 -0.06"/><axis xyz="1 0 0"/></joint>
+
+  <!-- Sensors -->
+  <link name="head_camera_link"/>
+  <joint name="head_camera_joint" type="fixed"><parent link="torso_link"/><child link="head_camera_link"/><origin xyz="0.15 0 0.60"/></joint>
+  <link name="lidar_link"/>
+  <joint name="lidar_joint" type="fixed"><parent link="base_link"/><child link="lidar_link"/><origin xyz="0.24 0 0.16"/></joint>
+</robot>
