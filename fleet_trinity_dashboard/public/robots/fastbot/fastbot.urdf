@@ -85,65 +85,48 @@
     <origin xyz="-0.3 0 0.65" rpy="0 0 0"/>
   </joint>
 
-  <!-- Wheels -->
-  <!-- Front Left -->
-  <link name="fl_wheel">
+  <!-- Rear Left Wheel -->
+  <link name="l_wheel">
     <visual>
       <geometry><cylinder radius="0.12" length="0.08"/></geometry>
       <origin xyz="0 0 0" rpy="1.5708 0 0"/>
       <material name="wheel_color"/>
     </visual>
   </link>
-  <joint name="fl_wheel_joint" type="continuous">
+  <joint name="l_wheel_joint" type="continuous">
     <parent link="base_link"/>
-    <child link="fl_wheel"/>
-    <origin xyz="0.25 0.29 0.12" rpy="0 0 0"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-
-  <!-- Front Right -->
-  <link name="fr_wheel">
-    <visual>
-      <geometry><cylinder radius="0.12" length="0.08"/></geometry>
-      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
-      <material name="wheel_color"/>
-    </visual>
-  </link>
-  <joint name="fr_wheel_joint" type="continuous">
-    <parent link="base_link"/>
-    <child link="fr_wheel"/>
-    <origin xyz="0.25 -0.29 0.12" rpy="0 0 0"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-
-  <!-- Rear Left -->
-  <link name="rl_wheel">
-    <visual>
-      <geometry><cylinder radius="0.12" length="0.08"/></geometry>
-      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
-      <material name="wheel_color"/>
-    </visual>
-  </link>
-  <joint name="rl_wheel_joint" type="continuous">
-    <parent link="base_link"/>
-    <child link="rl_wheel"/>
+    <child link="l_wheel"/>
     <origin xyz="-0.25 0.29 0.12" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
   </joint>
 
-  <!-- Rear Right -->
-  <link name="rr_wheel">
+  <!-- Rear Right Wheel -->
+  <link name="r_wheel">
     <visual>
       <geometry><cylinder radius="0.12" length="0.08"/></geometry>
       <origin xyz="0 0 0" rpy="1.5708 0 0"/>
       <material name="wheel_color"/>
     </visual>
   </link>
-  <joint name="rr_wheel_joint" type="continuous">
+  <joint name="r_wheel_joint" type="continuous">
     <parent link="base_link"/>
-    <child link="rr_wheel"/>
+    <child link="r_wheel"/>
     <origin xyz="-0.25 -0.29 0.12" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Front Guide Stand -->
+  <link name="front_stand">
+    <visual>
+      <geometry><sphere radius="0.12"/></geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="wheel_color"/>
+    </visual>
+  </link>
+  <joint name="front_stand_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_stand"/>
+    <origin xyz="0.25 0 0.12" rpy="0 0 0"/>
   </joint>
 
 </robot>

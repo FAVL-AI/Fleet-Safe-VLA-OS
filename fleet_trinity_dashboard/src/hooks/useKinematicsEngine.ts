@@ -101,10 +101,8 @@ export function useKinematicsEngine(onEncounter?: EncounterCallback) {
       if (isFastbot) {
         // FastBot Differential Drive
         const wheelSpeed = time * 5;
-        if (robot.joints['fl_wheel_joint']) robot.joints['fl_wheel_joint'].setJointValue(wheelSpeed);
-        if (robot.joints['fr_wheel_joint']) robot.joints['fr_wheel_joint'].setJointValue(wheelSpeed);
-        if (robot.joints['rl_wheel_joint']) robot.joints['rl_wheel_joint'].setJointValue(wheelSpeed);
-        if (robot.joints['rr_wheel_joint']) robot.joints['rr_wheel_joint'].setJointValue(wheelSpeed);
+        if (robot.joints['l_wheel_joint']) robot.joints['l_wheel_joint'].setJointValue(wheelSpeed);
+        if (robot.joints['r_wheel_joint']) robot.joints['r_wheel_joint'].setJointValue(wheelSpeed);
         
         // LiDAR Scanning Emulation
         if (robot.joints['lidar_joint']) robot.joints['lidar_joint'].setJointValue(time * -15);

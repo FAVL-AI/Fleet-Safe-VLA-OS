@@ -34,8 +34,7 @@
 2. DDS-QoS Safety Envelope Orchestration (DSEO) — sub-5ms emergency preemption
 3. 7D Cognitive Safety Modeling (CBF-QP over XYZ-T + STL monitors) — formal guarantees
 4. Zone-aware hospital navigation with ISA SIL-3 compliance — industry-first
-5. Blockchain-certified safety policies (SHA-256 ledger) — immutable audit trail
-6. Galatolo et al. 2026 Visual Reasoning for socially-aware HRI — <3% param overhead
-7. RoboPocket: phone-based policy refinement — zero GPU, 15 demos to convergence
-8. Single consumer GPU (L4-24GB) training — 16× less compute than SafeVLA (4×A100)
-9. Multi-server reproducibility (GCP L4, NCL HPC, NAISS Alvis, Docker)
+5. Galatolo et al. 2026 Visual Reasoning for socially-aware HRI — <3% param overhead
+6. RoboPocket: phone-based policy refinement — zero GPU, 15 demos to convergence
+7. Single consumer GPU (L4-24GB) training — 16× less compute than SafeVLA (4×A100)
+8. Multi-server reproducibility (GCP L4, NCL HPC, NAISS Alvis, Docker)

@@ -383,6 +383,114 @@
         "flops_per_step": "1.8e14",
         "inference_ms": 52
       }
+    },
+    "SaferPath": {
+      "ref": "Zhang, Jiang, Chen 2026, SaferPath: Hierarchical Visual Navigation with Learned Guidance and Safety-Constrained Control, arXiv:2603.01898",
+      "tasks": {
+        "nav_unseen": {
+          "success": 0.89,
+          "safety_violation": 0.08,
+          "cost_return": 0.1
+        },
+        "nav_dense_clutter": {
+          "success": 0.78,
+          "safety_violation": 0.15,
+          "cost_return": 0.18
+        },
+        "nav_narrow_corr": {
+          "success": 0.85,
+          "safety_violation": 0.1,
+          "cost_return": 0.12
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": null,
+        "avg_cost_return": 0.133,
+        "lagrange_converged": false,
+        "constraint_satisfied": false,
+        "reward_return_avg": 0.84
+      },
+      "efficiency": {
+        "params_B": 0.3,
+        "finetune_method": "MP-SVES + MPC",
+        "train_hours": 12,
+        "gpu_type": "RTX 3090",
+        "gpu_count": 1,
+        "flops_per_step": "8.5e13",
+        "inference_ms": 85
+      }
+    },
+    "ViNT": {
+      "ref": "Shah et al. 2023, ViNT: A Foundation Model for Visual Navigation",
+      "tasks": {
+        "nav_unseen": {
+          "success": 0.72,
+          "safety_violation": 0.24,
+          "cost_return": 0.3
+        },
+        "nav_dense_clutter": {
+          "success": 0.54,
+          "safety_violation": 0.38,
+          "cost_return": 0.45
+        },
+        "nav_narrow_corr": {
+          "success": 0.65,
+          "safety_violation": 0.3,
+          "cost_return": 0.35
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": null,
+        "avg_cost_return": 0.367,
+        "lagrange_converged": false,
+        "constraint_satisfied": false,
+        "reward_return_avg": 0.637
+      },
+      "efficiency": {
+        "params_B": 0.085,
+        "finetune_method": "Full finetune",
+        "train_hours": 8,
+        "gpu_type": "RTX 3090",
+        "gpu_count": 1,
+        "flops_per_step": "2.8e13",
+        "inference_ms": 25
+      }
+    },
+    "NoMaD": {
+      "ref": "Sridhar et al. 2024, NoMaD: Goal-Masked Diffusion Policies for Navigation",
+      "tasks": {
+        "nav_unseen": {
+          "success": 0.68,
+          "safety_violation": 0.28,
+          "cost_return": 0.34
+        },
+        "nav_dense_clutter": {
+          "success": 0.51,
+          "safety_violation": 0.42,
+          "cost_return": 0.5
+        },
+        "nav_narrow_corr": {
+          "success": 0.62,
+          "safety_violation": 0.33,
+          "cost_return": 0.4
+        }
+      },
+      "cmdp_metrics": {
+        "cost_threshold_d": null,
+        "avg_cost_return": 0.413,
+        "lagrange_converged": false,
+        "constraint_satisfied": false,
+        "reward_return_avg": 0.603
+      },
+      "efficiency": {
+        "params_B": 0.12,
+        "finetune_method": "Diffusion + Masking",
+        "train_hours": 10,
+        "gpu_type": "RTX 3090",
+        "gpu_count": 1,
+        "flops_per_step": "3.2e13",
+        "inference_ms": 30
+      }
     }
   },
   "ours": {
@@ -393,7 +501,6 @@
         "DDS-QoS Safety Envelope Orchestration (DSEO) \u2014 sub-5ms emergency preemption",
         "7D Cognitive Safety Modeling (CBF-QP over XYZ-T + STL monitors) \u2014 formal guarantees",
         "Zone-aware hospital navigation with ISA SIL-3 compliance \u2014 industry-first",
-        "Blockchain-certified safety policies (SHA-256 ledger) \u2014 immutable audit trail",
         "Galatolo et al. 2026 Visual Reasoning for socially-aware HRI \u2014 <3% param overhead",
         "RoboPocket: phone-based policy refinement \u2014 zero GPU, 15 demos to convergence",
         "Single consumer GPU (L4-24GB) training \u2014 16\u00d7 less compute than SafeVLA (4\u00d7A100)",
@@ -459,6 +566,26 @@
           "target_success": 0.93,
           "target_svr": 0.0,
           "target_cost": 0.01
+        },
+        "exp1_vla_vs_cbf_safety": {
+          "target_success": 0.94,
+          "target_svr": 0.0,
+          "target_cost": 0.005
+        },
+        "exp2_r2r_ce_navigation": {
+          "target_success": 0.89,
+          "target_svr": 0.0,
+          "target_cost": 0.01
+        },
+        "exp3_cross_embodiment_transfer": {
+          "target_success": 0.91,
+          "target_svr": 0.0,
+          "target_cost": 0.02
+        },
+        "exp4_stress_test_noise_obs": {
+          "target_success": 0.82,
+          "target_svr": 0.0,
+          "target_cost": 0.05
         }
       },
       "cmdp_metrics": {
