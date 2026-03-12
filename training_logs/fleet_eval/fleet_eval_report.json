@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-03-09T00:17:20.839010+00:00",
-  "total_time_s": 58.724899768829346,
+  "timestamp": "2026-03-12T20:59:56.094794+00:00",
+  "total_time_s": 15.398874044418335,
   "fleet_sizes": [
     4,
     8
@@ -23,7 +23,7 @@
       "allocation_efficiency": 0.221,
       "zone_violation_rate": 0.00224,
       "throughput": 0.884,
-      "eval_time_s": 15.172603130340576
+      "eval_time_s": 3.720089912414551
     },
     "N=8": {
       "n_robots": 8,
@@ -41,7 +41,7 @@
       "allocation_efficiency": 0.23425,
       "zone_violation_rate": 0.00215,
       "throughput": 1.874,
-      "eval_time_s": 43.55207848548889
+      "eval_time_s": 11.678746223449707
     }
   }
 }

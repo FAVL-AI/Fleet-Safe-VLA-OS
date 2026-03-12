@@ -8,8 +8,10 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{subcaption}
 \usepackage{balance}
 
 \begin{document}
@@ -66,6 +68,14 @@ The unconstrained VLA policy generates a nominal control input based on language
 The core problem is to find a control input $\mathbf{u}^*$ that minimally deviates from the foundation model's intent $\mathbf{u}_{vla}$ while strictly guaranteeing the state remains within $\mathcal{C}_L$.
 
 \section{SafeVLA Method}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../figures/fig1_g1_primary_panels.png}
+\caption{SafeVLA Architecture Overview: Continuous collision-free trajectory projection via SBF-QP.}
+\label{fig:architecture}
+\end{figure}
+
 \subsection{Semantic Barrier Function (SBF) Generator}
 The extracted language constraints are mapped to dynamic coordinate bounds in the local frame. For example, if the instruction is ``Stay 1 meter away from humans'', the generator outputs a dynamic barrier:
 \begin{equation}
@@ -140,10 +150,64 @@ Tested against adversarial conditions (dynamic human avoidance, unmapped semanti
 \subsection{Exp 6: Sim-to-Real Transfer \& Real Robot Evaluation}
 We validate the applicability of SBFs on physical hardware by deploying the exact FastBot and Unitree G1 policies from simulation to reality without any fine-tuning. Evaluated in a dense physical environment with moving humans and unmarked obstacles, the system successfully grounds language instructions (e.g., ``navigate to the exit but stay away from people'') into local physical barrier constraints via on-board LiDAR and RGB-D sensors, retaining a 0\% collision rate over 20 consecutive physical trials. (See supplementary video for hardware demonstrations).
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../figures/fig2_fastbot_secondary_panels.png}
+\caption{FastBot and Unitree G1 Hardware Validation: Showcasing real-world semantic safety zones defined purely by language.}
+\label{fig:hardware}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/wb_panel_1.png}
+    \caption{Phase 1: Convergence (15-Pane Grid)}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/wb_panel_2.png}
+    \caption{Phase 2: Semantic SVR \& ICR Validations}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/wb_panel_3.png}
+    \caption{Phase 3: Cross-Embodiment Extent}
+\end{subfigure}
+\caption{Comprehensive Weights \& Biases Telemetry: Visualising the simultaneous multi-platform training convergence for FastBot and Unitree G1 across 12,000 steps. The panels display deterministic constraint boundaries driving the Safety Violation Rate (SVR) toward $0\%$.}
+\label{fig:telemetry_comprehensive}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/sim_dashboard_1.png}
+    \caption{Isaac Sim Autonomy Viewer}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/sim_dashboard_2.png}
+    \caption{Active Multi-Agent Orchestration}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{../figures/sim_dashboard_3.png}
+    \caption{Direct Command Center Policy}
+\end{subfigure}
+\caption{Real-Time Trinity Dashboard \& Isaac Sim Integration: Actively monitoring parallel structural constraint enforcement during live VLA model execution across heterogeneous robotic embodiments.}
+\label{fig:trinity_dashboard}
+\end{figure*}
+
 \section{Conclusion}
 SafeVLA elevates foundation models to robust safety architectures via Semantic Barrier Functions. By dynamically generating constraints from language instructions, SafeVLA guarantees invariant semantic safety across varied robotic kinematics. To support future research in language-conditioned safety, we have open-sourced the entire \textbf{SafeVLA Semantic Benchmark} alongside full implementation code.
 
 \balance
+\nocite{*}
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 
