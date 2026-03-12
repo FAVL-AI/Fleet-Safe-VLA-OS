@@ -1,19 +1,6 @@
 {
   "model_id": "fastbot_diffusion_nav",
-  "status": "dry-run",
-  "elapsed_sec": 3.7181880474090576,
-  "final_loss": 0.10199489205800241,
-  "best_metric": 1.0108082787580563,
-  "checkpoint_path": "",
-  "onnx_path": "",
-  "error": "",
-  "metrics": {
-    "final_loss": 0.10199489205800241,
-    "nav_reward": 1.0108082787580563,
-    "zone_compliance": 1.0,
-    "corridor_centering": 0.87,
-    "collision_rate": 0.002,
-    "dmr": 0.0003,
-    "action_jitter": 0.021
-  }
+  "status": "failed",
+  "error": "No module named 'torch'",
+  "elapsed_sec": 5.2928924560546875e-05
 }

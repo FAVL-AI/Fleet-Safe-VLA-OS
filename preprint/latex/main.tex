@@ -370,21 +370,21 @@ SafeVLA elevates foundation models to robust safety architectures via Semantic B
 \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../figures/wb_panel_1.png}
-    \caption{Phase 1: Training Convergence}
+    \caption{Filtered Workspace: SVR Convergence}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../figures/wb_panel_2.png}
-    \caption{Phase 2: Semantic SVR \& ICR}
+    \caption{SafeVLA-UnitreeG1: SVR \& Loss}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../figures/wb_panel_3.png}
-    \caption{Phase 3: Cross-Embodiment Extent}
+    \caption{SafeVLA-FastBot: SVR \& Loss}
 \end{subfigure}
-\caption{Comprehensive Weights \& Biases Telemetry: Visualising the simultaneous multi-platform training convergence for FastBot and Unitree G1 across 12,000 steps. The panels display deterministic constraint boundaries driving the Safety Violation Rate (SVR) toward near-zero.}
+\caption{Live Weights \& Biases telemetry from the \texttt{fleet-safe-vla} project, filtered to show \textbf{only} SafeVLA-specific runs. (a) Workspace overview with Safety\_Violation\_Rate\_SVR converging to near-zero for SafeVLA-UnitreeG1, SafeVLA-FastBot, and SafeVLA: Unitree G1 (Humanoid) runs; zone\_loss driving toward zero. (b) Individual SafeVLA-UnitreeG1 run showing monotonic SVR reduction and loss convergence over 500 steps. (c) Individual SafeVLA-FastBot run confirming cross-embodiment SVR convergence.}
 \label{fig:telemetry_comprehensive}
 \end{figure*}
 
