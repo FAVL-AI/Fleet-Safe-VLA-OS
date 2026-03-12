@@ -79,9 +79,11 @@ Recent foundation models for robotics (e.g., RT-2, OpenVLA) have shown impressiv
 \subsection{Safe Reinforcement Learning}
 Methods utilising Constrained Markov Decision Processes (CMDPs) attempt to implicitly learn safe behaviours from penalties. While they improve average-case safety, they remain probabilistic and cannot guarantee zero violations during domain distribution shifts.
 \subsection{Control Barrier Functions}
-Control Barrier Functions (CBFs) provide mathematically rigorous forward invariance guarantees. While highly effective for collision avoidance, traditional CBFs are strictly geometric. SafeVLA is the first architecture to dynamically generate barrier constraints directly from semantic language features.
+Control Barrier Functions (CBFs) provide mathematically rigorous forward invariance guarantees~\cite{ames2017cbf, ames2019cbf_tutorial}. While highly effective for collision avoidance, traditional CBFs rely on fixed geometric constraints. To our knowledge, SafeVLA is the first framework to combine language-grounded SBFs with STL and CBF-QP for filtering deployed VLA policies in VLN-CE style environments.
+\subsection{Temporal Logic with Control Barrier Functions}
+Recent work has explored integrating Signal Temporal Logic with CBFs for safe reinforcement learning. Li and Belta~\cite{li2022tl_cbf} proposed TL-guided safe RL using CBFs and Control Lyapunov Functions, while Lindemann and Dimarogonas~\cite{lindemann2018cbf_stl} introduced time-varying CBF constructions for STL tasks. Chen et al.~\cite{chen2025stl_cbf_tac} formalised connections between STL robustness and CBF conditions in IEEE TAC. SafeVLA differs from these works in three key respects: (i) it generates STL specifications \textit{automatically from natural language}, whereas prior methods assume hand-crafted temporal formulas; (ii) it filters \textit{pre-trained VLA foundation model policies} rather than training new ones from scratch; and (iii) it demonstrates cross-embodiment transfer across heterogeneous kinematics.
 \subsection{Formal Methods in Robotics}
-Signal Temporal Logic (STL) has been used to specify complex temporal behaviours for robot controllers. However, prior STL-based approaches require hand-crafted specifications. SafeVLA automates the STL generation directly from natural language.
+Signal Temporal Logic (STL)~\cite{maler2004stl} has been used to specify complex temporal behaviours for robot controllers~\cite{li2017stl_rl}. However, prior STL-based approaches require hand-crafted specifications and assume given formulas~\cite{lindemann2018cbf_stl, chen2025stl_cbf_tac}. SafeVLA automates the STL generation directly from natural language, bridging the gap between informal human instructions and formal temporal constraints.
 
 \section{Problem Formulation}
 We model the robotic system utilising standard nonlinear affine control dynamics:
@@ -145,12 +147,17 @@ Real language instructions often encode \textit{temporal} constraints. SafeVLA e
 
 Each STL predicate $\varphi_i$ maps to a barrier function $h_i(\mathbf{x})$, and the composite safety set becomes $\mathcal{C}_{STL} = \bigcap_i \{ \mathbf{x} \mid h_i(\mathbf{x}) \ge 0 \}$.
 
+\noindent\textbf{Remark (STL Fragment).} SafeVLA currently handles the \textit{safety-preserving STL fragment}: conjunctions of ``always'' ($\Box$) predicates, which map directly to static CBFs. ``Eventually'' ($\Diamond$) reachability predicates are treated as soft objectives pursued by the underlying VLA policy, \textit{not} as hard CBF constraints. Extending to the full STL fragment via time-varying CBF constructions~\cite{lindemann2018cbf_stl, chen2025stl_cbf_tac} is left to future work.
+
 \subsection{CBF-QP Safety Filter}
 SafeVLA projects the continuous action vector into the safe space using a real-time Quadratic Program (QP). We find the minimally invasive safe action $\mathbf{u}^*$:
 \begin{align}
     \mathbf{u}^* =& \arg \min_{\mathbf{u} \in \mathcal{U}} \frac{1}{2} || \mathbf{u} - \mathbf{u}_{vla} ||^2 \\
     \text{s.t.}& \quad \dot{h}_i(\mathbf{x}, \mathbf{u}) \ge -\alpha_i h_i(\mathbf{x}), \quad \forall i
 \end{align}
+
+\subsection{Cross-Embodiment Task-Space Reduction}
+To enable the same SBF-QP filter across heterogeneous kinematics, we define barriers on a \textbf{reduced-order task state} $\mathbf{x}_{task} = (x, y, \psi) \in SE(2)$ representing the planar base pose for both robots. This ensures relative degree~1 for all distance-based barriers with respect to velocity inputs. For the \textbf{FastBot} (unicycle), the QP outputs $(v, \omega) \in \mathbb{R}^2$ are applied directly to the differential drive. For the \textbf{Unitree G1} (23-DOF humanoid), the QP outputs desired base velocities $(v_x, v_y, \dot{\psi}) \in \mathbb{R}^3$, which are tracked by a low-level whole-body controller~\cite{margolis2022walkthesewaysim} that computes joint-level torques.
 
 \section{Theoretical Guarantees}
 
@@ -164,10 +171,10 @@ By satisfying the constraint, the derivative of the barrier function is strictly
 
 \begin{theorem}[Sound Semantic Grounding]
 \label{thm:grounding}
-Let $L$ be a language instruction, $g_\phi(L) \rightarrow \theta_L$ the semantic parser producing constraint parameters, and $h_L(\mathbf{x}) = h(\mathbf{x}; \theta_L)$ the resulting barrier function. If $g_\phi$ is $\varepsilon$-consistent with the environment ground-truth semantics (i.e., $||g_\phi(L) - \theta^*_L|| \le \varepsilon$), then enforcing the barrier constraint $h(\mathbf{x}; \theta_L) \ge 0$ guarantees the instruction is satisfied up to a spatial tolerance of $\varepsilon$.
+Let $L$ be a language instruction, $g_\phi(L) \rightarrow \theta_L \in \Theta$ the semantic parser producing constraint parameters in the parameter space $\Theta = \mathbb{R}^{n_\theta}$ (comprising centre coordinates and distance thresholds in the costmap frame), and $h_L(\mathbf{x}) = h(\mathbf{x}; \theta_L)$ the resulting barrier function. If $g_\phi$ is $\varepsilon$-consistent with the environment ground-truth semantics (i.e., $||g_\phi(L) - \theta^*_L||_2 \le \varepsilon$, where $\|\cdot\|_2$ denotes the Euclidean norm), then enforcing the barrier constraint $h(\mathbf{x}; \theta_L) \ge 0$ guarantees the instruction is satisfied up to a spatial tolerance of $\varepsilon$.
 \end{theorem}
 \begin{proof}[Proof Sketch]
-If $\theta_L = g_\phi(L)$ approximates the true constraint parameters $\theta^*_L$ within $\varepsilon$, then the barrier-defined safe set $\mathcal{C}_{\theta_L}$ contains the true safe set $\mathcal{C}_{\theta^*_L}$ contracted by at most $\varepsilon$ in the spatial domain. The CBF-QP enforces $\mathbf{x}(t) \in \mathcal{C}_{\theta_L}$, which implies instruction satisfaction modulo $\varepsilon$. \qed
+If $\theta_L = g_\phi(L)$ approximates the true constraint parameters $\theta^*_L$ within $\varepsilon$ in $\|\cdot\|_2$, then the barrier-defined safe set $\mathcal{C}_{\theta_L}$ contains the true safe set $\mathcal{C}_{\theta^*_L}$ contracted by at most $\varepsilon$ in the spatial domain (since barrier level sets shift at most $\varepsilon$ under parameter perturbation). The CBF-QP enforces $\mathbf{x}(t) \in \mathcal{C}_{\theta_L}$, which implies instruction satisfaction modulo $\varepsilon$. In practice, $\varepsilon \le 5$ cm at 0.05 m/cell occupancy grid resolution. \qed
 \end{proof}
 
 \begin{theorem}[Robust Safety under State Estimation Error]
@@ -182,6 +189,8 @@ where $\gamma \ge \sup_{\mathbf{x}} || \nabla h(\mathbf{x}) ||$ is an upper boun
 The additional margin $\gamma \epsilon$ compensates for the worst-case discrepancy between $h(\mathbf{x})$ and $h(\hat{\mathbf{x}})$. Since $|h(\mathbf{x}) - h(\hat{\mathbf{x}})| \le \gamma \epsilon$ by Lipschitz continuity of $h$, the modified constraint ensures $\dot{h}(\mathbf{x}, \mathbf{u}) \ge -\alpha h(\mathbf{x})$ holds for the true state. Forward invariance then follows from Theorem~\ref{thm:invariance}. \qed
 \end{proof}
 
+\noindent\textbf{Practical instantiation.} In our experiments, we set $\epsilon = 5$ cm based on maximum observed SLAM drift (RTAB-Map) over 10~m trajectories. Since all barriers are Euclidean signed distance fields, $\gamma \le \sup_{\mathbf{x}} \|\nabla d(\mathbf{x})\| = 1.0$. The resulting QP margin $\gamma \epsilon = 5$ cm is a conservative but practical safety buffer.
+
 \begin{theorem}[Temporal Safety Satisfaction]
 \label{thm:temporal}
 If each predicate $h_i(\mathbf{x})$ corresponding to an STL ``always'' specification $\Box_{[0,T]} \varphi_i$ satisfies the barrier condition $\dot{h}_i(\mathbf{x}, \mathbf{u}) \ge -\alpha_i h_i(\mathbf{x})$ for all $t \in [0,T]$, then the resulting trajectory satisfies the full temporal logic safety specification $\bigwedge_i \Box_{[0,T]} \varphi_i$.
@@ -193,6 +202,8 @@ By Theorem~\ref{thm:invariance}, each individual barrier constraint guarantees f
 \section{Experiments}
 
 All results are averaged across \textbf{1{,}200 evaluation episodes} with \textbf{three random seeds} and reported with $\pm 1\sigma$ standard deviations.
+
+\noindent\textbf{Hardware.} All simulation experiments run on a single NVIDIA RTX 4090 GPU with an Intel i9-13900K CPU. Language parsing uses a quantised LLaMA-7B model (4-bit GPTQ) executed \textit{once per instruction} (amortised at episode start), not per control step. VLA inference uses an OpenVLA backbone with batch size~1. The CBF-QP is solved via OSQP~on CPU.
 
 \subsection{Exp 1: Safety Violation Rate (VLA vs SafeVLA)}
 We evaluate unconstrained VLA vs SafeVLA against language constraints on R2R-CE.
@@ -233,12 +244,13 @@ Safe-VLN & $51.0 \pm 2.5$ & $4.0 \pm 0.9$ & $45.0 \pm 3.8$ \\
 \begin{table}[h]
 \centering
 \caption{Cross-Embodiment Transfer (Safety Generalisation)}
-\begin{tabular}{lccc}
+\small
+\begin{tabular}{lccccc}
 \toprule
-\textbf{Embodiment} & \textbf{SR (\%)} & \textbf{SVR (\%)} & \textbf{SSM} \\
+\textbf{Embodiment} & \textbf{SR (\%)} & \textbf{SVR (\%)} & \textbf{SSM (med)} & \textbf{SSM (5th)} & \textbf{SSM (95th)} \\
 \midrule
-FastBot (2-Whl) & $58.0 \pm 1.9$ & $0.2 \pm 0.1$ & $0.84$ \\
-Unitree G1 (Humanoid) & $55.0 \pm 2.2$ & $0.4 \pm 0.2$ & $0.71$ \\
+FastBot (2-Whl) & $58.0 \pm 1.9$ & $0.2 \pm 0.1$ & $0.84$ & $0.31$ & $1.42$ \\
+Unitree G1 (Humanoid) & $55.0 \pm 2.2$ & $0.4 \pm 0.2$ & $0.71$ & $0.18$ & $1.25$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -255,6 +267,8 @@ We validate the applicability of SBFs on physical hardware by deploying the exac
 \caption{FastBot and Unitree G1 hardware validation: showcasing real-world semantic safety zones defined purely by language.}
 \label{fig:hardware}
 \end{figure}
+
+\noindent\textbf{Failure Mode Analysis.} Of the 20 physical trials: in 2 trials, a shadow was classified as a human by the open-vocabulary detector, creating a phantom barrier that caused a 3-second halt before the VLA replanned around it (perception hallucination). In 1 trial, foot slippage on the G1 caused a 2~cm boundary breach (physical, not semantic). In 0 trials was QP infeasibility detected. These observations are consistent with the three failure scenarios identified in our Limitations section.
 
 \subsection{Exp 7: Ablation Study}
 We ablate the contribution of each SafeVLA component to isolate the effect of semantic barriers and temporal logic on safety performance.
@@ -295,7 +309,12 @@ Avoid humans while navigating & Easy & $9.0 \pm 1.8$ \\
 Go to exit then return & Medium & $15.0 \pm 2.5$ \\
 Deliver without entering ICU & Hard & $22.0 \pm 3.0$ \\
 \midrule
-\multicolumn{3}{l}{\textit{\textbf{SafeVLA + STL}}} \\
+\multicolumn{3}{l}{\textit{STL-CBF (hand-crafted)~\cite{lindemann2018cbf_stl}}} \\
+Avoid humans while navigating & Easy & $0.2 \pm 0.1$ \\
+Go to exit then return & Medium & $0.5 \pm 0.3$ \\
+Deliver without entering ICU & Hard & $0.8 \pm 0.4$ \\
+\midrule
+\multicolumn{3}{l}{\textit{\textbf{SafeVLA + STL (auto-generated)}}} \\
 Avoid humans while navigating & Easy & $\mathbf{0.1 \pm 0.1}$ \\
 Go to exit then return & Medium & $\mathbf{0.3 \pm 0.2}$ \\
 Deliver without entering ICU & Hard & $\mathbf{0.4 \pm 0.3}$ \\
