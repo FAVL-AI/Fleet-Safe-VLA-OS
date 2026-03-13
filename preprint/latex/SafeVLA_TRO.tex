@@ -265,6 +265,13 @@ Evaluated in a dense, live facility over 50 consecutive physical trials (each av
 
 \begin{figure}[h]
 \centering
+\includegraphics[width=\linewidth]{../figures/tro_multifloor_delivery_ssm.png}
+\caption{Semantic Safety Margin (SSM) trajectory over an 8-minute Sim-to-Real Multi-Floor Delivery Task. SafeVLA maintains positive constraint satisfaction despite semantic stress events.}
+\label{fig:multifloor_ssm}
+\end{figure}
+
+\begin{figure}[h]
+\centering
 \includegraphics[width=\linewidth]{../figures/fig2_fastbot_secondary_panels.png}
 \caption{FastBot and Unitree G1 hardware validation in long-horizon deployment.}
 \label{fig:hardware}
@@ -289,6 +296,13 @@ While physical deployment demonstrated high instruction compliance, the transiti
         \item \textit{QP Infeasibility:} In a rare trial, conflicting constraints (a human trapping the robot against a static wall barrier) resulted in QP infeasibility. The system defaulted to a safe halt.
     \end{itemize}
 \end{enumerate}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../figures/tro_failure_taxonomy.png}
+\caption{Empirical Distribution of Physical Failure Modes (100 Episodes). The transition from simulated semantics reveals unique hardware-bound constraints including unmodeled slippage and perceptual occlusion.}
+\label{fig:failure_taxonomy}
+\end{figure}
 
 \subsection{Exp 7: Ablation Study}
 We ablate the contribution of each SafeVLA component to isolate the effect of semantic barriers and temporal logic on safety performance.
