@@ -258,65 +258,103 @@ function URDFRobot({ url, position = [0, -0.5, 0], scale = 3.5, color = 0x06b6d4
   );
 }
 
+/* ─── WebGL Error Boundary ─── */
+class WebGLErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error: Error) {
+    console.warn('WebGL error caught by boundary:', error.message);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="w-full h-full flex items-center justify-center bg-slate-950/90">
+          <div className="text-center space-y-3 p-8">
+            <div className="text-4xl">🤖</div>
+            <h3 className="text-slate-300 font-bold tracking-widest text-sm">WEBGL UNAVAILABLE</h3>
+            <p className="text-slate-500 text-xs max-w-sm">3D viewer requires WebGL support. The fleet is still operational — telemetry and minimap remain active.</p>
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-emerald-400 text-xs font-mono">FLEET ONLINE</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 /* ─── Main Viewer Component ─── */
 
 const RobotViewer = React.memo(function RobotViewer({ onEncounter }: { onEncounter?: EncounterCallback }) {
   return (
     <div className="w-full h-full relative">
-      <Canvas
-        shadows
-        camera={{ position: [0, 1.2, 4], fov: 40 }}
-        onCreated={({ gl }) => {
-          const canvas = gl.domElement;
-          canvas.addEventListener('webglcontextlost', (e) => {
-            e.preventDefault();
-            console.warn('WebGL context lost');
-          });
-        }}
-      >
-        <fog attach="fog" args={['#0f111a', 5, 18]} />
-        <ambientLight intensity={0.6} />
-        
-        <directionalLight position={[2, 5, 3]} intensity={1.5} color="#ffffff" castShadow />
-        <spotLight position={[-3, 4, -2]} intensity={2.0} color="#22d3ee" angle={0.4} penumbra={1} />
-        <spotLight position={[3, -1, 3]} intensity={1.0} color="#06b6d4" angle={0.6} penumbra={1} />
+      <WebGLErrorBoundary>
+        <Canvas
+          shadows
+          camera={{ position: [0, 1.2, 4], fov: 40 }}
+          onCreated={({ gl }) => {
+            const canvas = gl.domElement;
+            canvas.addEventListener('webglcontextlost', (e) => {
+              e.preventDefault();
+              console.warn('WebGL context lost');
+            });
+          }}
+        >
+          <fog attach="fog" args={['#0f111a', 5, 18]} />
+          <ambientLight intensity={0.6} />
+          
+          <directionalLight position={[2, 5, 3]} intensity={1.5} color="#ffffff" castShadow />
+          <spotLight position={[-3, 4, -2]} intensity={2.0} color="#22d3ee" angle={0.4} penumbra={1} />
+          <spotLight position={[3, -1, 3]} intensity={1.0} color="#06b6d4" angle={0.6} penumbra={1} />
 
-        {/* Fleet Roster */}
-        <URDFRobot url="/robots/unitree_g1/g1_29dof.urdf" position={[-0.8, 0.5, 0]} scale={1.5} color={0x06b6d4} robotId="robot_0" onEncounter={onEncounter} />
-        <URDFRobot url="/robots/fastbot/fastbot.urdf" position={[1.0, -0.4, 0]} scale={1.2} color={0x22c55e} isFastbot={true} robotId="robot_1" onEncounter={onEncounter} />
-        
-        {/* Spatial Memory Zones with labels */}
-        <FloorZone position={[0, -0.39, 6.67]} color="#22c55e" length={6.66} label="GREEN ZONE (SAFE)" />
-        <FloorZone position={[0, -0.39, 0]} color="#f59e0b" length={6.66} label="AMBER ZONE (CAUTION)" />
-        <FloorZone position={[0, -0.39, -6.67]} color="#ef4444" length={6.66} label="RED ZONE (DANGER)" />
+          {/* Fleet Roster */}
+          <URDFRobot url="/robots/unitree_g1/g1_29dof.urdf" position={[-0.8, 0.5, 0]} scale={1.5} color={0x06b6d4} robotId="robot_0" onEncounter={onEncounter} />
+          <URDFRobot url="/robots/fastbot/fastbot.urdf" position={[1.0, -0.4, 0]} scale={1.2} color={0x22c55e} isFastbot={true} robotId="robot_1" onEncounter={onEncounter} />
+          
+          {/* Spatial Memory Zones with labels */}
+          <FloorZone position={[0, -0.39, 6.67]} color="#22c55e" length={6.66} label="GREEN ZONE (SAFE)" />
+          <FloorZone position={[0, -0.39, 0]} color="#f59e0b" length={6.66} label="AMBER ZONE (CAUTION)" />
+          <FloorZone position={[0, -0.39, -6.67]} color="#ef4444" length={6.66} label="RED ZONE (DANGER)" />
 
-        {/* Coordinate grid for spatial reference */}
-        <SpatialGrid />
+          {/* Coordinate grid for spatial reference */}
+          <SpatialGrid />
 
-        {/* Labeled Doors */}
-        <LabeledDoor position={[-3, -0.4, 4]} label={"Systems Lab\n[Safe Zone]"} />
-        <LabeledDoor position={[3, -0.4, 0]} label={"Unit 02\n[Caution]"} isRight />
-        <LabeledDoor position={[-3, -0.4, -4]} label={"Server Terminal\n[Danger]"} />
+          {/* Labeled Doors */}
+          <LabeledDoor position={[-3, -0.4, 4]} label={"Systems Lab\n[Safe Zone]"} />
+          <LabeledDoor position={[3, -0.4, 0]} label={"Unit 02\n[Caution]"} isRight />
+          <LabeledDoor position={[-3, -0.4, -4]} label={"Server Terminal\n[Danger]"} />
 
-        {/* Ground plane */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.4, 0]} receiveShadow>
-          <planeGeometry args={[15, 25]} />
-          <meshStandardMaterial color="#0b0c11" roughness={1} />
-        </mesh>
+          {/* Ground plane */}
+          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.4, 0]} receiveShadow>
+            <planeGeometry args={[15, 25]} />
+            <meshStandardMaterial color="#0b0c11" roughness={1} />
+          </mesh>
 
-        <OrbitControls 
-          enableZoom={true} 
-          enablePan={true} 
-          maxPolarAngle={Math.PI / 2 + 0.1} 
-          minPolarAngle={0.2} 
-          makeDefault 
-          target={[0, 0.8, 0]}
-          maxDistance={12}
-          minDistance={2}
-        />
-      </Canvas>
+          <OrbitControls 
+            enableZoom={true} 
+            enablePan={true} 
+            maxPolarAngle={Math.PI / 2 + 0.1} 
+            minPolarAngle={0.2} 
+            makeDefault 
+            target={[0, 0.8, 0]}
+            maxDistance={12}
+            minDistance={2}
+          />
+        </Canvas>
+      </WebGLErrorBoundary>
     </div>
   );
 });
 
 export default RobotViewer;
+

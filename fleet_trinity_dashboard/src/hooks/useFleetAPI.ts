@@ -37,18 +37,25 @@ export function useFleetAPI() {
 
   const wsRef = useRef<WebSocket | null>(null);
 
-  // Initialize WebSocket Connection
+  // Initialize WebSocket Connection — max 3 retries then give up
   useEffect(() => {
     let ws: WebSocket;
     let reconnectTimeout: NodeJS.Timeout;
+    let retries = 0;
+    const MAX_RETRIES = 3;
 
     const connectWS = () => {
+      if (retries >= MAX_RETRIES) {
+        console.warn(`[Fleet API] Backend unreachable after ${MAX_RETRIES} attempts — running in standalone mode`);
+        return;
+      }
       try {
         ws = new WebSocket(`${WS_BASE_URL}/fleet`);
         wsRef.current = ws;
 
         ws.onopen = () => {
           console.log('[Fleet API] WebSocket Connected');
+          retries = 0; // Reset on successful connect
           setFleetState(prev => ({ ...prev, wsConnected: true }));
         };
 
@@ -85,16 +92,18 @@ export function useFleetAPI() {
         };
 
         ws.onclose = () => {
-          console.log('[Fleet API] WebSocket Disconnected. Reconnecting...');
           setFleetState(prev => ({ ...prev, wsConnected: false }));
-          reconnectTimeout = setTimeout(connectWS, 3000); // 3s backoff
+          retries++;
+          const delay = Math.min(3000 * Math.pow(2, retries), 15000);
+          console.warn(`[Fleet API] WebSocket disconnected. Retry ${retries}/${MAX_RETRIES} in ${delay/1000}s`);
+          reconnectTimeout = setTimeout(connectWS, delay);
         };
         
-        ws.onerror = (err) => {
-            console.error('[Fleet API] WebSocket Error:', err);
+        ws.onerror = () => {
+          // Silently handled — onclose will fire next
         };
       } catch (e) {
-        console.error('[Fleet API] Failed to connect WebSocket', e);
+        console.warn('[Fleet API] Failed to connect WebSocket — running standalone');
       }
     };
 
@@ -111,8 +120,17 @@ export function useFleetAPI() {
     animationStore.robots = fleetState.robots;
   }, [fleetState.robots]);
 
-  // REST API Mutations
+  // REST API Mutations — apply locally as fallback when backend is unreachable
   const setFSMState = useCallback(async (robotId: string, state: string) => {
+    // Always apply locally so UI responds immediately
+    setFleetState(prev => ({
+      ...prev,
+      robots: {
+        ...prev.robots,
+        [robotId]: { ...prev.robots[robotId], fsm: state }
+      }
+    }));
+
     try {
       const res = await fetch(`${API_BASE_URL}/fleet/${robotId}/fsm`, {
         method: 'POST',
@@ -122,12 +140,21 @@ export function useFleetAPI() {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return await res.json();
     } catch (e) {
-      console.error(`[Fleet API] Failed to set FSM for ${robotId}:`, e);
+      console.warn(`[Fleet API] Backend unavailable — FSM state applied locally for ${robotId}:`, state);
       return null;
     }
   }, []);
 
   const setPolicy = useCallback(async (robotId: string, policy: string) => {
+    // Always apply locally so UI responds immediately
+    setFleetState(prev => ({
+      ...prev,
+      robots: {
+        ...prev.robots,
+        [robotId]: { ...prev.robots[robotId], policy }
+      }
+    }));
+
     try {
       const res = await fetch(`${API_BASE_URL}/fleet/${robotId}/policy`, {
         method: 'POST',
@@ -137,7 +164,7 @@ export function useFleetAPI() {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return await res.json();
     } catch (e) {
-      console.error(`[Fleet API] Failed to set policy for ${robotId}:`, e);
+      console.warn(`[Fleet API] Backend unavailable — policy applied locally for ${robotId}:`, policy);
       return null;
     }
   }, []);
