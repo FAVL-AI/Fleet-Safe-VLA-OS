@@ -291,7 +291,7 @@ While the high-fidelity simulation demonstrates high instruction compliance, the
         \item \textit{Unmodeled Slippage:} Injected friction variances for the G1 humanoid induced bounded state deviations exceeding the $\epsilon = 5$ cm robust margin, causing minor semantic boundary breaches.
         \item \textit{Actuator Limits:} Aggressive avoidance maneuvers proposed by the QP occasionally requested joint velocities that were artificially capped at hardware limits within the simulator.
     \end{itemize}
-    \item \textbf{Optimization Failures (3\% of projected failures):}
+    \item \textbf{Optimisation Failures (3\% of projected failures):}
     \begin{itemize}
         \item \textit{QP Infeasibility:} In a rare trial, conflicting constraints (a dynamic agent trapping the robot against a static wall barrier) resulted in QP infeasibility. The system defaulted to a safe halt.
     \end{itemize}
