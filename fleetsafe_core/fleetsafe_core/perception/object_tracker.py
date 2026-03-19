@@ -19,7 +19,7 @@ import time
 import cv2
 
 # Import LCM messages
-from dimos_lcm.vision_msgs import (
+from fleetsafe_core_lcm.vision_msgs import (
     Detection2D,
     Detection3D,
     ObjectHypothesisWithPose,

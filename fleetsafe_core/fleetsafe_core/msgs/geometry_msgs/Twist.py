@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 
-from dimos_lcm.geometry_msgs import Twist as LCMTwist
+from fleetsafe_core_lcm.geometry_msgs import Twist as LCMTwist
 from plum import dispatch
 
 # Import Quaternion at runtime for beartype compatibility

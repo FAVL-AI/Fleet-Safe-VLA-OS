@@ -28,7 +28,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning, module="websocket
 def test_foxglove_bridge_import() -> None:
     """Test that the foxglove bridge can be imported successfully."""
     try:
-        from dimos_lcm.foxglove_bridge import FoxgloveBridge
+        from fleetsafe_core_lcm.foxglove_bridge import FoxgloveBridge
 
         assert FoxgloveBridge is not None
     except ImportError as e:
@@ -38,7 +38,7 @@ def test_foxglove_bridge_import() -> None:
 def test_foxglove_bridge_runner_init() -> None:
     """Test that LcmFoxgloveBridge can be initialized with default parameters."""
     try:
-        from dimos_lcm.foxglove_bridge import FoxgloveBridge
+        from fleetsafe_core_lcm.foxglove_bridge import FoxgloveBridge
 
         runner = FoxgloveBridge(host="localhost", port=8765, debug=False, num_threads=2)
 
@@ -52,7 +52,7 @@ def test_foxglove_bridge_runner_init() -> None:
 def test_foxglove_bridge_runner_params() -> None:
     """Test that LcmFoxgloveBridge accepts various parameter configurations."""
     try:
-        from dimos_lcm.foxglove_bridge import FoxgloveBridge
+        from fleetsafe_core_lcm.foxglove_bridge import FoxgloveBridge
 
         configs = [
             {"host": "0.0.0.0", "port": 8765, "debug": True, "num_threads": 1},
@@ -71,7 +71,7 @@ def test_foxglove_bridge_runner_params() -> None:
 def test_bridge_runner_has_run_method() -> None:
     """Test that the bridge runner has a run method that can be called."""
     try:
-        from dimos_lcm.foxglove_bridge import FoxgloveBridge
+        from fleetsafe_core_lcm.foxglove_bridge import FoxgloveBridge
 
         runner = FoxgloveBridge(host="localhost", port=8765, debug=False, num_threads=1)
 

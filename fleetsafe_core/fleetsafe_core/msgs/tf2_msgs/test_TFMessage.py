@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dimos_lcm.tf2_msgs import TFMessage as LCMTFMessage
+from fleetsafe_core_lcm.tf2_msgs import TFMessage as LCMTFMessage
 
 from fleetsafe_core.msgs.geometry_msgs import Quaternion, Transform, Vector3
 from fleetsafe_core.msgs.tf2_msgs import TFMessage

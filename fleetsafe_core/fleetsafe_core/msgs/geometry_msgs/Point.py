@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 
-from dimos_lcm.geometry_msgs import Point as LCMPoint
+from fleetsafe_core_lcm.geometry_msgs import Point as LCMPoint
 
 
 class Point(LCMPoint):  # type: ignore[misc]

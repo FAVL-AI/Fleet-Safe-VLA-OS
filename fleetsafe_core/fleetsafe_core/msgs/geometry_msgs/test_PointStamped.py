@@ -16,7 +16,7 @@
 
 import time
 
-from dimos_lcm.geometry_msgs import Point as LCMPoint
+from fleetsafe_core_lcm.geometry_msgs import Point as LCMPoint
 
 from fleetsafe_core.msgs.geometry_msgs.Point import Point
 from fleetsafe_core.msgs.geometry_msgs.PointStamped import PointStamped

@@ -105,5 +105,5 @@ parameters, EKF tuning, and point cloud processing settings.
 | `fleetsafe_core_native_module.hpp` | Reusable header for parsing NativeModule CLI args            |
 | `config/`                 | FAST-LIO2 YAML configuration files                           |
 | `flake.nix`               | Nix flake for hermetic builds                                |
-| `CMakeLists.txt`          | Build config, fetches dimos-lcm headers automatically        |
+| `CMakeLists.txt`          | Build config, fetches fleetsafe_core-lcm headers automatically        |
 | `../module.py`            | Python NativeModule wrapper (`FastLio2`)                     |

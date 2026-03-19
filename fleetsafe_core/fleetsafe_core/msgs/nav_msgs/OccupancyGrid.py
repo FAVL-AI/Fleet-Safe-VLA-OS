@@ -19,11 +19,11 @@ from functools import lru_cache
 import time
 from typing import TYPE_CHECKING, BinaryIO
 
-from dimos_lcm.nav_msgs import (
+from fleetsafe_core_lcm.nav_msgs import (
     MapMetaData,
     OccupancyGrid as LCMOccupancyGrid,
 )
-from dimos_lcm.std_msgs import Time as LCMTime  # type: ignore[import-untyped]
+from fleetsafe_core_lcm.std_msgs import Time as LCMTime  # type: ignore[import-untyped]
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image

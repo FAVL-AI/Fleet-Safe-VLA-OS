@@ -16,9 +16,9 @@ from collections.abc import Callable, Generator
 import functools
 from typing import TypedDict
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import ImageAnnotations
-from dimos_lcm.foxglove_msgs.SceneUpdate import SceneUpdate
-from dimos_lcm.visualization_msgs.MarkerArray import MarkerArray
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import ImageAnnotations
+from fleetsafe_core_lcm.foxglove_msgs.SceneUpdate import SceneUpdate
+from fleetsafe_core_lcm.visualization_msgs.MarkerArray import MarkerArray
 import pytest
 
 from fleetsafe_core.core.transport import LCMTransport

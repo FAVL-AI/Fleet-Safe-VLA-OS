@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from dimos_lcm.vision_msgs.Detection3DArray import Detection3DArray as LCMDetection3DArray
+from fleetsafe_core_lcm.vision_msgs.Detection3DArray import Detection3DArray as LCMDetection3DArray
 
 from fleetsafe_core.types.timestamped import to_timestamp
 

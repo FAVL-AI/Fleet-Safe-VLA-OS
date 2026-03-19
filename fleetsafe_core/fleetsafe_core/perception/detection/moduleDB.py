@@ -17,7 +17,7 @@ import threading
 import time
 from typing import Any
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import (
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import (
     ImageAnnotations,
 )
 from lcm_msgs.foxglove_msgs import SceneUpdate  # type: ignore[import-not-found]

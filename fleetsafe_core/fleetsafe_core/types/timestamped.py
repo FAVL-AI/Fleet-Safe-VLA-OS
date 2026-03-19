@@ -15,11 +15,11 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from typing import Generic, TypeVar, Union
 
-from dimos_lcm.builtin_interfaces import Time as ROSTime
+from fleetsafe_core_lcm.builtin_interfaces import Time as ROSTime
 from reactivex import create
 from reactivex.disposable import CompositeDisposable
 
-# from dimos_lcm.std_msgs import Time as ROSTime
+# from fleetsafe_core_lcm.std_msgs import Time as ROSTime
 from reactivex.observable import Observable
 
 from fleetsafe_core.memory.timeseries.inmemory import InMemoryStore

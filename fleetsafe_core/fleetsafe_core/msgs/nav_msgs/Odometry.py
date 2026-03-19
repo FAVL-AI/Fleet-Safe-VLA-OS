@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from rerun._baseclasses import Archetype
 
-from dimos_lcm.nav_msgs import Odometry as LCMOdometry
+from fleetsafe_core_lcm.nav_msgs import Odometry as LCMOdometry
 import numpy as np
 
 from fleetsafe_core.msgs.geometry_msgs.Pose import Pose

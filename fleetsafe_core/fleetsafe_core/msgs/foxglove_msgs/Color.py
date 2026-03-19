@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import hashlib
 
-from dimos_lcm.foxglove_msgs import Color as LCMColor
+from fleetsafe_core_lcm.foxglove_msgs import Color as LCMColor
 
 
 class Color(LCMColor):  # type: ignore[misc]

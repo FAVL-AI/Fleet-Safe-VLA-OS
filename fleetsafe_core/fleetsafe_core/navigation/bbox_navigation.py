@@ -14,7 +14,7 @@
 
 import logging
 
-from dimos_lcm.sensor_msgs import CameraInfo
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo
 from reactivex.disposable import Disposable
 
 from fleetsafe_core.core.core import rpc

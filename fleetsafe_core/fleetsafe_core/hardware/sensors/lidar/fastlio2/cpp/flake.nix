@@ -7,8 +7,8 @@
     livox-sdk.url = "path:../../livox/cpp";
     livox-sdk.inputs.nixpkgs.follows = "nixpkgs";
     livox-sdk.inputs.flake-utils.follows = "flake-utils";
-    dimos-lcm = {
-      url = "github:dimensionalOS/dimos-lcm/main";
+    fleetsafe_core-lcm = {
+      url = "github:dimensionalOS/fleetsafe_core-lcm/main";
       flake = false;
     };
     fast-lio = {
@@ -17,7 +17,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, livox-sdk, dimos-lcm, fast-lio, ... }:
+  outputs = { self, nixpkgs, flake-utils, livox-sdk, fleetsafe_core-lcm, fast-lio, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
@@ -45,7 +45,7 @@
 
           cmakeFlags = [
             "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-            "-DFETCHCONTENT_SOURCE_DIR_DIMOS_LCM=${dimos-lcm}"
+            "-DFETCHCONTENT_SOURCE_DIR_FLEETSAFE_CORE_LCM=${fleetsafe_core-lcm}"
             "-DFASTLIO_DIR=${fast-lio}"
             "-DLIVOX_COMMON_DIR=${livox-common}"
           ];

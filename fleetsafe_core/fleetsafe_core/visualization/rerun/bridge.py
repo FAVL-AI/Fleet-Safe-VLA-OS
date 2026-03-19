@@ -305,14 +305,14 @@ class RerunBridgeModule(Module):
 
                 rerun_bindings.spawn(
                     port=RERUN_GRPC_PORT,
-                    executable_name="dimos-viewer",
+                    executable_name="fleetsafe_core-viewer",
                     memory_limit=self.config.memory_limit,
                 )
             except ImportError:
-                pass  # dimos-viewer not installed
+                pass  # fleetsafe_core-viewer not installed
             except Exception:
                 logger.warning(
-                    "dimos-viewer found but failed to spawn, falling back to stock rerun",
+                    "fleetsafe_core-viewer found but failed to spawn, falling back to stock rerun",
                     exc_info=True,
                 )
             rr.spawn(connect=True, memory_limit=self.config.memory_limit)

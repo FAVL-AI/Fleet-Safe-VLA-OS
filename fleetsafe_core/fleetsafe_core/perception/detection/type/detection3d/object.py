@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING, Any
 import uuid
 
 import cv2
-from dimos_lcm.geometry_msgs import Pose
+from fleetsafe_core_lcm.geometry_msgs import Pose
 import numpy as np
 import open3d as o3d  # type: ignore[import-untyped]
 
@@ -32,7 +32,7 @@ from fleetsafe_core.perception.detection.type.detection2d.seg import Detection2D
 from fleetsafe_core.perception.detection.type.detection3d.base import Detection3D
 
 if TYPE_CHECKING:
-    from dimos_lcm.sensor_msgs import CameraInfo
+    from fleetsafe_core_lcm.sensor_msgs import CameraInfo
 
     from fleetsafe_core.perception.detection.type.detection2d.imageDetections2D import ImageDetections2D
 

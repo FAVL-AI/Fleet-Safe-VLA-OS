@@ -77,22 +77,22 @@ echo "Installing lcm.so to $LUA_CPATH_DIR"
 sudo mkdir -p "$LUA_CPATH_DIR"
 sudo cp lcm-lua/lcm.so "$LUA_CPATH_DIR/"
 
-# Get dimos-lcm message definitions
-DIMOS_LCM_DIR="$SCRIPT_DIR/dimos-lcm"
+# Get fleetsafe_core-lcm message definitions
+FLEETSAFE_CORE_LCM_DIR="$SCRIPT_DIR/fleetsafe_core-lcm"
 MSGS_DST="$SCRIPT_DIR/msgs"
 
 echo "Getting message definitions..."
-if [ -d "$DIMOS_LCM_DIR" ]; then
-    echo "Updating dimos-lcm..."
-    cd "$DIMOS_LCM_DIR" && git pull
+if [ -d "$FLEETSAFE_CORE_LCM_DIR" ]; then
+    echo "Updating fleetsafe_core-lcm..."
+    cd "$FLEETSAFE_CORE_LCM_DIR" && git pull
 else
-    echo "Cloning dimos-lcm..."
-    git clone --depth 1 https://github.com/dimensionalOS/dimos-lcm.git "$DIMOS_LCM_DIR"
+    echo "Cloning fleetsafe_core-lcm..."
+    git clone --depth 1 https://github.com/dimensionalOS/fleetsafe_core-lcm.git "$FLEETSAFE_CORE_LCM_DIR"
 fi
 
 # Link/copy messages
 rm -rf "$MSGS_DST"
-cp -r "$DIMOS_LCM_DIR/generated/lua_lcm_msgs" "$MSGS_DST"
+cp -r "$FLEETSAFE_CORE_LCM_DIR/generated/lua_lcm_msgs" "$MSGS_DST"
 echo "Messages installed to $MSGS_DST"
 
 echo ""

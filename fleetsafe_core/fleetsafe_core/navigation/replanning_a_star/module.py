@@ -14,7 +14,7 @@
 
 import os
 
-from dimos_lcm.std_msgs import Bool, String
+from fleetsafe_core_lcm.std_msgs import Bool, String
 from reactivex.disposable import Disposable
 
 from fleetsafe_core.core.core import rpc

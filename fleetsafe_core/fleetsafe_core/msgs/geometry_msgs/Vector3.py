@@ -17,7 +17,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Any, TypeAlias
 
-from dimos_lcm.geometry_msgs import Vector3 as LCMVector3
+from fleetsafe_core_lcm.geometry_msgs import Vector3 as LCMVector3
 import numpy as np
 
 # Types that can be converted to/from Vector

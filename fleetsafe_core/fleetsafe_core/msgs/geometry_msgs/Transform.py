@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
     from fleetsafe_core.msgs.geometry_msgs.PoseStamped import PoseStamped
 
-from dimos_lcm.geometry_msgs import (
+from fleetsafe_core_lcm.geometry_msgs import (
     Transform as LCMTransform,
     TransformStamped as LCMTransformStamped,
 )
@@ -256,7 +256,7 @@ class Transform(Timestamped):
     @classmethod
     def lcm_decode(cls, data: bytes | BinaryIO) -> Transform:
         """Decode from LCM TFMessage bytes."""
-        from dimos_lcm.tf2_msgs import TFMessage as LCMTFMessage
+        from fleetsafe_core_lcm.tf2_msgs import TFMessage as LCMTFMessage
 
         lcm_msg = LCMTFMessage.lcm_decode(data)
 

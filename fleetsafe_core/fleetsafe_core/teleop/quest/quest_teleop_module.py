@@ -28,8 +28,8 @@ import threading
 import time
 from typing import Any
 
-from dimos_lcm.geometry_msgs import PoseStamped as LCMPoseStamped
-from dimos_lcm.sensor_msgs import Joy as LCMJoy
+from fleetsafe_core_lcm.geometry_msgs import PoseStamped as LCMPoseStamped
+from fleetsafe_core_lcm.sensor_msgs import Joy as LCMJoy
 from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles

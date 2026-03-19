@@ -28,7 +28,7 @@ import time
 from typing import Any
 import webbrowser
 
-from dimos_lcm.std_msgs import Bool  # type: ignore[import-untyped]
+from fleetsafe_core_lcm.std_msgs import Bool  # type: ignore[import-untyped]
 from reactivex.disposable import Disposable
 import socketio  # type: ignore[import-untyped]
 from starlette.applications import Starlette

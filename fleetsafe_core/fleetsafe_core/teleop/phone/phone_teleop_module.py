@@ -28,8 +28,8 @@ import threading
 import time
 from typing import Any
 
-from dimos_lcm.geometry_msgs import TwistStamped as LCMTwistStamped
-from dimos_lcm.std_msgs import Bool as LCMBool
+from fleetsafe_core_lcm.geometry_msgs import TwistStamped as LCMTwistStamped
+from fleetsafe_core_lcm.std_msgs import Bool as LCMBool
 from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles

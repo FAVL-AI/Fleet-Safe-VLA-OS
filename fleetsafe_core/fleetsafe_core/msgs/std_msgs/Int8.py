@@ -19,7 +19,7 @@
 
 from typing import ClassVar
 
-from dimos_lcm.std_msgs import Int8 as LCMInt8
+from fleetsafe_core_lcm.std_msgs import Int8 as LCMInt8
 
 
 class Int8(LCMInt8):  # type: ignore[misc]

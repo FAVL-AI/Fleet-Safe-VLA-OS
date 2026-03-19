@@ -15,8 +15,8 @@
 from typing import Union
 
 import cv2
-from dimos_lcm.sensor_msgs import CameraInfo
-from dimos_lcm.vision_msgs import (
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo
+from fleetsafe_core_lcm.vision_msgs import (
     BoundingBox2D,
     Detection2D,
     Detection3D,

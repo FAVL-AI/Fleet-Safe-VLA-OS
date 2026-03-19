@@ -49,7 +49,7 @@ classifiers = [
 
 dependencies = [
     # Transport Protocols
-    "dimos-lcm",
+    "fleetsafe_core-lcm",
     "PyTurboJPEG==1.8.2",
     # Core
     "numpy>=1.26.4",
@@ -82,7 +82,7 @@ dependencies = [
     # TODO: rerun shouldn't be required but rn its in core (there is NO WAY to use fleetsafe_core without rerun rn)
     # remove this once rerun is optional in core
     "rerun-sdk>=0.20.0",
-    "dimos-viewer>=0.30.0a2",
+    "fleetsafe_core-viewer>=0.30.0a2",
     "toolz>=1.1.0",
     "protobuf>=6.33.5,<7",
     "psutil>=7.0.0",
@@ -150,7 +150,7 @@ misc = [
 
 visualization = [
     "rerun-sdk>=0.20.0",
-    "dimos-viewer>=0.30.0a4",
+    "fleetsafe_core-viewer>=0.30.0a4",
 ]
 
 agents = [
@@ -309,7 +309,7 @@ dds = [
 
 # Minimal dependencies for Docker modules that communicate with the FleetSafeCore host
 docker = [
-    "dimos-lcm",
+    "fleetsafe_core-lcm",
     "numpy>=1.26.4",
     "scipy>=1.15.1",
     "reactivex",
@@ -380,7 +380,7 @@ module = [
     "annotation_protocol",
     "cyclonedds",
     "cyclonedds.*",
-    "dimos_lcm.*",
+    "fleetsafe_core_lcm.*",
     "etils",
     "geometry_msgs.*",
     "lazy_loader",

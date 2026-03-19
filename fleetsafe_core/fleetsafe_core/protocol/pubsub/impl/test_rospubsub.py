@@ -15,7 +15,7 @@
 from collections.abc import Generator
 import threading
 
-from dimos_lcm.geometry_msgs import PointStamped
+from fleetsafe_core_lcm.geometry_msgs import PointStamped
 import numpy as np
 import pytest
 

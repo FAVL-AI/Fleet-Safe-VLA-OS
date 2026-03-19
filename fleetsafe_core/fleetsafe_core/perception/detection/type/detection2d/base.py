@@ -15,7 +15,7 @@
 from abc import abstractmethod
 from collections.abc import Callable
 
-from dimos_lcm.vision_msgs import Detection2D as ROSDetection2D
+from fleetsafe_core_lcm.vision_msgs import Detection2D as ROSDetection2D
 
 from fleetsafe_core.msgs.foxglove_msgs import ImageAnnotations
 from fleetsafe_core.msgs.sensor_msgs import Image

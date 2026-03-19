@@ -17,14 +17,14 @@ from __future__ import annotations
 import time
 from typing import TYPE_CHECKING, BinaryIO
 
-from dimos_lcm.geometry_msgs import (
+from fleetsafe_core_lcm.geometry_msgs import (
     Point as LCMPoint,
     Pose as LCMPose,
     PoseStamped as LCMPoseStamped,
     Quaternion as LCMQuaternion,
 )
-from dimos_lcm.nav_msgs import Path as LCMPath
-from dimos_lcm.std_msgs import Header as LCMHeader, Time as LCMTime
+from fleetsafe_core_lcm.nav_msgs import Path as LCMPath
+from fleetsafe_core_lcm.std_msgs import Header as LCMHeader, Time as LCMTime
 
 from fleetsafe_core.msgs.geometry_msgs.PoseStamped import PoseStamped
 from fleetsafe_core.types.timestamped import Timestamped

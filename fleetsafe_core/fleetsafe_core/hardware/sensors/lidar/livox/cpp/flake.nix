@@ -4,13 +4,13 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    dimos-lcm = {
-      url = "github:dimensionalOS/dimos-lcm/main";
+    fleetsafe_core-lcm = {
+      url = "github:dimensionalOS/fleetsafe_core-lcm/main";
       flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, dimos-lcm, ... }:
+  outputs = { self, nixpkgs, flake-utils, fleetsafe_core-lcm, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
@@ -54,7 +54,7 @@
 
           cmakeFlags = [
             "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-            "-DFETCHCONTENT_SOURCE_DIR_DIMOS_LCM=${dimos-lcm}"
+            "-DFETCHCONTENT_SOURCE_DIR_FLEETSAFE_CORE_LCM=${fleetsafe_core-lcm}"
             "-DLIVOX_COMMON_DIR=${livox-common}"
           ];
         };

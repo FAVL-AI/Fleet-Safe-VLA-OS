@@ -18,8 +18,8 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 import cv2
-from dimos_lcm.foxglove_msgs.ImageAnnotations import PointsAnnotation
-from dimos_lcm.foxglove_msgs.Point2 import Point2
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import PointsAnnotation
+from fleetsafe_core_lcm.foxglove_msgs.Point2 import Point2
 import numpy as np
 import torch
 

@@ -19,11 +19,11 @@ import struct
 from typing import TYPE_CHECKING, Any
 
 # Import LCM types
-from dimos_lcm.sensor_msgs.PointCloud2 import (
+from fleetsafe_core_lcm.sensor_msgs.PointCloud2 import (
     PointCloud2 as LCMPointCloud2,
 )
-from dimos_lcm.sensor_msgs.PointField import PointField  # type: ignore[import-untyped]
-from dimos_lcm.std_msgs.Header import Header  # type: ignore[import-untyped]
+from fleetsafe_core_lcm.sensor_msgs.PointField import PointField  # type: ignore[import-untyped]
+from fleetsafe_core_lcm.std_msgs.Header import Header  # type: ignore[import-untyped]
 import numpy as np
 import open3d as o3d  # type: ignore[import-untyped]
 import open3d.core as o3c  # type: ignore[import-untyped]

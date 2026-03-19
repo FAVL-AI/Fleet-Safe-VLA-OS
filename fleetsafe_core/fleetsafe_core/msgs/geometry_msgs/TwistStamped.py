@@ -17,7 +17,7 @@ from __future__ import annotations
 import time
 from typing import BinaryIO, TypeAlias
 
-from dimos_lcm.geometry_msgs import TwistStamped as LCMTwistStamped
+from fleetsafe_core_lcm.geometry_msgs import TwistStamped as LCMTwistStamped
 from plum import dispatch
 
 from fleetsafe_core.msgs.geometry_msgs.Twist import Twist

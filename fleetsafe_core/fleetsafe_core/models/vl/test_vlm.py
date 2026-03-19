@@ -2,7 +2,7 @@ import os
 import time
 from typing import TYPE_CHECKING
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import (
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import (
     ImageAnnotations,
 )
 import pytest

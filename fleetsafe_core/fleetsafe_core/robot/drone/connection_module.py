@@ -21,7 +21,7 @@ import threading
 import time
 from typing import Any
 
-from dimos_lcm.std_msgs import String
+from fleetsafe_core_lcm.std_msgs import String
 from reactivex.disposable import CompositeDisposable, Disposable
 
 from fleetsafe_core.agents.annotation import skill

@@ -15,7 +15,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import (
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import (
     ImageAnnotations,
 )
 from reactivex import operators as ops

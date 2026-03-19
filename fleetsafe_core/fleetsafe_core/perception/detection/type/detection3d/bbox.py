@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 import functools
 from typing import Any
 
-from dimos_lcm.vision_msgs import ObjectHypothesis, ObjectHypothesisWithPose
+from fleetsafe_core_lcm.vision_msgs import ObjectHypothesis, ObjectHypothesisWithPose
 
 from fleetsafe_core.msgs.geometry_msgs import Pose, PoseStamped, Quaternion, Transform, Vector3
 from fleetsafe_core.msgs.std_msgs import Header

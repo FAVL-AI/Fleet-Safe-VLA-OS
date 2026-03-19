@@ -21,7 +21,7 @@ import time
 from typing import Any
 
 import cv2
-from dimos_lcm.std_msgs import String
+from fleetsafe_core_lcm.std_msgs import String
 import numpy as np
 from numpy.typing import NDArray
 

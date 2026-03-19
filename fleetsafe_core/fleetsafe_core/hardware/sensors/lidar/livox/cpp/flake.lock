@@ -1,19 +1,19 @@
 {
   "nodes": {
-    "dimos-lcm": {
+    "fleetsafe_core-lcm": {
       "flake": false,
       "locked": {
         "lastModified": 1769774949,
         "narHash": "sha256-icRK7jerqNlwK1WZBrnIP04I2WozzFqTD7qsmnPxQuo=",
         "owner": "dimensionalOS",
-        "repo": "dimos-lcm",
+        "repo": "fleetsafe_core-lcm",
         "rev": "0aa72b7b1bd3a65f50f5c03485ee9b728df56afe",
         "type": "github"
       },
       "original": {
         "owner": "dimensionalOS",
         "ref": "main",
-        "repo": "dimos-lcm",
+        "repo": "fleetsafe_core-lcm",
         "type": "github"
       }
     },
@@ -53,7 +53,7 @@
     },
     "root": {
       "inputs": {
-        "dimos-lcm": "dimos-lcm",
+        "fleetsafe_core-lcm": "fleetsafe_core-lcm",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       }

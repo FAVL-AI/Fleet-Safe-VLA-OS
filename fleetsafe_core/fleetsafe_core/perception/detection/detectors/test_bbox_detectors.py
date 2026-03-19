@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import ImageAnnotations
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import ImageAnnotations
 import pytest
 from reactivex.disposable import CompositeDisposable
 

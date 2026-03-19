@@ -46,13 +46,13 @@ if(NOT FASTLIO_DIR)
   set(FASTLIO_DIR ${fast_lio_SOURCE_DIR})
 endif()
 
-# dimos-lcm C++ message headers
-FetchContent_Declare(dimos_lcm
-  GIT_REPOSITORY https://github.com/dimensionalOS/dimos-lcm.git
+# fleetsafe_core-lcm C++ message headers
+FetchContent_Declare(fleetsafe_core_lcm
+  GIT_REPOSITORY https://github.com/dimensionalOS/fleetsafe_core-lcm.git
   GIT_TAG main
   GIT_SHALLOW TRUE
 )
-FetchContent_MakeAvailable(dimos_lcm)
+FetchContent_MakeAvailable(fleetsafe_core_lcm)
 
 # LCM
 find_package(PkgConfig REQUIRED)
@@ -90,7 +90,7 @@ endif()
 target_include_directories(fastlio2_native PRIVATE
   ${FASTLIO_DIR}/include
   ${FASTLIO_DIR}/src
-  ${dimos_lcm_SOURCE_DIR}/generated/cpp_lcm_msgs
+  ${fleetsafe_core_lcm_SOURCE_DIR}/generated/cpp_lcm_msgs
   ${LCM_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
   ${PCL_INCLUDE_DIRS}

@@ -15,7 +15,7 @@
 
 """Bool message type."""
 
-from dimos_lcm.std_msgs import Bool as LCMBool
+from fleetsafe_core_lcm.std_msgs import Bool as LCMBool
 
 
 class Bool(LCMBool):  # type: ignore[misc]

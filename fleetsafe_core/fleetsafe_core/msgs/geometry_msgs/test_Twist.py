@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dimos_lcm.geometry_msgs import Twist as LCMTwist
+from fleetsafe_core_lcm.geometry_msgs import Twist as LCMTwist
 import numpy as np
 
 from fleetsafe_core.msgs.geometry_msgs import Quaternion, Twist, Vector3

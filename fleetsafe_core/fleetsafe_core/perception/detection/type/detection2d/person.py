@@ -17,11 +17,11 @@ from dataclasses import dataclass
 # Import for type checking only to avoid circular imports
 from typing import TYPE_CHECKING
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import (
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import (
     PointsAnnotation,
     TextAnnotation,
 )
-from dimos_lcm.foxglove_msgs.Point2 import Point2
+from fleetsafe_core_lcm.foxglove_msgs.Point2 import Point2
 import numpy as np
 
 from fleetsafe_core.msgs.foxglove_msgs.Color import Color

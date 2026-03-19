@@ -45,7 +45,7 @@ from fleetsafe_core.perception.detection.type.detection3d.pointcloud_filters imp
 from fleetsafe_core.types.timestamped import to_ros_stamp
 
 if TYPE_CHECKING:
-    from dimos_lcm.sensor_msgs import CameraInfo
+    from fleetsafe_core_lcm.sensor_msgs import CameraInfo
 
     from fleetsafe_core.perception.detection.type.detection2d.bbox import Detection2DBBox
 

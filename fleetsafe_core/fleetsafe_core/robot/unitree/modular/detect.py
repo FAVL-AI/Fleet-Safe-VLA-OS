@@ -14,7 +14,7 @@
 
 import pickle
 
-from dimos_lcm.sensor_msgs import CameraInfo
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo
 
 from fleetsafe_core.msgs.sensor_msgs import Image, PointCloud2
 from fleetsafe_core.msgs.std_msgs import Header
@@ -108,7 +108,7 @@ def broadcast(  # type: ignore[no-untyped-def]
     detections,
     annotations,
 ) -> None:
-    from dimos_lcm.foxglove_msgs.ImageAnnotations import (
+    from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import (
         ImageAnnotations,
     )
 

@@ -29,7 +29,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, BinaryIO
 
-from dimos_lcm.tf2_msgs import TFMessage as LCMTFMessage
+from fleetsafe_core_lcm.tf2_msgs import TFMessage as LCMTFMessage
 
 from fleetsafe_core.msgs.geometry_msgs.Quaternion import Quaternion
 from fleetsafe_core.msgs.geometry_msgs.Transform import Transform

@@ -18,7 +18,7 @@ from functools import reduce
 from operator import add
 from typing import TYPE_CHECKING, Generic, TypeVar
 
-from dimos_lcm.vision_msgs import Detection2DArray
+from fleetsafe_core_lcm.vision_msgs import Detection2DArray
 
 from fleetsafe_core.msgs.foxglove_msgs import ImageAnnotations
 from fleetsafe_core.msgs.std_msgs import Header

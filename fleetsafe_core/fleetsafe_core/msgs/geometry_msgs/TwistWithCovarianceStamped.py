@@ -17,7 +17,7 @@ from __future__ import annotations
 import time
 from typing import TypeAlias
 
-from dimos_lcm.geometry_msgs import (
+from fleetsafe_core_lcm.geometry_msgs import (
     TwistWithCovarianceStamped as LCMTwistWithCovarianceStamped,
 )
 import numpy as np

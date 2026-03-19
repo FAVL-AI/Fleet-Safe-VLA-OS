@@ -17,7 +17,7 @@ from __future__ import annotations
 from datetime import datetime
 import time
 
-from dimos_lcm.std_msgs import Header as LCMHeader, Time as LCMTime
+from fleetsafe_core_lcm.std_msgs import Header as LCMHeader, Time as LCMTime
 from plum import dispatch
 
 # Import the actual LCM header type that's returned from decoding

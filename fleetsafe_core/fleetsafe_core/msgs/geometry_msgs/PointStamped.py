@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
     from fleetsafe_core.msgs.geometry_msgs.PoseStamped import PoseStamped
 
-from dimos_lcm.geometry_msgs import PointStamped as LCMPointStamped
+from fleetsafe_core_lcm.geometry_msgs import PointStamped as LCMPointStamped
 
 from fleetsafe_core.msgs.geometry_msgs.Point import Point
 from fleetsafe_core.types.timestamped import Timestamped

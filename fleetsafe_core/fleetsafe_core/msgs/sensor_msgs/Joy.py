@@ -17,7 +17,7 @@ from __future__ import annotations
 import time
 from typing import TypeAlias
 
-from dimos_lcm.sensor_msgs import Joy as LCMJoy
+from fleetsafe_core_lcm.sensor_msgs import Joy as LCMJoy
 from plum import dispatch
 
 from fleetsafe_core.types.timestamped import Timestamped

@@ -22,7 +22,7 @@ from fleetsafe_core.msgs.geometry_msgs import Transform
 from fleetsafe_core.perception.detection.type.detection2d.bbox import Detection2DBBox
 
 if TYPE_CHECKING:
-    from dimos_lcm.sensor_msgs import CameraInfo
+    from fleetsafe_core_lcm.sensor_msgs import CameraInfo
 
 
 @dataclass

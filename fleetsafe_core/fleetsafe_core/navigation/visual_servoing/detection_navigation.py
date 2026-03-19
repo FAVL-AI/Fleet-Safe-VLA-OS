@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dimos_lcm.sensor_msgs import CameraInfo as FleetSafeCoreLcmCameraInfo
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo as FleetSafeCoreLcmCameraInfo
 import numpy as np
 
 from fleetsafe_core.msgs.geometry_msgs import Transform, Twist, Vector3

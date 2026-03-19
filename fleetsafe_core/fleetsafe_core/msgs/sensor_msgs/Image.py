@@ -21,8 +21,8 @@ import time
 from typing import TYPE_CHECKING, Any, Literal, TypedDict
 
 import cv2
-from dimos_lcm.sensor_msgs.Image import Image as LCMImage
-from dimos_lcm.std_msgs.Header import Header
+from fleetsafe_core_lcm.sensor_msgs.Image import Image as LCMImage
+from fleetsafe_core_lcm.std_msgs.Header import Header
 import numpy as np
 import reactivex as rx
 from reactivex import operators as ops

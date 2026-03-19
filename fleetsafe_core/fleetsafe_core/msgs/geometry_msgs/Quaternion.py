@@ -22,7 +22,7 @@ from typing import TYPE_CHECKING, BinaryIO, TypeAlias
 if TYPE_CHECKING:
     import rerun as rr
 
-from dimos_lcm.geometry_msgs import Quaternion as LCMQuaternion
+from fleetsafe_core_lcm.geometry_msgs import Quaternion as LCMQuaternion
 import numpy as np
 from plum import dispatch
 from scipy.spatial.transform import Rotation as R  # type: ignore[import-untyped]

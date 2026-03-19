@@ -8,14 +8,14 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/result" CACHE PATH "" FORCE)
 endif()
 
-# Fetch dimos-lcm for C++ message headers
+# Fetch fleetsafe_core-lcm for C++ message headers
 include(FetchContent)
-FetchContent_Declare(dimos_lcm
-  GIT_REPOSITORY https://github.com/dimensionalOS/dimos-lcm.git
+FetchContent_Declare(fleetsafe_core_lcm
+  GIT_REPOSITORY https://github.com/dimensionalOS/fleetsafe_core-lcm.git
   GIT_TAG main
   GIT_SHALLOW TRUE
 )
-FetchContent_MakeAvailable(dimos_lcm)
+FetchContent_MakeAvailable(fleetsafe_core_lcm)
 
 # Find LCM
 find_package(PkgConfig REQUIRED)
@@ -38,7 +38,7 @@ if(NOT LIVOX_COMMON_DIR)
 endif()
 
 target_include_directories(mid360_native PRIVATE
-  ${dimos_lcm_SOURCE_DIR}/generated/cpp_lcm_msgs
+  ${fleetsafe_core_lcm_SOURCE_DIR}/generated/cpp_lcm_msgs
   ${LCM_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${LIVOX_COMMON_DIR}

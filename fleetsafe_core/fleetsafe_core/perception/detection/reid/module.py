@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import (
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import (
     ImageAnnotations,
     TextAnnotation,
 )
-from dimos_lcm.foxglove_msgs.Point2 import Point2
+from fleetsafe_core_lcm.foxglove_msgs.Point2 import Point2
 from reactivex import operators as ops
 from reactivex.observable import Observable
 

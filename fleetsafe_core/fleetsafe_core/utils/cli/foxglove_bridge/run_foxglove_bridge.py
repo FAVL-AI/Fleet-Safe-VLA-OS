@@ -14,18 +14,18 @@
 # limitations under the License.
 
 """
-use lcm_foxglove_bridge as a module from dimos_lcm
+use lcm_foxglove_bridge as a module from fleetsafe_core_lcm
 """
 
 import asyncio
 import os
 import threading
 
-import dimos_lcm
-from dimos_lcm.foxglove_bridge import FoxgloveBridge
+import fleetsafe_core_lcm
+from fleetsafe_core_lcm.foxglove_bridge import FoxgloveBridge
 
-dimos_lcm_path = os.path.dirname(os.path.abspath(dimos_lcm.__file__))
-print(f"Using dimos_lcm from: {dimos_lcm_path}")
+fleetsafe_core_lcm_path = os.path.dirname(os.path.abspath(fleetsafe_core_lcm.__file__))
+print(f"Using fleetsafe_core_lcm from: {fleetsafe_core_lcm_path}")
 
 
 def run_bridge_example() -> None:

@@ -19,7 +19,7 @@ It handles three categories of types:
 
 1. Complex types (different internal representation) - use LCM roundtrip
 2. Simple types (field structures match) - use direct field copy
-3. No fleetsafe_core.msgs equivalent - return dimos_lcm type
+3. No fleetsafe_core.msgs equivalent - return fleetsafe_core_lcm type
 """
 
 from __future__ import annotations
@@ -49,7 +49,7 @@ _fleetsafe_core_type_cache: dict[str, type[FleetSafeCoreMsg] | None] = {}
 _lcm_type_cache: dict[str, type[Any]] = {}
 
 # Field name mappings between ROS and LCM (ROS name -> LCM name)
-# This is some mixup in dimos_lcm having ROS1 and ROS2 message definitions?
+# This is some mixup in fleetsafe_core_lcm having ROS1 and ROS2 message definitions?
 # Would be good to clarify later, but this works for now
 _ROS_TO_LCM_FIELD_MAP: dict[str, str] = {
     "nanosec": "nsec",  # ROS2 Time.nanosec -> LCM Time.nsec
@@ -89,7 +89,7 @@ def derive_lcm_type(fleetsafe_core_type: type[FleetSafeCoreMsg]) -> type[Any]:
         fleetsafe_core_type: A fleetsafe_core message type (e.g., fleetsafe_core.msgs.sensor_msgs.PointCloud2)
 
     Returns:
-        The corresponding LCM message type (e.g., dimos_lcm.sensor_msgs.PointCloud2)
+        The corresponding LCM message type (e.g., fleetsafe_core_lcm.sensor_msgs.PointCloud2)
     """
     msg_name = fleetsafe_core_type.msg_name  # e.g., "sensor_msgs.PointCloud2"
 
@@ -101,7 +101,7 @@ def derive_lcm_type(fleetsafe_core_type: type[FleetSafeCoreMsg]) -> type[Any]:
         raise ValueError(f"Invalid msg_name format: {msg_name}, expected 'package.MessageName'")
 
     package, message_name = parts
-    lcm_module = importlib.import_module(f"dimos_lcm.{package}.{message_name}")
+    lcm_module = importlib.import_module(f"fleetsafe_core_lcm.{package}.{message_name}")
     lcm_type: type[Any] = getattr(lcm_module, message_name)
     _lcm_type_cache[msg_name] = lcm_type
     return lcm_type
@@ -263,9 +263,9 @@ def _create_lcm_instance_for_ros_msg(ros_msg: Any) -> Any:
     module_name = ros_type.__module__  # e.g., "std_msgs.msg"
     class_name = ros_type.__name__  # e.g., "Header"
 
-    # Convert to LCM module path (std_msgs.msg.Header -> dimos_lcm.std_msgs.Header)
+    # Convert to LCM module path (std_msgs.msg.Header -> fleetsafe_core_lcm.std_msgs.Header)
     package = module_name.split(".")[0]  # e.g., "std_msgs"
-    lcm_module = importlib.import_module(f"dimos_lcm.{package}.{class_name}")
+    lcm_module = importlib.import_module(f"fleetsafe_core_lcm.{package}.{class_name}")
     lcm_type = getattr(lcm_module, class_name)
     return lcm_type()
 
@@ -293,7 +293,7 @@ def _create_ros_instance_for_lcm_msg(lcm_msg: Any, ros_type_hint: str) -> Any:
 
     # Fallback: try to derive from LCM type
     lcm_type = type(lcm_msg)
-    module_name = lcm_type.__module__  # e.g., "dimos_lcm.std_msgs.Header"
+    module_name = lcm_type.__module__  # e.g., "fleetsafe_core_lcm.std_msgs.Header"
     class_name = lcm_type.__name__
     parts = module_name.split(".")
     if len(parts) >= 2:

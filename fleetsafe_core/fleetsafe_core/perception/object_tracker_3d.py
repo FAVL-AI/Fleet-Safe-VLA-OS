@@ -15,8 +15,8 @@
 
 # Import LCM messages
 import cv2
-from dimos_lcm.sensor_msgs import CameraInfo
-from dimos_lcm.vision_msgs import (
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo
+from fleetsafe_core_lcm.vision_msgs import (
     Detection3D,
     ObjectHypothesisWithPose,
 )

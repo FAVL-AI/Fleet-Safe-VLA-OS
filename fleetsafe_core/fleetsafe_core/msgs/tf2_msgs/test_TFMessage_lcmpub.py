@@ -25,7 +25,7 @@ from fleetsafe_core.protocol.pubsub.impl.lcmpubsub import LCM, Topic
 # to actual LCM messages, foxglove running in parallel should render this
 @pytest.mark.skip
 def test_publish_transforms() -> None:
-    from dimos_lcm.tf2_msgs import TFMessage as LCMTFMessage
+    from fleetsafe_core_lcm.tf2_msgs import TFMessage as LCMTFMessage
 
     lcm = LCM()
     lcm.start()

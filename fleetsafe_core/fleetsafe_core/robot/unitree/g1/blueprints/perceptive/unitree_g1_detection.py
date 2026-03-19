@@ -17,8 +17,8 @@
 
 from typing import Any
 
-from dimos_lcm.foxglove_msgs import SceneUpdate
-from dimos_lcm.foxglove_msgs.ImageAnnotations import ImageAnnotations
+from fleetsafe_core_lcm.foxglove_msgs import SceneUpdate
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import ImageAnnotations
 
 from fleetsafe_core.core.blueprints import autoconnect
 from fleetsafe_core.core.transport import LCMTransport

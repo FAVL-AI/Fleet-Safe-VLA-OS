@@ -13,10 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import (
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import (
     ImageAnnotations,  # type: ignore[import-untyped]
 )
-from dimos_lcm.foxglove_msgs.SceneUpdate import SceneUpdate  # type: ignore[import-untyped]
+from fleetsafe_core_lcm.foxglove_msgs.SceneUpdate import SceneUpdate  # type: ignore[import-untyped]
 
 from fleetsafe_core.core.blueprints import autoconnect
 from fleetsafe_core.core.transport import LCMTransport

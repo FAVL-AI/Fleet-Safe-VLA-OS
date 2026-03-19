@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from dimos_lcm.sensor_msgs import CameraInfo
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo
 
 from fleetsafe_core.msgs.geometry_msgs import Transform
 from fleetsafe_core.msgs.sensor_msgs import PointCloud2

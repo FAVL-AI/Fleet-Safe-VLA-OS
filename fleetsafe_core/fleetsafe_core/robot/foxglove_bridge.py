@@ -17,7 +17,7 @@ import logging
 import threading
 from typing import TYPE_CHECKING, Any
 
-from dimos_lcm.foxglove_bridge import (
+from fleetsafe_core_lcm.foxglove_bridge import (
     FoxgloveBridge as LCMFoxgloveBridge,
 )
 

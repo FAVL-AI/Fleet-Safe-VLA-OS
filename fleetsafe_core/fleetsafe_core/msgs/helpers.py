@@ -40,7 +40,7 @@ def resolve_msg_type(type_name: str) -> type[FleetSafeCoreMsg] | None:
     # Try different import paths
     import_paths = [
         f"fleetsafe_core.msgs.{module_name}",
-        f"dimos_lcm.{module_name}",
+        f"fleetsafe_core_lcm.{module_name}",
     ]
 
     for path in import_paths:

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Installing FleetSafe Core (formerly DimOS)..."
+echo "Installing FleetSafe Core (formerly FleetSafeCore)..."
 cd "$(dirname "$0")/../fleetsafe_core"
 uv pip install -e ".[all]" || python3 -m pip install -e ".[all]"
 

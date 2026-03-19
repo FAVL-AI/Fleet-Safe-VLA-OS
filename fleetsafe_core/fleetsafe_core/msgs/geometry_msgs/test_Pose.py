@@ -14,7 +14,7 @@
 
 import pickle
 
-from dimos_lcm.geometry_msgs import Pose as LCMPose
+from fleetsafe_core_lcm.geometry_msgs import Pose as LCMPose
 import numpy as np
 import pytest
 

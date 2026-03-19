@@ -21,7 +21,7 @@ import threading
 import time
 from typing import Any
 
-from dimos_lcm.sensor_msgs import CameraInfo
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo
 
 from fleetsafe_core.core.core import rpc
 from fleetsafe_core.core.module import Module

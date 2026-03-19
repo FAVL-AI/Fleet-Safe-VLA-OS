@@ -17,12 +17,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import (
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import (
     CircleAnnotation,
     TextAnnotation,
 )
-from dimos_lcm.foxglove_msgs.Point2 import Point2
-from dimos_lcm.vision_msgs import (
+from fleetsafe_core_lcm.foxglove_msgs.Point2 import Point2
+from fleetsafe_core_lcm.vision_msgs import (
     BoundingBox2D,
     Detection2D as ROSDetection2D,
     ObjectHypothesis,

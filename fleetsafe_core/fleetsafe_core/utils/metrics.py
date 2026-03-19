@@ -17,7 +17,7 @@ import functools
 import time
 from typing import Any, TypeVar, cast
 
-from dimos_lcm.std_msgs import Float32
+from fleetsafe_core_lcm.std_msgs import Float32
 import rerun as rr
 
 from fleetsafe_core.core.stream import Transport

@@ -21,7 +21,7 @@ from dataclasses import dataclass
 import functools
 import logging
 
-from dimos_lcm.sensor_msgs import CameraInfo
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo
 import numpy as np
 
 from fleetsafe_core.core.core import rpc

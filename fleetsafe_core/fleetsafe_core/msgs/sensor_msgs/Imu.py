@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import time
 
-from dimos_lcm.sensor_msgs.Imu import Imu as LCMImu
+from fleetsafe_core_lcm.sensor_msgs.Imu import Imu as LCMImu
 
 from fleetsafe_core.msgs.geometry_msgs import Quaternion, Vector3
 from fleetsafe_core.types.timestamped import Timestamped

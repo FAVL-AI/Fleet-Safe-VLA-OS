@@ -21,7 +21,7 @@ from typing import TYPE_CHECKING, BinaryIO, TypeAlias
 if TYPE_CHECKING:
     from rerun._baseclasses import Archetype
 
-from dimos_lcm.geometry_msgs import PoseStamped as LCMPoseStamped
+from fleetsafe_core_lcm.geometry_msgs import PoseStamped as LCMPoseStamped
 from plum import dispatch
 
 from fleetsafe_core.msgs.geometry_msgs.Pose import Pose

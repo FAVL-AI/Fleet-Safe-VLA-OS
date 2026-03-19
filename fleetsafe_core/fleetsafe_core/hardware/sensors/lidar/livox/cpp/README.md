@@ -48,7 +48,7 @@ cmake --install build
 
 Binary lands at `result/bin/mid360_native` (same location as nix).
 
-CMake automatically fetches [dimos-lcm](https://github.com/dimensionalOS/dimos-lcm)
+CMake automatically fetches [fleetsafe_core-lcm](https://github.com/dimensionalOS/fleetsafe_core-lcm)
 for the C++ message headers on first configure.
 
 ## Network setup
@@ -110,5 +110,5 @@ lcm-spy
 | `main.cpp`                | Livox SDK2 callbacks, frame accumulation, LCM publishing |
 | `fleetsafe_core_native_module.hpp` | Reusable header for parsing NativeModule CLI args        |
 | `flake.nix`               | Nix flake for hermetic builds                            |
-| `CMakeLists.txt`          | Build config, fetches dimos-lcm headers automatically    |
+| `CMakeLists.txt`          | Build config, fetches fleetsafe_core-lcm headers automatically    |
 | `../module.py`            | Python NativeModule wrapper (`Mid360`)                   |

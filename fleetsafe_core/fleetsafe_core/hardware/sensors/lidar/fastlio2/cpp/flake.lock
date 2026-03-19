@@ -1,36 +1,36 @@
 {
   "nodes": {
-    "dimos-lcm": {
+    "fleetsafe_core-lcm": {
       "flake": false,
       "locked": {
         "lastModified": 1769774949,
         "narHash": "sha256-icRK7jerqNlwK1WZBrnIP04I2WozzFqTD7qsmnPxQuo=",
         "owner": "dimensionalOS",
-        "repo": "dimos-lcm",
+        "repo": "fleetsafe_core-lcm",
         "rev": "0aa72b7b1bd3a65f50f5c03485ee9b728df56afe",
         "type": "github"
       },
       "original": {
         "owner": "dimensionalOS",
         "ref": "main",
-        "repo": "dimos-lcm",
+        "repo": "fleetsafe_core-lcm",
         "type": "github"
       }
     },
-    "dimos-lcm_2": {
+    "fleetsafe_core-lcm_2": {
       "flake": false,
       "locked": {
         "lastModified": 1769774949,
         "narHash": "sha256-icRK7jerqNlwK1WZBrnIP04I2WozzFqTD7qsmnPxQuo=",
         "owner": "dimensionalOS",
-        "repo": "dimos-lcm",
+        "repo": "fleetsafe_core-lcm",
         "rev": "0aa72b7b1bd3a65f50f5c03485ee9b728df56afe",
         "type": "github"
       },
       "original": {
         "owner": "dimensionalOS",
         "ref": "main",
-        "repo": "dimos-lcm",
+        "repo": "fleetsafe_core-lcm",
         "type": "github"
       }
     },
@@ -71,7 +71,7 @@
     },
     "livox-sdk": {
       "inputs": {
-        "dimos-lcm": "dimos-lcm_2",
+        "fleetsafe_core-lcm": "fleetsafe_core-lcm_2",
         "flake-utils": [
           "flake-utils"
         ],
@@ -107,7 +107,7 @@
     },
     "root": {
       "inputs": {
-        "dimos-lcm": "dimos-lcm",
+        "fleetsafe_core-lcm": "fleetsafe_core-lcm",
         "fast-lio": "fast-lio",
         "flake-utils": "flake-utils",
         "livox-sdk": "livox-sdk",

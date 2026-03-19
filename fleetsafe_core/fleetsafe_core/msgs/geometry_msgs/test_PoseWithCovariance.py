@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dimos_lcm.geometry_msgs import PoseWithCovariance as LCMPoseWithCovariance
+from fleetsafe_core_lcm.geometry_msgs import PoseWithCovariance as LCMPoseWithCovariance
 import numpy as np
 import pytest
 

@@ -17,7 +17,7 @@
 
 from typing import ClassVar
 
-from dimos_lcm.std_msgs import UInt32 as LCMUInt32
+from fleetsafe_core_lcm.std_msgs import UInt32 as LCMUInt32
 
 
 class UInt32(LCMUInt32):  # type: ignore[misc]

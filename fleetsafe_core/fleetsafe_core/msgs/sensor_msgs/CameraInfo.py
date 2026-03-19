@@ -21,8 +21,8 @@ if TYPE_CHECKING:
     from fleetsafe_core.visualization.rerun.bridge import RerunData, RerunMulti
 
 # Import LCM types
-from dimos_lcm.sensor_msgs import CameraInfo as LCMCameraInfo
-from dimos_lcm.std_msgs.Header import Header
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo as LCMCameraInfo
+from fleetsafe_core_lcm.std_msgs.Header import Header
 import numpy as np
 
 from fleetsafe_core.types.timestamped import Timestamped

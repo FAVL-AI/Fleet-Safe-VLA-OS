@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from dimos_lcm.foxglove_msgs.ImageAnnotations import ImageAnnotations
+from fleetsafe_core_lcm.foxglove_msgs.ImageAnnotations import ImageAnnotations
 import pytest
 
 from fleetsafe_core.core.transport import LCMTransport

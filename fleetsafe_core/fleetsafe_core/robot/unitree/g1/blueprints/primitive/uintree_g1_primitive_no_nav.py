@@ -17,7 +17,7 @@
 
 from typing import Any
 
-from dimos_lcm.sensor_msgs import CameraInfo
+from fleetsafe_core_lcm.sensor_msgs import CameraInfo
 
 from fleetsafe_core.core.blueprints import autoconnect
 from fleetsafe_core.core.global_config import global_config

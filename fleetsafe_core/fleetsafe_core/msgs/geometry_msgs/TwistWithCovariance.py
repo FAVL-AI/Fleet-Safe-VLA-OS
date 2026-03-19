@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import Any, TypeAlias
 
-from dimos_lcm.geometry_msgs import (
+from fleetsafe_core_lcm.geometry_msgs import (
     TwistWithCovariance as LCMTwistWithCovariance,
 )
 import numpy as np
