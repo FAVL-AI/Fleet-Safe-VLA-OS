@@ -73,13 +73,13 @@
 \citation{octo2024}
 \citation{robopocket2025}
 \citation{aloha2_2024}
-\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Architectural Comparison of Contemporary Vision-Language-Action Paradigms vs.\ FLEET-Safe VLA}}{3}{table.caption.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Architectural Comparison of Contemporary Vision-Language-Action Paradigms vs.\ SafeVLA}}{3}{table.caption.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{tab:comparison}{{I}{3}{Architectural Comparison of Contemporary Vision-Language-Action Paradigms vs.\ FLEET-Safe VLA}{table.caption.1}{}}
+\newlabel{tab:comparison}{{I}{3}{Architectural Comparison of Contemporary Vision-Language-Action Paradigms vs.\ SafeVLA}{table.caption.1}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Mathematical Notation}}{3}{table.caption.2}\protected@file@percent }
 \newlabel{tab:notation}{{II}{3}{Mathematical Notation}{table.caption.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces FLEET-Safe VLA architecture. Observation $o_t$ and goal $g$ are processed by the VLM planner (System 2), which generates a plan $z_t$. The DiT action head (System 1) produces a nominal action $a_\text  {nom}$, projected onto the safe set by the CBF-QP filter. DSEO enforces hard real-time deadlines.}}{3}{figure.caption.3}\protected@file@percent }
-\newlabel{fig:arch}{{1}{3}{FLEET-Safe VLA architecture. Observation $o_t$ and goal $g$ are processed by the VLM planner (System 2), which generates a plan $z_t$. The DiT action head (System 1) produces a nominal action $a_\text {nom}$, projected onto the safe set by the CBF-QP filter. DSEO enforces hard real-time deadlines}{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces SafeVLA architecture. Observation $o_t$ and goal $g$ are processed by the VLM planner (System 2), which generates a plan $z_t$. The DiT action head (System 1) produces a nominal action $a_\text  {nom}$, projected onto the safe set by the CBF-QP filter. DSEO enforces hard real-time deadlines.}}{3}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:arch}{{1}{3}{SafeVLA architecture. Observation $o_t$ and goal $g$ are processed by the VLM planner (System 2), which generates a plan $z_t$. The DiT action head (System 1) produces a nominal action $a_\text {nom}$, projected onto the safe set by the CBF-QP filter. DSEO enforces hard real-time deadlines}{figure.caption.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}OpenVLA Llama-2 Backbone Integration (with GR00T Fallback)}{3}{subsection.4.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}CBF-QP Safety Filter}{3}{subsection.4.3}\protected@file@percent }
 \newlabel{sec:cbf}{{\mbox  {IV-C}}{3}{CBF-QP Safety Filter}{subsection.4.3}{}}
@@ -101,8 +101,8 @@
 \citation{octo2024}
 \citation{robopocket2025}
 \citation{aloha2_2024}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces FLEET-Safe VLA Training (PPO-Lagrangian + CBF)}}{4}{algorithm.1}\protected@file@percent }
-\newlabel{alg:training}{{1}{4}{FLEET-Safe VLA Training (PPO-Lagrangian + CBF)}{algorithm.1}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces SafeVLA Training (PPO-Lagrangian + CBF)}}{4}{algorithm.1}\protected@file@percent }
+\newlabel{alg:training}{{1}{4}{SafeVLA Training (PPO-Lagrangian + CBF)}{algorithm.1}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Hyperparameter Configuration}}{4}{table.caption.4}\protected@file@percent }
 \newlabel{tab:hyper}{{III}{4}{Hyperparameter Configuration}{table.caption.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Baselines}{4}{subsection.5.2}\protected@file@percent }
@@ -115,19 +115,20 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Main Results}{4}{subsection.6.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Training Convergence}{4}{subsection.6.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Ablation Studies}{4}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Cross-Embodiment Transfer}{4}{subsection.6.4}\protected@file@percent }
 \citation{tobin2017domainrand}
 \citation{hofer2021simtoreal}
 \citation{ieee7010_2020,mhra2023guidance}
 \bibstyle{IEEEtran}
 \bibdata{references}
 \bibcite{dimos2025}{1}
+\bibcite{kyrarini2021survey}{2}
 \@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Benchmark Comparison Against Nine Baselines. Best results in \textbf  {bold}. $\downarrow $ = lower is better, $\uparrow $ = higher is better. Our method achieves provably near-zero SVR while maintaining competitive task performance at $14\times $ lower compute cost.}}{5}{table.caption.5}\protected@file@percent }
 \newlabel{tab:main}{{IV}{5}{Benchmark Comparison Against Nine Baselines. Best results in \textbf {bold}. $\downarrow $ = lower is better, $\uparrow $ = higher is better. Our method achieves provably near-zero SVR while maintaining competitive task performance at $14\times $ lower compute cost}{table.caption.5}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Ablation Study (FastBot). Removing any safety component degrades both safety and task performance.}}{5}{table.caption.7}\protected@file@percent }
 \newlabel{tab:ablation}{{V}{5}{Ablation Study (FastBot). Removing any safety component degrades both safety and task performance}{table.caption.7}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Cross-Embodiment Results: Same Safety Layer, Different Bodies}}{5}{table.caption.8}\protected@file@percent }
 \newlabel{tab:cross}{{VI}{5}{Cross-Embodiment Results: Same Safety Layer, Different Bodies}{table.caption.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Cross-Embodiment Transfer}{5}{subsection.6.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{5}{section.7}\protected@file@percent }
 \newlabel{sec:discussion}{{VII}{5}{Discussion}{section.7}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}Limitations}{5}{subsection.7.1}\protected@file@percent }
@@ -136,7 +137,7 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}Ethical Considerations}{5}{subsection.7.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion}{5}{section.8}\protected@file@percent }
 \newlabel{sec:conclusion}{{VIII}{5}{Conclusion}{section.8}{}}
-\bibcite{kyrarini2021survey}{2}
+\@writefile{toc}{\contentsline {section}{References}{5}{section*.9}\protected@file@percent }
 \bibcite{holland2021service}{3}
 \bibcite{rt2_2023}{4}
 \bibcite{openvla2024}{5}
@@ -174,5 +175,4 @@
 \bibcite{hofer2021simtoreal}{37}
 \bibcite{ieee7010_2020}{38}
 \bibcite{mhra2023guidance}{39}
-\@writefile{toc}{\contentsline {section}{References}{6}{section*.9}\protected@file@percent }
 \gdef \@abspage@last{6}

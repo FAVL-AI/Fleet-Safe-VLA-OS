@@ -1,5 +1,5 @@
 % =============================================================================
-% FLEET-Safe VLA — Main Paper (IEEE Conference Format, 8 pages)
+% SafeVLA — Main Paper (IEEE Conference Format, 8 pages)
 % Target venues: ICRA 2027, CoRL 2026, RSS 2027, NeurIPS 2026
 % =============================================================================
 \documentclass[conference]{IEEEtran}
@@ -34,8 +34,8 @@
 \begin{document}
 
 % =============================================================================
-\title{FLEET-Safe VLA: A Layered Safety Architecture for \\
-Vision-Language-Action Robot Fleets in Hospital Environments}
+\title{SafeVLA: A Cross-Embodiment Safety Architecture for \\
+Vision-Language-Action Robots in Hospital Environments}
 
 \author{\IEEEauthorblockN{Frank Asante Van Laarhoven}
 \IEEEauthorblockA{\textit{School of Computing} \\
@@ -51,9 +51,9 @@ Newcastle upon Tyne, United Kingdom \\
 \begin{abstract}
 Autonomous robots in hospitals must balance efficient task execution with uncompromising safety in crowded, human-centric environments.
 Existing Vision-Language-Action (VLA) models achieve high task success rates but lack formal safety guarantees, relying instead on reward shaping that offers no worst-case assurances.
-We present \textbf{FLEET-Safe VLA}, a hierarchical architecture that unifies foundation-model generalisation with mathematically provable safety.
+We present \textbf{SafeVLA}, a hierarchical architecture that unifies foundation-model generalisation with mathematically provable safety.
 Building upon Dimensional OS (DimOS)~\cite{dimos2025}---an emerging agent-native operating system for physical space that provides seamless, ROS-free hardware abstraction---our system integrates three novel components: (1) OpenVLA Llama-2 as the primary dual-system backbone (with NVIDIA GR00T N1.6 reserved as a closed-source fallback) for cross-embodiment policy learning routed via DimOS LCM messages, (2) Control Barrier Function Quadratic Programming (CBF-QP) filters that enforce forward invariance of safe sets in real time, and (3) a Deadline-Sensitive Safety Envelope Orchestrator (DSEO) providing hard real-time preemption under \SI{5}{\milli\second}.
-Evaluated across two platforms --- FastBot mobile base (161.77M parameters, 2-DOF) and Unitree G1 humanoid (162.48M parameters, 23-DOF) --- FLEET-Safe VLA achieves an 88.5\% safety cost reduction vs.\ SafeVLA (0.0007 vs.\ 0.156), 93.3\% lower inference latency (\SI{<8}{\milli\second} vs.\ \SI{120}{\milli\second}), and $14\times$ compute cost reduction (\$0.49 vs.\ \$96), while maintaining a provably near-zero Safety Violation Rate (SVR $< 5 \times 10^{-5}$).
+Evaluated across two platforms --- FastBot mobile base (161.77M parameters, 2-DOF) and Unitree G1 humanoid (162.48M parameters, 23-DOF) --- SafeVLA achieves an 88.5\% safety cost reduction vs.\ SafeVLA (0.0007 vs.\ 0.156), 93.3\% lower inference latency (\SI{<8}{\milli\second} vs.\ \SI{120}{\milli\second}), and $14\times$ compute cost reduction (\$0.49 vs.\ \$96), while maintaining a provably near-zero Safety Violation Rate (SVR $< 5 \times 10^{-5}$).
 To our knowledge, this is the first system executing a unified codebase across humanoids, quadrupeds, and wheeled platforms natively via DimOS blueprints, while providing mathematical CBF guarantees.
 \end{abstract}
 
@@ -81,7 +81,7 @@ We identify three critical gaps in the existing literature:
     \item \textbf{No real-time deadline enforcement.} No VLA system provides hard real-time preemption when inference deadlines are missed --- a critical requirement for safety-certified deployment.
 \end{enumerate}
 
-\textbf{Contributions.} We present FLEET-Safe VLA, which addresses all three gaps by building atop the DimOS~\cite{dimos2025} hardware-agnostic runtime:
+\textbf{Contributions.} We present SafeVLA, which addresses all three gaps by building atop the DimOS~\cite{dimos2025} hardware-agnostic runtime:
 \begin{itemize}
     \item A \textbf{layered safety architecture} combining OpenVLA Llama-2 foundation model generalisation with CBF-QP provable safety executing natively on DimOS.
     \item \textbf{Cross-embodiment validation} on a 2-DOF wheeled platform and a 23-DOF bipedal humanoid using identical safety constraints~\cite{dimarogonas2019framework}.
@@ -122,7 +122,7 @@ Galatolo et al.~\cite{galatolo2025visual} propose lightweight visual reasoning f
 Our work bridges the gap between learned VLA policies and the provable safety required for clinical-grade deployment.
 
 \subsection{Agentive Operating Systems}
-Traditional robotic deployments heavily rely on ROS~\cite{quigley2009ros}. Recently, Agentive Operating Systems such as Dimensional OS (DimOS)~\cite{dimos2025} have emerged as Python-native, ROS-free alternatives built on Lightweight Communications and Marshalling (LCM). DimOS allows agent-based ``vibecoding'' and rapid instantiation of skills across heterogeneous multi-robot fleets via Blueprints~\cite{dimarogonas2019framework}. Our work addresses the critical limitation of existing agentic operating systems: the lack of formal control-theoretic safety bounds during autonomous execution.
+Traditional robotic deployments heavily rely on ROS~\cite{quigley2009ros}. Recently, Agentive Operating Systems such as Dimensional OS (DimOS)~\cite{dimos2025} have emerged as Python-native, ROS-free alternatives built on Lightweight Communications and Marshalling (LCM). DimOS allows agent-based ``vibecoding'' and rapid instantiation of skills across heterogeneous multi-robots via Blueprints~\cite{dimarogonas2019framework}. Our work addresses the critical limitation of existing agentic operating systems: the lack of formal control-theoretic safety bounds during autonomous execution.
 
 \subsection{Foundation Models for Robotics}
 OpenVLA~\cite{openvla2024} established the viability of 7B-parameter Llama-2 backbones for Vision-Language-Action tasks.
@@ -134,7 +134,7 @@ We augment the primary Llama-2 backbone with our safety stack.
 % =============================================================================
 \begin{table*}[t]
 \centering
-\caption{Architectural Comparison of Contemporary Vision-Language-Action Paradigms vs.\ FLEET-Safe VLA}
+\caption{Architectural Comparison of Contemporary Vision-Language-Action Paradigms vs.\ SafeVLA}
 \label{tab:comparison}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{@{}lccccc@{}}
@@ -145,7 +145,7 @@ We augment the primary Llama-2 backbone with our safety stack.
 \textbf{Safe-VLN (Heuristic-based)} & Soft (Probabilistic) & Medium ($\approx$ 100\,ms) & High (ROS-dependent) & None & Fails in worst-case dense dynamic crowds \\
 \textbf{Base DimOS~\cite{dimos2025}}  & None (Agent-controlled) & High (LCM / DDS) & Native (No ROS req.) & Yes & Relying purely on LLM agents poses safety risks at edge cases \\
 \midrule
-\textbf{FLEET-Safe VLA (Ours)} & \textbf{Hard (CBF-QP Invariance)} & \textbf{Hard ($<5$\,ms DSEO)} & \textbf{Native (DimOS Backbone)} & \textbf{Yes (G1 \& Mobile Base)} & \textbf{None (World-leading clinical-grade verifiable autonomy)} \\
+\textbf{SafeVLA (Ours)} & \textbf{Hard (CBF-QP Invariance)} & \textbf{Hard ($<5$\,ms DSEO)} & \textbf{Native (DimOS Backbone)} & \textbf{Yes (G1 \& Mobile Base)} & \textbf{None (World-leading clinical-grade verifiable autonomy)} \\
 \bottomrule
 \end{tabular}}
 \end{table*}
@@ -252,7 +252,7 @@ a^* = \arg\min_{a} \; \|a - a_\text{nom}\|^2 \quad \text{s.t.} \quad \nabla_a h(
     \node[fit=(vlm)(dit)(cbf)(dseo), draw=black!50, dashed, rounded corners=4pt, inner sep=6pt, fill=black!3] {};
 \end{scope}
 \end{tikzpicture}
-\caption{FLEET-Safe VLA architecture. Observation $o_t$ and goal $g$ are processed by the VLM planner (System 2), which generates a plan $z_t$. The DiT action head (System 1) produces a nominal action $a_\text{nom}$, projected onto the safe set by the CBF-QP filter. DSEO enforces hard real-time deadlines.}
+\caption{SafeVLA architecture. Observation $o_t$ and goal $g$ are processed by the VLM planner (System 2), which generates a plan $z_t$. The DiT action head (System 1) produces a nominal action $a_\text{nom}$, projected onto the safe set by the CBF-QP filter. DSEO enforces hard real-time deadlines.}
 \label{fig:arch}
 \end{figure}
 
@@ -305,7 +305,7 @@ Transitions between modes use asymmetric thresholds to prevent chattering~\cite{
 \subsection{Training Algorithm}
 
 \begin{algorithm}[t]
-\caption{FLEET-Safe VLA Training (PPO-Lagrangian + CBF)}
+\caption{SafeVLA Training (PPO-Lagrangian + CBF)}
 \label{alg:training}
 \begin{algorithmic}[1]
 \REQUIRE Dataset $\mathcal{D}$, cost limit $d$, CBF decay $\alpha$, learning rates $\eta_\pi$, $\eta_\lambda$
@@ -413,7 +413,7 @@ All experiments use PyTorch~2.1~\cite{pytorch2019} with mixed-precision FP16 tra
 \toprule
 \textbf{System} & \textbf{Cost $\downarrow$} & \textbf{Reward $\uparrow$} & \textbf{SVR $\downarrow$} & \textbf{Latency $\downarrow$} & \textbf{Compute \$} & \textbf{Provable?} & \textbf{Cross-Emb.?} \\
 \midrule
-\textbf{FLEET-Safe VLA (ours)} & \textbf{0.0007} & \textbf{0.893} & \textbf{$5\!\times\!10^{-5}$} & \textbf{$<$8\,ms} & \textbf{\$0.49} & \textbf{Yes} & \textbf{Yes} \\
+\textbf{SafeVLA (ours)} & \textbf{0.0007} & \textbf{0.893} & \textbf{$5\!\times\!10^{-5}$} & \textbf{$<$8\,ms} & \textbf{\$0.49} & \textbf{Yes} & \textbf{Yes} \\
 SafeVLA~\cite{safevla2025}      & 0.156 & 0.826 & 0.030 & 120\,ms & \$96 & No & No \\
 GR00T N1~\cite{groot2025}       & 0.089 & 0.810 & 0.015 & 45\,ms & \$180 & No & Yes \\
 $\pi_0$~\cite{pi0_2025}        & 0.120 & 0.850 & 0.020 & 35\,ms & \$220 & No & No \\
@@ -428,7 +428,7 @@ ALOHA-2~\cite{aloha2_2024}      & 0.145 & 0.820 & 0.025 & 50\,ms & \$75 & No & N
 \end{table*}
 
 Table~\ref{tab:main} summarises our main results.
-FLEET-Safe VLA achieves the lowest safety cost (0.0007), lowest SVR ($5\times10^{-5}$), highest reward (0.893), and lowest latency ($<$8\,ms) while being the only system with formal safety guarantees.
+SafeVLA achieves the lowest safety cost (0.0007), lowest SVR ($5\times10^{-5}$), highest reward (0.893), and lowest latency ($<$8\,ms) while being the only system with formal safety guarantees.
 The $14\times$ cost reduction vs.\ SafeVLA (\$0.49 vs.\ \$96) demonstrates that provably safe VLA training is computationally accessible.
 
 \subsection{Training Convergence}
@@ -454,7 +454,7 @@ Critically, the barrier function $h(s)$ transitions from negative (unsafe initia
 \toprule
 \textbf{Configuration} & \textbf{SVR $\downarrow$} & \textbf{Reward $\uparrow$} & \textbf{Cost $\downarrow$} \\
 \midrule
-Full FLEET-Safe VLA     & $\mathbf{5\!\times\!10^{-5}}$ & \textbf{0.893} & \textbf{0.0007} \\
+Full SafeVLA     & $\mathbf{5\!\times\!10^{-5}}$ & \textbf{0.893} & \textbf{0.0007} \\
 $-$ CBF-QP filter       & 0.031 & 0.877 & 0.048 \\
 $-$ DSEO preemption     & 0.004 & 0.891 & 0.005 \\
 $-$ GR00T backbone      & 0.009 & 0.742 & 0.012 \\
@@ -509,7 +509,7 @@ Our current results are in simulation. While we use aggressive domain randomisat
 Our training data is synthetically generated, not collected from real hospitals. Section~\ref{sec:data} describes our planned auto-collection pipeline.
 
 \textbf{Single-agent evaluation.}
-While FLEET targets multi-robot fleets, current results are single-agent. Fleet-level coordination with shared safety envelopes is future work.
+While later stages will target multi-robot environments, current results evaluate strict cross-embodiment hardware generalisation.
 
 \textbf{Statistical significance.}
 Our results are from single training runs. We acknowledge the need for multi-seed experiments with confidence intervals; we reserve this for the full paper.
@@ -535,7 +535,7 @@ Hospital robot deployment raises significant ethical concerns~\cite{ieee7010_202
 \section{Conclusion}
 \label{sec:conclusion}
 
-We presented FLEET-Safe VLA, the first vision-language-action framework providing provable safety for autonomous hospital robots.
+We presented SafeVLA, the first vision-language-action framework providing provable safety for autonomous hospital robots.
 By integrating the GR00T N1.6 foundation model backbone with CBF-QP safety filtering and DSEO real-time preemption, we achieve an 88.5\% safety cost reduction, 93.3\% latency improvement, and $14\times$ compute cost reduction compared to SafeVLA, while maintaining provably near-zero Safety Violation Rate.
 Our cross-embodiment validation on both a 2-DOF wheeled FastBot and a 23-DOF Unitree G1 humanoid demonstrates that formal safety guarantees generalise across robot morphologies. These successes serve as our foundational outcome, establishing the blueprint to scale these state-of-the-art architectures safely out to our wider heterogeneous robot fleet in future work.
 We release all code, training logs, and model checkpoints for full reproducibility.
