@@ -65,6 +65,15 @@ class SafetyKernel:
         self.epsilon = epsilon_error_bound # Maximum state estimation error (Theorem 3)
         self.parser = LLMSemanticParser()
         
+        # Spatial Integration: Drift-Aware geometric firewall
+        try:
+            from fleetsafe_vla.modules.spatial_registration import DriftAwareRegistration
+            self.spatial_guard = DriftAwareRegistration(shift_limit_ratio=0.05)
+            # Mock anchor setting for initialization
+            self.spatial_guard.set_anchor(np.array([[-5, -5, -5], [5, 5, 5]]))
+        except ImportError:
+            self.spatial_guard = None
+        
     def load_language_constraints(self, instruction: str):
         self.logger.info(f"Parsing language instruction: {instruction}")
         parsed_constraints = self.parser.parse_instruction(instruction)
@@ -80,7 +89,12 @@ class SafetyKernel:
                        action: np.ndarray,
                        robot_id: Optional[str] = None) -> Tuple[bool, Optional[str]]:
         
-        # Priority 1 (critical) constraints first
+        # Geometric Firewall: Validate spatial registration constraints first
+        if self.spatial_guard and not self.spatial_guard.process_incoming_frame(state):
+            self.logger.error(f"Geometric verification failed for {robot_id} - Auto-Calibration Triggered.")
+            return False, "Catastrophic Spatial Drift"
+
+        # Priority 1 (critical) semantic constraints
         for constraint in sorted(self.constraints.values(), key=lambda c: c.priority):
             if not self._check_constraint(state, action, constraint, robot_id):
                 self._log_violation(constraint, state, action, robot_id)

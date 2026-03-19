@@ -102,7 +102,7 @@ export function useFleetAPI() {
         ws.onerror = () => {
           // Silently handled — onclose will fire next
         };
-      } catch (e) {
+      } catch {
         console.warn('[Fleet API] Failed to connect WebSocket — running standalone');
       }
     };
@@ -139,7 +139,7 @@ export function useFleetAPI() {
       });
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return await res.json();
-    } catch (e) {
+    } catch {
       console.warn(`[Fleet API] Backend unavailable — FSM state applied locally for ${robotId}:`, state);
       return null;
     }
@@ -163,7 +163,7 @@ export function useFleetAPI() {
       });
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return await res.json();
-    } catch (e) {
+    } catch {
       console.warn(`[Fleet API] Backend unavailable — policy applied locally for ${robotId}:`, policy);
       return null;
     }

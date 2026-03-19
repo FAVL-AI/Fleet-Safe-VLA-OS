@@ -30,6 +30,7 @@ export function useTelemetry() {
   const [adherence, setAdherence] = useState<number[]>(Array(10).fill(85));
   const [efficiency, setEfficiency] = useState<number[]>(Array(10).fill(90));
   const [robotY, setRobotY] = useState(0);
+  const [recalibrating, setRecalibrating] = useState<boolean>(false);
 
   const wsRef = useRef<WebSocket | null>(null);
 
@@ -48,8 +49,9 @@ export function useTelemetry() {
           
           setRobotY(data.robotY);
           animationStore.robotY = data.robotY;
+          if (data.recalibrating !== undefined) setRecalibrating(data.recalibrating);
         }
-      } catch (e) {
+      } catch {
         // silent handle
       }
     };
@@ -73,7 +75,8 @@ export function useTelemetry() {
       efficiencyCurrent: Math.round(efficiency[efficiency.length - 1])
     },
     kinematics: {
-      robotY
+      robotY,
+      recalibrating
     }
   };
 }

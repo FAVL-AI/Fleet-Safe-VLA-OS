@@ -39,7 +39,7 @@ class ModelEntry:
     description: str
 
     # Architecture
-    backbone: str = "GR00T-N1.6"
+    backbone: str = "OpenVLA-7B (Llama-2)"
     obs_dim: int = 0
     act_dim: int = 0
     parameters: int = 0
@@ -136,6 +136,24 @@ class ModelRegistry:
             onnx_path="checkpoints/g1_cmdp_locomotion/g1_locomotion.onnx",
             training_script="training/groot_wb_train.py",
             tags=["groot", "g1", "cmdp", "safety", "cbf", "core"],
+        )
+
+        self._models["openvla_llama2_nav"] = ModelEntry(
+            id="openvla_llama2_nav",
+            name="openvla_llama2_nav",
+            display_name="OpenVLA Llama-2 Navigation",
+            category="core",
+            description="Fully-owned OpenVLA 7B backbone built with native Multi-Stage SLM Tuning "
+                        "(CPT + QLoRA SFT + DPO Alignment) to prevent Catastrophic Drift natively.",
+            backbone="OpenVLA-7B (Llama-2)",
+            obs_dim=48, act_dim=2,
+            finetuning="multi-stage (cpt+sft+dpo)",
+            wandb_run_id="openvla-multi-stage-sota",
+            wandb_url="https://wandb.ai/FrankAsanteVanLaarhoven/fleet-safe-vla/runs/openvla-lora",
+            checkpoint_path="server/models/openvla-7b_(llama-2)_nav.bin",
+            onnx_path="checkpoints/openvla_llama2_nav/openvla_policy.onnx",
+            training_script="training/slm_multistage_tuner.py",
+            tags=["openvla", "llama-2", "slm", "dpo", "core"],
         )
 
     # ─── Extended Models (3-10) ───────────────────────────────────

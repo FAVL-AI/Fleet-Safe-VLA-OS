@@ -1,0 +1,137 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{safevln2024}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {I-A}}Core Contributions}{1}{subsection.1.1}\protected@file@percent }
+\citation{ames2017cbf,ames2019cbf_tutorial,panja2024cbf_survey}
+\citation{li2022tl_cbf}
+\citation{lindemann2018cbf_stl,lindemann2019cbf_stl_csl}
+\citation{liang2023erg_cbf_stl}
+\citation{chen2025stl_cbf_tac}
+\citation{maler2004stl}
+\citation{li2017stl_rl}
+\citation{lindemann2018cbf_stl,chen2025stl_cbf_tac}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Novelty Differentiation: Prior CBF Work vs SafeVLA}}{2}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:novelty}{{I}{2}{Novelty Differentiation: Prior CBF Work vs SafeVLA}{table.caption.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Vision-Language-Action Policies}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Safe Reinforcement Learning}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Control Barrier Functions}{2}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Temporal Logic with Control Barrier Functions}{2}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-E}}Formal Methods in Robotics}{2}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Problem Formulation}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}SafeVLA Architecture}{2}{section.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces SafeVLA architecture. Natural language instructions are parsed into semantic safety constraints, which generate Control Barrier Functions defining a forward-invariant safe set. The VLA policy proposes actions that are projected via a real-time CBF-QP safety filter, producing minimally modified safe controls applicable across multiple robot embodiments.}}{2}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:architecture}{{1}{2}{SafeVLA architecture. Natural language instructions are parsed into semantic safety constraints, which generate Control Barrier Functions defining a forward-invariant safe set. The VLA policy proposes actions that are projected via a real-time CBF-QP safety filter, producing minimally modified safe controls applicable across multiple robot embodiments}{figure.caption.2}{}}
+\citation{lindemann2019cbf_stl_csl,liang2023erg_cbf_stl,chen2025stl_cbf_tac}
+\citation{margolis2022walkthesewaysim}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Semantic Parsing Pipeline}{3}{subsection.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Language-to-Constraint Extraction Examples}}{3}{table.caption.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Semantic Barrier Function (SBF) Generator}{3}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Language-Conditioned Temporal Safety (STL Extension)}{3}{subsection.4.3}\protected@file@percent }
+\newlabel{eq:stl_always}{{4}{3}{Language-Conditioned Temporal Safety (STL Extension)}{equation.4}{}}
+\newlabel{eq:stl_eventually}{{5}{3}{Language-Conditioned Temporal Safety (STL Extension)}{equation.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}CBF-QP Safety Filter}{3}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Cross-Embodiment Task-Space Reduction}{3}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Theoretical Guarantees}{3}{section.5}\protected@file@percent }
+\newlabel{thm:invariance}{{1}{3}{Language-Conditioned Safety Invariance}{theorem.1}{}}
+\newlabel{thm:grounding}{{2}{3}{Sound Semantic Grounding}{theorem.2}{}}
+\newlabel{thm:robust}{{3}{3}{Robust Safety under State Estimation Error}{theorem.3}{}}
+\newlabel{thm:temporal}{{4}{4}{Temporal Safety Satisfaction}{theorem.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Experiments}{4}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Exp 1: Safety Violation Rate (VLA vs SafeVLA)}{4}{subsection.6.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Safety Violation Rate and Instruction Compliance}}{4}{table.caption.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Exp 2: Minimal Action Distortion}{4}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Exp 3: R2R-CE SOTA Baseline Comparisons}{4}{subsection.6.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces R2R-CE SOTA Comparisons}}{4}{table.caption.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}Exp 4: Cross-Embodiment Transfer}{4}{subsection.6.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Cross-Embodiment Transfer (Safety Generalisation)}}{4}{table.caption.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-E}}Exp 5: Semantic Stress Tests}{4}{subsection.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-F}}Exp 6: Sim-to-Real Transfer \& Real Robot Evaluation}{4}{subsection.6.6}\protected@file@percent }
+\citation{lindemann2018cbf_stl}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces FastBot and Unitree G1 hardware validation: showcasing real-world semantic safety zones defined purely by language.}}{5}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:hardware}{{2}{5}{FastBot and Unitree G1 hardware validation: showcasing real-world semantic safety zones defined purely by language}{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-G}}Exp 7: Ablation Study}{5}{subsection.6.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Component Ablation Study}}{5}{table.caption.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-H}}Exp 8: Temporal Instruction Benchmark}{5}{subsection.6.8}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Temporal Instruction Benchmark}}{5}{table.caption.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-I}}Exp 9: Hospital Delivery Case Study}{5}{subsection.6.9}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Hospital Delivery Case Study (20 Trials)}}{5}{table.caption.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Analysis}{5}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}Runtime Complexity}{5}{subsection.7.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {IX}{\ignorespaces System Latency Breakdown}}{5}{table.caption.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-B}}Semantic Safety Margin (SSM)}{5}{subsection.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Limitations}{5}{section.8}\protected@file@percent }
+\citation{*}
+\bibstyle{IEEEtran}
+\bibdata{references}
+\bibcite{safevln2024}{1}
+\bibcite{ames2017cbf}{2}
+\bibcite{ames2019cbf_tutorial}{3}
+\bibcite{panja2024cbf_survey}{4}
+\bibcite{li2022tl_cbf}{5}
+\bibcite{lindemann2018cbf_stl}{6}
+\bibcite{lindemann2019cbf_stl_csl}{7}
+\bibcite{liang2023erg_cbf_stl}{8}
+\bibcite{chen2025stl_cbf_tac}{9}
+\bibcite{maler2004stl}{10}
+\bibcite{li2017stl_rl}{11}
+\bibcite{margolis2022walkthesewaysim}{12}
+\bibcite{safevla2025}{13}
+\bibcite{achiam2017cpo}{14}
+\bibcite{ray2019benchmarking}{15}
+\bibcite{stooke2020responsive}{16}
+\bibcite{tessler2019reward}{17}
+\bibcite{wachi2024survey}{18}
+\bibcite{chow2019lyapunov}{19}
+\bibcite{groot2025}{20}
+\bibcite{rt2_2023}{21}
+\bibcite{pi0_2025}{22}
+\bibcite{openvla2024}{23}
+\bibcite{robomamba2024}{24}
+\bibcite{octo2024}{25}
+\bibcite{aloha2_2024}{26}
+\bibcite{robopocket2025}{27}
+\bibcite{galatolo2025visual}{28}
+\bibcite{cheng2019cbf_rl}{29}
+\bibcite{dawson2023safe}{30}
+\bibcite{zhao2023cbf_learning}{31}
+\bibcite{chi2023diffusion}{32}
+\bibcite{song2021ddim}{33}
+\bibcite{ho2020ddpm}{34}
+\bibcite{peebles2023dit}{35}
+\bibcite{taylor2020learning_cbf}{36}
+\bibcite{kyrarini2021survey}{37}
+\bibcite{holland2021service}{38}
+\bibcite{miseikis2020tug}{39}
+\bibcite{papadopoulos2024hospital}{40}
+\bibcite{unitree_g1}{41}
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Conclusion}{6}{section.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{6}{section*.14}\protected@file@percent }
+\bibcite{isaacgym}{42}
+\bibcite{tobin2017domainrand}{43}
+\bibcite{hofer2021simtoreal}{44}
+\bibcite{hu2022lora}{45}
+\bibcite{vaswani2017attention}{46}
+\bibcite{dosovitskiy2021vit}{47}
+\bibcite{altman1999cmdp}{48}
+\bibcite{schulman2017ppo}{49}
+\bibcite{sha1990priority}{50}
+\bibcite{buttazzo2011hard}{51}
+\bibcite{mhra2023guidance}{52}
+\bibcite{ieee7010_2020}{53}
+\bibcite{wandb2020}{54}
+\bibcite{pytorch2019}{55}
+\bibcite{agarwal2021deep}{56}
+\bibcite{lindemann2021learning}{57}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Live Weights \& Biases telemetry from the \texttt  {fleet-safe-vla} project, filtered to show \textbf  {only} SafeVLA-specific runs. (a) Workspace overview with Safety\_Violation\_Rate\_SVR converging to near-zero for SafeVLA-UnitreeG1, SafeVLA-FastBot, and SafeVLA: Unitree G1 (Humanoid) runs; zone\_loss driving toward zero. (b) Individual SafeVLA-UnitreeG1 run showing monotonic SVR reduction and loss convergence over 500 steps. (c) Individual SafeVLA-FastBot run confirming cross-embodiment SVR convergence.}}{7}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:telemetry_comprehensive}{{3}{7}{Live Weights \& Biases telemetry from the \texttt {fleet-safe-vla} project, filtered to show \textbf {only} SafeVLA-specific runs. (a) Workspace overview with Safety\_Violation\_Rate\_SVR converging to near-zero for SafeVLA-UnitreeG1, SafeVLA-FastBot, and SafeVLA: Unitree G1 (Humanoid) runs; zone\_loss driving toward zero. (b) Individual SafeVLA-UnitreeG1 run showing monotonic SVR reduction and loss convergence over 500 steps. (c) Individual SafeVLA-FastBot run confirming cross-embodiment SVR convergence}{figure.caption.12}{}}
+\bibcite{saferpath2025}{58}
+\bibcite{shah2023vint}{59}
+\bibcite{sridhar2023nomad}{60}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Real-Time Trinity Dashboard \& Isaac Sim Integration: Actively monitoring parallel structural constraint enforcement during live VLA model execution across heterogeneous robotic embodiments.}}{8}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:trinity_dashboard}{{4}{8}{Real-Time Trinity Dashboard \& Isaac Sim Integration: Actively monitoring parallel structural constraint enforcement during live VLA model execution across heterogeneous robotic embodiments}{figure.caption.13}{}}
+\gdef \@abspage@last{8}

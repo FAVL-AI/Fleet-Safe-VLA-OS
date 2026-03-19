@@ -17,7 +17,7 @@ Action space: 12 leg joint position targets (scaled)
 
 References:
   - unitree_rl_lab/deploy/robots/g1_23dof/
-  - Isaac-GR00T policy export (ONNX)
+  - OpenVLA-7B Llama-2 policy export (with GR00T fallback)
 """
 
 from __future__ import annotations
@@ -193,15 +193,39 @@ class PolicyEngine:
         return True
 
     def _try_load_onnx(self, name: str, path: str):
-        """Attempt to load an ONNX model (graceful fallback to sim)."""
+        """Attempt to load an ONNX model with kernel-level optimizations."""
         try:
             import onnxruntime as ort
-            session = ort.InferenceSession(path)
+            
+            # Kernel-level optimizations
+            sess_options = ort.SessionOptions()
+            sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
+            sess_options.intra_op_num_threads = 4
+            
+            # Execution Providers for TensorRT and CUDA
+            providers = [
+                ('TensorrtExecutionProvider', {
+                    'device_id': 0,
+                    'trt_engine_cache_enable': True,
+                    'trt_engine_cache_path': './trt_caches',
+                    'trt_fp16_enable': True,
+                }),
+                ('CUDAExecutionProvider', {
+                    'device_id': 0,
+                    'arena_extend_strategy': 'kNextPowerOfTwo',
+                    'gpu_mem_limit': 4 * 1024 * 1024 * 1024,
+                    'cudnn_conv_algo_search': 'EXHAUSTIVE',
+                    'do_copy_in_default_stream': True,
+                }),
+                'CPUExecutionProvider'
+            ]
+            
+            session = ort.InferenceSession(path, sess_options=sess_options, providers=providers)
             self._onnx_sessions[name] = session
-            print(f"[PolicyEngine] Loaded ONNX model: {path}")
+            print(f"[PolicyEngine] Loaded highly optimized ONNX model: {path}")
         except (ImportError, Exception) as e:
             # Fallback to simulated inference
-            print(f"[PolicyEngine] ONNX not available for {name}, using simulated gait")
+            print(f"[PolicyEngine] ONNX/TensorRT not available for {name}: {e}. Using simulated gait.")
 
     def infer(self, low_state: LowState, joystick: WirelessController) -> List[float]:
         """Run policy inference: observation → action → joint targets.

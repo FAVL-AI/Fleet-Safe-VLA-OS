@@ -158,6 +158,7 @@ class FleetState:
                     "adherence": metrics.adherence,
                     "efficiency": efficiency,
                     "robotY": robotY,
+                    "recalibrating": getattr(metrics, 'recalibrating', False),
                     "ts": time.time()
                 })
             except Exception as e:

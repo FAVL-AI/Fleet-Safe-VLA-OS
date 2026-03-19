@@ -68,7 +68,7 @@ const LiveMinimap = () => {
   // Non-uniform time accumulators for zone-aware speed
   const progressA = useRef(0);
   const progressB = useRef(0);
-  const lastTimestamp = useRef(Date.now());
+  const lastTimestamp = useRef(0);
   const [posA, setPosA] = useState({ x: 40, y: 350 });
   const [posB, setPosB] = useState({ x: 160, y: 60 });
   const [speedA, setSpeedA] = useState({ speed: 1.0, zone: null as string | null });
@@ -79,6 +79,7 @@ const LiveMinimap = () => {
   const rafRef = useRef(0);
 
   useEffect(() => {
+    lastTimestamp.current = Date.now();
     const BASE_SPEED_A = 1 / 24; // full cycle fraction per second
     const BASE_SPEED_B = 1 / 30;
 
@@ -270,6 +271,8 @@ const LineChart = ({ color, points }: { color: 'cyan' | 'purple', points: string
 
 export default function Home() {
   const telemetry = useTelemetry();
+  // SOTA Autonomous Hardware Drift Recalibration Flag
+  const isRecalibrating = telemetry.kinematics?.recalibrating;
   const [leftPanelOpen, setLeftPanelOpen] = useState(true);
   const [rightPanelOpen, setRightPanelOpen] = useState(true);
   const [liveTime, setLiveTime] = useState('');
@@ -320,6 +323,21 @@ export default function Home() {
   return (
     <main className="min-h-screen w-full relative flex flex-col pt-0 text-[13px]">
       <div className="bg-aurora" />
+
+      {/* 🚨 SOTA AUTONOMOUS SPATIAL DRIFT RECALIBRATION OVERLAY 🚨 */}
+      {isRecalibrating && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-red-900/40 backdrop-blur-sm pointer-events-none transition-all duration-300">
+          <div className="flex flex-col items-center bg-black/90 border-2 border-red-500 rounded-3xl p-8 shadow-[0_0_60px_rgba(239,68,68,0.5)] animate-pulse">
+            <AlertTriangle className="w-24 h-24 text-red-500 mb-6 animate-bounce" />
+            <h2 className="text-4xl font-bold font-mono tracking-widest text-red-500 mb-3 text-center uppercase">
+              Catastrophic Spatial Drift
+            </h2>
+            <p className="text-cyan-400 font-mono text-xl text-center uppercase tracking-wider drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">
+              SOTA Autonomous Hardware Recalibration Engaged<br/>Resetting Topological Anchor...
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Top Header */}
       <header className="glass-header w-full h-16 flex items-center justify-between px-6 z-50">

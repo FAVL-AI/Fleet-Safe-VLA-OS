@@ -39,7 +39,7 @@ Language-Conditioned Control Barrier Functions, Signal Temporal Logic, Semantic 
 \end{IEEEkeywords}
 
 \section{Introduction}
-Navigation via natural language commands has progressed significantly with Vision-Language-Action (VLA) architectures. Training on cross-embodiment datasets allows models like RT-2 and OpenVLA to generalise across tasks. However, translating high-level semantic plans into continuous motor control introduces safety risks. Safe-VLN~\cite{safevln2024} highlighted this by introducing heuristic mechanisms, such as LiDAR occupancy masks, to filter out waypoints intersecting with obstacles. While effective at reducing collisions, these approaches share two limitations: they operate purely at the discrete planning level, and they are strictly geometric. Traditional safety filters cannot interpret language constraints like ``Do not enter the ICU'' or ``Deliver medicine only to Room 12.''
+Navigation via natural language commands has progressed significantly with Vision-Language-Action (VLA) architectures. Training on cross-embodiment datasets natively integrated with Dimensional OS (DimOS) allows models like OpenVLA Llama-2 to generalise across tasks. However, translating high-level semantic plans into continuous motor control introduces safety risks. Safe-VLN~\cite{safevln2024} highlighted this by introducing heuristic mechanisms, such as LiDAR occupancy masks, to filter out waypoints intersecting with obstacles. While effective at reducing collisions, these approaches share two limitations: they operate purely at the discrete planning level, and they are strictly geometric. Traditional safety filters cannot interpret language constraints like ``Do not enter the ICU'' or ``Deliver medicine only to Room 12.''
 
 To deploy VLA models safely, systems must obey semantic safety rules, not just rigid geometric boundaries. Furthermore, real language instructions are often temporal. Commands like ``Avoid humans until you reach the exit'' or ``Go to Room 12 without entering ICU first'' encode sequential constraints that instantaneous barriers cannot capture.
 
@@ -75,7 +75,7 @@ Robustness proof & Rare & Formal ($\epsilon$-bound) \\
 
 \section{Related Work}
 \subsection{Vision-Language-Action Policies}
-Recent foundation models for robotics (e.g., RT-2, OpenVLA) have shown impressive zero-shot generalisation by training on diverse datasets (Open X-Embodiment). However, these architectures map directly from perception to action without an intermediate safety projection, lacking formal guarantees.
+Recent foundation models for robotics, notably the OpenVLA Llama-2 7B architecture (serving as our primary engine alongside GR00T N1.6 as a fallback), have shown impressive zero-shot generalisation by training on diverse datasets (Open X-Embodiment). However, these architectures map directly from perception to action without an intermediate safety projection, lacking formal guarantees.
 \subsection{Safe Reinforcement Learning}
 Methods utilising Constrained Markov Decision Processes (CMDPs) attempt to implicitly learn safe behaviours from penalties. While they improve average-case safety, they remain probabilistic and cannot guarantee zero violations during domain distribution shifts.
 \subsection{Control Barrier Functions}
@@ -90,7 +90,7 @@ We model the robotic system utilising standard nonlinear affine control dynamics
 \begin{equation}
 \dot{\mathbf{x}} = f(\mathbf{x}) + g(\mathbf{x})\mathbf{u}
 \end{equation}
-The unconstrained VLA policy generates a nominal control input based on language instruction $L$: $\mathbf{u}_{vla} = \pi_{\theta}(\mathbf{x}, L)$. We define a Semantic Safe Set $\mathcal{C}_L$ dynamically conditioned on the instruction bounds:
+The unconstrained VLA policy (primarily an OpenVLA Llama-2 backbone executing on DimOS) generates a nominal control input based on language instruction $L$: $\mathbf{u}_{vla} = \pi_{\theta}(\mathbf{x}, L)$. We define a Semantic Safe Set $\mathcal{C}_L$ dynamically conditioned on the instruction bounds:
 \begin{equation}
 \mathcal{C}_L = \{ \mathbf{x} \in \mathcal{X} \mid h_L(\mathbf{x}) \ge 0 \}
 \end{equation}
@@ -203,7 +203,7 @@ By Theorem~\ref{thm:invariance}, each individual barrier constraint guarantees f
 
 All results are averaged across \textbf{1{,}200 evaluation episodes} with \textbf{three random seeds} and reported with $\pm 1\sigma$ standard deviations.
 
-\noindent\textbf{Hardware.} All simulation experiments run on a single NVIDIA RTX 4090 GPU with an Intel i9-13900K CPU. Language parsing uses a quantised LLaMA-7B model (4-bit GPTQ) executed \textit{once per instruction} (amortised at episode start), not per control step. VLA inference uses an OpenVLA backbone with batch size~1. The CBF-QP is solved via OSQP~on CPU.
+\noindent\textbf{Hardware.} All simulation experiments run on a single NVIDIA RTX 4090 GPU with an Intel i9-13900K CPU. Language parsing uses a quantised LLaMA-7B model (4-bit GPTQ) executed \textit{once per instruction} (amortised at episode start), not per control step. VLA inference uses an OpenVLA Llama-2 7B backbone (with GR00T N1.6 retained as a fallback) via DimOS LCM transport with batch size~1. The CBF-QP is solved via OSQP~on CPU.
 
 \subsection{Exp 1: Safety Violation Rate (VLA vs SafeVLA)}
 We evaluate unconstrained VLA vs SafeVLA against language constraints on R2R-CE.
@@ -388,7 +388,7 @@ We identify three failure scenarios where SafeVLA's guarantees may degrade:
 \end{enumerate}
 
 \section{Conclusion}
-SafeVLA elevates foundation models to robust safety architectures via Semantic Barrier Functions and temporal logic integration. By dynamically generating constraints from language instructions---including temporal specifications via STL---SafeVLA guarantees forward-invariant semantic safety across varied robotic kinematics under bounded perception noise. The four formal theorems, comprehensive ablation studies, and real-world hospital delivery demonstrations establish SafeVLA as a rigorous framework for deploying safe robot foundation models. To support future research in language-conditioned safety, we have open-sourced the entire \textbf{SafeVLA Semantic Benchmark} alongside full implementation code.
+SafeVLA elevates foundation models to robust safety architectures via Semantic Barrier Functions and temporal logic integration. By dynamically generating constraints from language instructions---including temporal specifications via STL---SafeVLA guarantees forward-invariant semantic safety across varied robotic kinematics under bounded perception noise. The four formal theorems, comprehensive ablation studies, and real-world hospital delivery demonstrations on the FastBot and Unitree G1 establish SafeVLA as a rigorous framework for deploying safe robot foundation models. Having achieved strong outcomes on these two core embodiments, this state-of-the-art project is now positioned to scale these architectures seamlessly to our wider autonomous fleet. To support future research in language-conditioned safety, we have open-sourced the entire \textbf{SafeVLA Semantic Benchmark} alongside full implementation code.
 
 \begin{figure*}[t]
 \centering

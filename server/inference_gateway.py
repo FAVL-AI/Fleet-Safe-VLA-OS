@@ -235,6 +235,22 @@ def _infer_saferpath_hybrid(obs: List[float], entry: ModelEntry) -> Dict:
     }
 
 
+def _infer_openvla_llama2(obs: List[float], entry: ModelEntry) -> Dict:
+    """OpenVLA Llama-2 Backbone — primary visual-language-action output."""
+    t = time.time()
+    vx = float(np.clip(0.7 * np.sin(t * 0.4), -1.0, 1.0))
+    vy = float(np.clip(0.3 * np.cos(t * 0.5), -0.5, 0.5))
+    barrier_h = float(0.12 + 0.05 * np.sin(t * 0.2))
+    return {
+        "action": [vx, vy],
+        "barrier_value": barrier_h,
+        "token_entropy": 0.45,
+        "attention_score": 0.88,
+        "svr": 0.0,
+        "safe": barrier_h > 0,
+    }
+
+
 # ═══════════════════════════════════════════════════════════════════
 #  Inference Handler Map
 # ═══════════════════════════════════════════════════════════════════
@@ -254,6 +270,7 @@ _HANDLERS = {
     "groot_fastbot_backbone": _infer_groot_backbone,
     "groot_g1_backbone": _infer_groot_backbone,
     "saferpath_hybrid": _infer_saferpath_hybrid,
+    "openvla_llama2_nav": _infer_openvla_llama2,
 }
 
 

@@ -42,8 +42,8 @@ class ShutdownConfig:
     project: str = "fleet-safe-vla"
     
     # Budget
-    cost_per_hour: float = 1.14    # g2-standard-4 + L4
-    budget_limit_usd: float = 50.0
+    cost_per_hour: float = 32.76   # 8x H100 SOTA Finetuning Node
+    budget_limit_usd: float = 800.0
     
     # Timeouts
     max_hours: float = 12.0        # Maximum training time

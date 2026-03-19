@@ -44,7 +44,7 @@ Digital Twin Command Center with WebRTC streaming, VLA inference, RoboPocket pho
 | Module | Purpose |
 |--------|---------|
 | `dds_bridge.py` | CycloneDDS ↔ Python bridge |
-| `policy_engine.py` | GR00T N1.6 VLA inference |
+| `policy_engine.py` | OpenVLA Llama-2 inference (GR00T fallback) |
 | `fsm_controller.py` | Finite State Machine for robot behavior |
 | `arm_controller.py` | Dual arm manipulation |
 | `rewards.py` | Reward functions for RL training |
@@ -74,7 +74,7 @@ Phone-based policy iteration — improve robot policies without a robot.
 - **Safety MDP**: COM margin rewards (weight=5.0), contact force limits, progressive curriculum
 
 ### 🏗️ Pipeline (`pipeline/`)
-- GR00T training scripts (single & multi-GPU)
+- OpenVLA training scripts (with GR00T fallback support)
 - HDF5 → LeRobot dataset conversion
 - CycloneDDS XML configuration
 - DDS QoS profiles (Normal/Degraded/Emergency)
