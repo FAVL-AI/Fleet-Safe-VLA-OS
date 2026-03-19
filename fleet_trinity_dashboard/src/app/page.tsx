@@ -668,7 +668,7 @@ export default function Home() {
           {/* Live FastBot Hospital Patrol — embedded (compact) */}
           <div className="w-full border border-[#22d3ee]/20 rounded-lg relative bg-slate-950/40 overflow-hidden" style={{ height: '200px' }}>
             <iframe 
-              src="http://localhost:8080/fastbot_dashboard.html"
+              src="http://localhost:8000/"
               className="w-full h-full border-0 rounded-lg"
               style={{ height: '200px' }}
               title="FastBot Hospital Patrol — Live"
