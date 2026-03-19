@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+rm -f .coverage .coverage.*
+
+export _FLEETSAFE_CORE_COV=1
+
+uv run coverage run -m pytest "$@" -m 'not tool'
+uv run coverage combine
+uv run coverage html
+uv run coverage report

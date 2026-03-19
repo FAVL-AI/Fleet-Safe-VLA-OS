@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { animationStore } from './animationStore';
 
 // Generates an SVG path string from an array of values (0-100)
@@ -31,41 +31,32 @@ export function useTelemetry() {
   const [efficiency, setEfficiency] = useState<number[]>(Array(10).fill(90));
   const [robotY, setRobotY] = useState(0);
 
+  const wsRef = useRef<WebSocket | null>(null);
+
   useEffect(() => {
-    let tick = 0;
-    
-    const interval = setInterval(() => {
-      tick += 0.1;
-      
-      // Simulate High-Frequency telemetry streams
-      setCbfInterventions(prev => {
-        const next = [...prev.slice(1), 50 + Math.sin(tick) * 30 + Math.random() * 10];
-        return next;
-      });
-      
-      setSafetyViolations(prev => {
-        // Keep violations near 0, occasionally spiking
-        const val = Math.max(0, Math.sin(tick * 0.5) * 5 + (Math.random() > 0.9 ? 15 : 0));
-        return [...prev.slice(1), val];
-      });
-      
-      setAdherence(prev => {
-        // High adherence (80-100%)
-        return [...prev.slice(1), 85 + Math.sin(tick * 0.2) * 10 + Math.random() * 5];
-      });
-      
-      setEfficiency(prev => {
-         return [...prev.slice(1), 90 + Math.cos(tick * 0.3) * 8 + Math.random() * 2];
-      });
+    const ws = new WebSocket('ws://localhost:8000/ws/fleet');
+    wsRef.current = ws;
 
-      // Simple breathing/walking kinematic simulation for the 3D twin
-      const y = Math.sin(tick * 2) * 0.03 + 0.95;
-      setRobotY(y);
-      animationStore.robotY = y;
-      
-    }, 200); // 5 FPS update for the UI graphs
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'telemetry') {
+          setCbfInterventions(prev => [...prev.slice(1), data.cbf]);
+          setSafetyViolations(prev => [...prev.slice(1), data.violations]);
+          setAdherence(prev => [...prev.slice(1), data.adherence]);
+          setEfficiency(prev => [...prev.slice(1), data.efficiency]);
+          
+          setRobotY(data.robotY);
+          animationStore.robotY = data.robotY;
+        }
+      } catch (e) {
+        // silent handle
+      }
+    };
 
-    return () => clearInterval(interval);
+    return () => {
+      ws.close();
+    };
   }, []);
 
   return {

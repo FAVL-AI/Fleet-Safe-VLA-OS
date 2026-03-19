@@ -1,0 +1,21 @@
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .DS_Store
+
+# Exclude web development directories
+recursive-exclude fleetsafe_core/web/command-center-extension *
+recursive-exclude fleetsafe_core/web/websocket_vis/node_modules *
+recursive-exclude fleetsafe_core/agents/fixtures *
+recursive-exclude fleetsafe_core/mapping/google_maps/fixtures *
+recursive-exclude fleetsafe_core/web/fleetsafe_core_interface *
+
+# Exclude development files
+exclude .gitignore
+exclude .gitattributes
+prune .git
+prune .github
+prune .mypy_cache
+prune .pytest_cache
+prune .ruff_cache
+prune .vscode
+prune fleetsafe_core/web/command-center-extension

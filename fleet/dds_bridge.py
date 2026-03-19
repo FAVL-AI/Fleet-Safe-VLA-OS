@@ -241,6 +241,12 @@ class SimulatedChannel:
 
     def write(self, msg, timeout: float = 0.5) -> bool:
         """Publish a message to the channel."""
+        from fleetsafe_vla.transport.safety_transport import SafetyTransport
+        if not hasattr(self, 'safety_transport'):
+            self.safety_transport = SafetyTransport()
+        if not self.safety_transport.validate(msg):
+            return False
+
         with self._lock:
             self._buffer.append(msg)
             self._last_msg = msg

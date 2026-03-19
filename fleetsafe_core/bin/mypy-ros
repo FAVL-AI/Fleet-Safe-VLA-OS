@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+mypy_args=(--show-error-codes --hide-error-context --no-pretty)
+
+main() {
+  cd "$ROOT"
+
+  if [ -z "$(docker images -q fleetsafe_core-ros-dev)" ]; then
+    (cd docker/ros; docker build -t fleetsafe_core-ros .)
+    docker build -t fleetsafe_core-ros-python --build-arg FROM_IMAGE=fleetsafe_core-ros -f docker/python/Dockerfile .
+    docker build -t fleetsafe_core-ros-dev --build-arg FROM_IMAGE=fleetsafe_core-ros-python -f docker/dev/Dockerfile .
+  fi
+
+  sudo rm -fr .mypy_cache_docker
+  rm -fr .mypy_cache_local
+
+  {
+    mypy_docker &
+    mypy_local &
+    wait
+  } | sort -u
+}
+
+cleaned() {
+  grep ': error: ' | sort
+}
+
+mypy_docker() {
+  docker run --rm -v $(pwd):/app -w /app fleetsafe_core-ros-dev bash -c "
+    source /opt/ros/humble/setup.bash &&
+    MYPYPATH=/opt/ros/humble/lib/python3.10/site-packages mypy ${mypy_args[*]} --cache-dir .mypy_cache_docker fleetsafe_core
+  " | cleaned
+}
+
+mypy_local() {
+  MYPYPATH=/opt/ros/jazzy/lib/python3.12/site-packages \
+  mypy "${mypy_args[@]}" --cache-dir .mypy_cache_local fleetsafe_core | cleaned
+}
+
+main "$@"
