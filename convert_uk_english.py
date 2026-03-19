@@ -53,6 +53,7 @@ tex_files = [
     'Safe-VLA-Paper/main.tex',
     'preprint/latex/SafeVLA_TAC.tex',
     'preprint/latex/SafeVLA_TRO.tex',
+    'preprint/latex/SafeVLA_NeurIPS.tex',
     'preprint/latex/main.tex'
 ]
 

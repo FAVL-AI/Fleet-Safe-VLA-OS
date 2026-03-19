@@ -347,10 +347,10 @@ Mean delivery time & $42.3$s $\pm 3.8$ \\
 \end{table}
 
 \section{End-to-End Differentiable Safety}
-While the preceding experiments demonstrate the efficacy of SBFs as a post-hoc safety filter, foundation models benefit significantly from end-to-end alignment. To transcend post-hoc filtering, SafeVLA embeds the CBF-QP directly into the VLA fine-tuning pipeline as a differentiable optimization layer.
+While the preceding experiments demonstrate the efficacy of SBFs as a post-hoc safety filter, foundation models benefit significantly from end-to-end alignment. To transcend post-hoc filtering, SafeVLA embeds the CBF-QP directly into the VLA fine-tuning pipeline as a differentiable optimisation layer.
 
 \subsection{Differentiable CBF-QP Layer}
-We formulate the safety projection as a differentiable convex optimization layer (e.g., via \texttt{qpth} or \texttt{OptNet}). During behavioral cloning or RLHF, the VLA policy $\pi_\theta$ proposes a nominal action $\mathbf{u}_{vla}$, which is projected onto the language-conditioned safe set to produce $\mathbf{u}^*$. The learning loss $\mathcal{L}$ is computed on the safe action $\mathbf{u}^*$:
+We formulate the safety projection as a differentiable convex optimisation layer (e.g., via \texttt{qpth} or \texttt{OptNet}). During behavioral cloning or RLHF, the VLA policy $\pi_\theta$ proposes a nominal action $\mathbf{u}_{vla}$, which is projected onto the language-conditioned safe set to produce $\mathbf{u}^*$. The learning loss $\mathcal{L}$ is computed on the safe action $\mathbf{u}^*$:
 \begin{equation}
 \mathcal{L}(\theta) = || \mathbf{u}^*(\mathbf{u}_{vla}(\theta)) - \mathbf{u}_{expert} ||^2
 \end{equation}
@@ -360,7 +360,7 @@ By computing the analytical gradients of the optimal QP solution with respect to
 Integrating the hard CBF constraints into the forward pass dramatically constrains the hypothesis space of the VLA policy during training. Consequently, the sample complexity for safe alignment improves over standard unconstrained behavioral cloning.
 
 \begin{theorem}[Sample Complexity of Safe Alignment]
-Let $\mathcal{H}$ be the hypothesis class of the unconstrained VLA policy with Rademacher complexity $\mathfrak{R}_n(\mathcal{H})$. Let $\mathcal{H}_{SBF}$ be the constrained space induced by the differentiable CBF-QP layer. Because the QP strictly truncates action spaces violating $h_L(\mathbf{x}) \ge 0$, we have $\mathfrak{R}_n(\mathcal{H}_{SBF}) \le \mathfrak{R}_n(\mathcal{H})$. Thus, the generalization error bound tightens proportionally to the volume of the unsafe action space, accelerating safety alignment with fewer expert demonstrations.
+Let $\mathcal{H}$ be the hypothesis class of the unconstrained VLA policy with Rademacher complexity $\mathfrak{R}_n(\mathcal{H})$. Let $\mathcal{H}_{SBF}$ be the constrained space induced by the differentiable CBF-QP layer. Because the QP strictly truncates action spaces violating $h_L(\mathbf{x}) \ge 0$, we have $\mathfrak{R}_n(\mathcal{H}_{SBF}) \le \mathfrak{R}_n(\mathcal{H})$. Thus, the generalisation error bound tightens proportionally to the volume of the unsafe action space, accelerating safety alignment with fewer expert demonstrations.
 \end{theorem}
 
 \section{Analysis}
