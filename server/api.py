@@ -82,9 +82,9 @@ class FleetState:
 
     def __init__(self):
         self.robots = {
-            'robot_0': {'fsm': 'Passive', 'policy': 'HospitalPatrol', 'position': [2.0, 1.5, 0.78], 'arm': None},
-            'robot_1': {'fsm': 'Passive', 'policy': 'HospitalPatrol', 'position': [8.0, 5.0, 0.78], 'arm': None},
-            'robot_2': {'fsm': 'Patrol', 'policy': 'HospitalPatrol', 'position': [12.0, 3.0, 0.78], 'arm': None},
+            'robot_0': {'fsm': 'Passive', 'policy': 'SOTA: FastBot-SaferPath (Hybrid + CBF)', 'position': [2.0, 1.5, 0.78], 'arm': None},
+            'robot_1': {'fsm': 'Passive', 'policy': 'SOTA: FastBot-SaferPath (Hybrid + CBF)', 'position': [8.0, 5.0, 0.78], 'arm': None},
+            'robot_2': {'fsm': 'Patrol', 'policy': 'SOTA: FastBot-SaferPath (Hybrid + CBF)', 'position': [12.0, 3.0, 0.78], 'arm': None},
         }
         self.policy_engine = PolicyEngine() if FLEET_AVAILABLE else None
         self.ws_clients: List[WebSocket] = []
@@ -522,6 +522,10 @@ async def command_center():
 @app.get("/sw.js")
 async def service_worker():
     return FileResponse(static_dir / "sw.js", media_type="application/javascript")
+
+@app.get("/favicon.ico")
+async def favicon():
+    return JSONResponse(status_code=204, content="")
 
 # Mount static directories
 if (static_dir / "pwa").exists():

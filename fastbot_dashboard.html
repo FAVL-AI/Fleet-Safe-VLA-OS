@@ -130,6 +130,15 @@ canvas{display:block;width:100%;height:100%}
       <h3>Event Log</h3>
       <div class="log" id="log"></div>
     </div>
+    
+    <div class="card">
+      <h3>DSEO Preemption</h3>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px;">
+        <button id="btn-normal" class="badge" onclick="setDseoMode('Normal')" style="cursor:pointer;width:100%;text-align:center;background:rgba(0,255,229,.1);border-color:var(--cyan);color:var(--cyan)">NORMAL</button>
+        <button id="btn-degraded" class="badge" onclick="setDseoMode('Degraded')" style="cursor:pointer;width:100%;text-align:center;background:var(--surface);border-color:var(--border);color:var(--muted)">DEGRADED</button>
+        <button id="btn-emergency" class="badge" onclick="setDseoMode('Emergency')" style="cursor:pointer;width:100%;text-align:center;background:var(--surface);border-color:var(--border);color:var(--muted)">EMERGENCY</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -145,6 +154,24 @@ const KP_L=.5, KP_A=2.0, MAX_L=.22, MAX_A=2.84, ARRIVE=.3, DT=1/60, SAFETY_D=.4;
 let rx=INIT.x, ry=INIT.y, rth=INIT.yaw;
 let routeIdx=0, ep=1, steps=0, viols=0, totalViols=0, tStart=performance.now();
 let trail=[];
+let dseoMode = 'Normal';
+
+function setDseoMode(mode) {
+  dseoMode = mode;
+  document.getElementById('btn-normal').style.background = mode === 'Normal' ? 'rgba(0,255,229,.1)' : 'var(--surface)';
+  document.getElementById('btn-normal').style.borderColor = mode === 'Normal' ? 'var(--cyan)' : 'var(--border)';
+  document.getElementById('btn-normal').style.color = mode === 'Normal' ? 'var(--cyan)' : 'var(--muted)';
+  
+  document.getElementById('btn-degraded').style.background = mode === 'Degraded' ? 'rgba(250,204,21,.15)' : 'var(--surface)';
+  document.getElementById('btn-degraded').style.borderColor = mode === 'Degraded' ? 'var(--yellow)' : 'var(--border)';
+  document.getElementById('btn-degraded').style.color = mode === 'Degraded' ? 'var(--yellow)' : 'var(--muted)';
+  
+  document.getElementById('btn-emergency').style.background = mode === 'Emergency' ? 'rgba(239,68,68,.15)' : 'var(--surface)';
+  document.getElementById('btn-emergency').style.borderColor = mode === 'Emergency' ? 'var(--red)' : 'var(--border)';
+  document.getElementById('btn-emergency').style.color = mode === 'Emergency' ? 'var(--red)' : 'var(--muted)';
+  
+  addLog(`DSEO Mode switched to ${mode}`, mode === 'Emergency' ? 'warn' : 'ep');
+}
 
 // ─── CANVAS ──────────────────────────────────────────────────────────
 const canvas = document.getElementById("sim");
@@ -330,6 +357,15 @@ function policyStep(){
   if(safety.dist<SAFETY_D*2) lv*=Math.max(.1,safety.dist/(SAFETY_D*2));
   lv=Math.max(0,Math.min(lv,MAX_L));
   av=Math.max(-MAX_A,Math.min(av,MAX_A));
+  
+  // DSEO Safety Overrides
+  if (dseoMode === 'Degraded') {
+    lv *= 0.5;
+    av *= 0.5;
+  } else if (dseoMode === 'Emergency') {
+    lv = 0;
+    av = 0;
+  }
   
   rth=wrap(rth+av*DT);
   rx+=lv*Math.cos(rth)*DT;
