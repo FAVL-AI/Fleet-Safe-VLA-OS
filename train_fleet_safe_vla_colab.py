@@ -82,9 +82,26 @@ class FleetSafeTrainer(Trainer):
 
         return (total_loss, outputs) if return_outputs else total_loss
 
+import wandb
+
 def main():
     print("[FLEET-Safe] Initialising OpenVLA-7B Colab Workspace for Long-Horizon Dynamic Training...")
     
+    # 0. Initialize Weights & Biases (WandB) for robust, world-leading methodical tracking
+    wandb.init(
+        project="FLEET-Safe-VLA-Training",
+        name="OpenVLA-7B-LoRA-Dynamic-CBF",
+        config={
+            "architecture": "OpenVLA-7B",
+            "finetuning_method": "LoRA (r=64, alpha=128)",
+            "datasets": ["SACSoN", "SCAND", "GoStanford2", "RECON"],
+            "epochs": 100,
+            "dynamic_cbf_penalty_enabled": True,
+            "target_embodiments": ["Unitree G1", "FastBot"]
+        }
+    )
+    print("[FLEET-Safe] Weights & Biases logging initialized. Training graphs will be synced to your WandB dashboard.")
+
     # 1. Base Model Checkpoint Configuration (OpenVLA-7B)
     model_id = "openvla/openvla-7b"
     processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
@@ -129,7 +146,7 @@ def main():
         save_strategy="epoch",
         logging_steps=10,
         optim="paged_adamw_32bit",
-        report_to="tensorboard"
+        report_to="wandb"                 # Sync all telemetry to Weights & Biases explicitly!
     )
 
     # 5. Initialize the Custom CBF-Constrained Trainer
