@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FLEET SAFE VLA - HFB-S — Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0a0e17; color: #e2e8f0; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; margin: 0; }
+        .grid-container { display: grid; grid-template-columns: 1fr 340px; height: 100vh; gap: 0; }
+        .panel { background: rgba(17, 24, 39, 0.8); border-left: 1px solid rgba(30, 41, 59, 1); box-shadow: -4px 0 10px rgba(0,0,0,0.5); }
+        .glass { background: rgba(15, 17, 26, 0.6); backdrop-filter: blur(8px); }
+        
+        .dash-anim { stroke-dasharray: 6 6; animation: dash 20s linear infinite; }
+        .pulse-ring { animation: radar 3s ease-out infinite; }
+        @keyframes dash { to { stroke-dashoffset: -400; } }
+        @keyframes radar { 0% { r: 5px; stroke-width: 2px; opacity: 0.8; } 100% { r: 35px; stroke-width: 0.5px; opacity: 0; } }
+        
+        .log-list { max-height: 480px; overflow-y: auto; }
+        .log-list::-webkit-scrollbar { width: 4px; }
+        .log-list::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+    </style>
+</head>
+<body class="grid-container">
+
+    <!-- 3D Viewer Area (Left/Center) -->
+    <div class="relative h-full flex flex-col p-6 pr-0 pb-6 glass">
+       <div class="absolute top-8 left-8 flex items-center gap-4 z-50">
+           <div class="px-3 py-1 bg-[#22d3ee]/10 border border-[#22d3ee]/30 text-[#22d3ee] text-xs font-bold tracking-widest rounded shadow-[0_0_10px_rgba(34,211,238,0.2)]">CMDP PATROL</div>
+           <div class="px-3 py-1 bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold tracking-widest rounded shadow-[0_0_10px_rgba(34,197,94,0.2)]">SAFE</div>
+           <div class="px-3 py-1 bg-[#22d3ee]/10 border border-[#22d3ee]/30 text-[#22d3ee] text-xs font-bold tracking-widest rounded shadow-[0_0_10px_rgba(34,211,238,0.2)]">FOLLOW CAM</div>
+       </div>
+       <div class="w-full flex-1 border border-slate-700/50 bg-[#111827]/80 rounded-lg overflow-hidden relative shadow-2xl" id="center-viewer">
+           <div class="absolute inset-0 bg-[#0a0e17]/60 z-0"></div>
+           
+           <h1 class="absolute inset-0 flex items-center justify-center text-slate-700 font-black text-6xl tracking-tighter opacity-20 transform -rotate-12 z-10 pointer-events-none">LOBBY</h1>
+           
+           <div class="absolute top-1/4 left-1/4 z-20 opacity-40">
+              <span class="text-yellow-500 font-bold tracking-wider text-xl">Corr-N</span>
+           </div>
+           <div class="absolute bottom-1/4 left-1/3 z-20 opacity-40">
+              <div class="w-12 h-12 bg-[#22d3ee] rounded-full blur-md opacity-30 shadow-[0_0_50px_rgba(34,211,238,1)]"></div>
+           </div>
+           <div class="absolute top-1/2 left-10 z-20 opacity-40 text-yellow-500 font-bold tracking-wider">Pharmacy</div>
+           
+           <!-- Overlay view modes -->
+           <div class="absolute right-0 top-0 h-full w-[160px] bg-slate-900/80 border-l border-slate-700/50 flex flex-col z-30">
+               <div class="flex-1 border-b border-[#22d3ee]/40 relative flex flex-col justify-end p-2 cursor-pointer hover:bg-slate-800 transition">
+                   <div class="absolute inset-x-0 bottom-0 h-1 bg-[#22d3ee] shadow-[0_0_10px_#22d3ee]"></div>
+                   <span class="text-[10px] font-bold tracking-widest text-[#22d3ee]">FOLLOW CAM</span>
+               </div>
+               <div class="flex-1 border-b border-slate-700/50 relative flex flex-col justify-end p-2 text-slate-500">
+                   <span class="text-[10px] font-bold tracking-widest">TOP-DOWN</span>
+               </div>
+               <div class="flex-1 border-b border-slate-700/50 relative flex flex-col justify-end p-2 text-slate-500">
+                   <span class="text-[10px] font-bold tracking-widest">FIRST PERSON</span>
+               </div>
+               <div class="flex-1 border-b border-slate-700/50 relative flex flex-col justify-end p-2 text-slate-500">
+                   <span class="text-[10px] font-bold tracking-widest">SECURITY CAM</span>
+               </div>
+               <div class="flex-1 border-b border-slate-700/50 relative flex flex-col justify-end p-2 text-slate-500">
+                   <span class="text-[10px] font-bold tracking-widest">FREE CAM</span>
+               </div>
+               <div class="flex-1 border-b border-slate-700/50 relative flex flex-col justify-end p-2 text-slate-500">
+                   <span class="text-[10px] font-bold tracking-widest">ISOMETRIC</span>
+               </div>
+               <div class="flex-1 border-b border-slate-700/50 relative flex flex-col justify-end p-2 text-slate-500">
+                   <span class="text-[10px] font-bold tracking-widest">SIDE VIEW</span>
+               </div>
+               <div class="flex-1 relative flex flex-col justify-end p-2 text-slate-500">
+                   <span class="text-[10px] font-bold tracking-widest">CORNER VIEW</span>
+               </div>
+           </div>
+       </div>
+       
+       <div class="absolute bottom-6 left-6 right-8 h-8 flex items-center justify-between z-50 text-[10px] text-slate-500 font-mono">
+           <div class="flex items-center gap-4">
+               <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Server: online</div>
+               <div>Uptime: 10765s</div>
+               <div>3 robots</div>
+           </div>
+           <div class="flex gap-2">
+               <button class="px-3 py-1 border border-green-500/50 text-green-400 rounded bg-green-500/10 hover:bg-green-500/20">▶ START</button>
+               <button class="px-3 py-1 border border-red-500/50 text-red-400 rounded bg-red-500/10 hover:bg-red-500/20">■ STOP</button>
+           </div>
+       </div>
+    </div>
+
+    <!-- Right Panel (Trinity Minimap & Logs) -->
+    <div class="panel flex flex-col h-full overflow-hidden relative">
+        <div class="p-5 flex flex-col h-full overflow-y-auto w-full">
+            <div class="border-b border-slate-800 pb-3 mb-4">
+                <h2 class="font-bold tracking-widest text-xs text-slate-200 uppercase">Hospital Minimap</h2>
+            </div>
+            
+            <span class="text-[9px] text-slate-400 mb-2 block uppercase tracking-widest">Level 4 - Multi-Zone Operations</span>
+            
+            <!-- Exact SVG implementation from Trinity with dual lanes and active corridors -->
+            <div class="w-full border border-slate-700/50 rounded-lg p-2 relative bg-slate-950/40 min-h-[400px]">
+                <svg viewBox="0 0 400 600" class="w-full h-full text-gray-500 font-mono" style="font-size: 8px" fill="none">
+                    <rect width="400" height="600" fill="#0f111a" opacity="0.3" />
+                    
+                    <rect x="20" y="20" width="160" height="120" fill="#ef4444" fill-opacity="0.05" stroke="#ef4444" stroke-width="1" stroke-dasharray="4 4" />
+                    <text x="30" y="40" fill="#ef4444" font-size="12" font-weight="bold" letter-spacing="2">ICU WARD (RESTRICTED)</text>
+                    <text x="30" y="55" fill="#ef4444" font-size="9" opacity="0.8">MAX SPEED: 0.5M/S</text>
+
+                    <rect x="220" y="20" width="160" height="120" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1" />
+                    <text x="230" y="40" fill="#60a5fa" font-size="12" font-weight="bold" letter-spacing="2">PHARMACY DISPENSARY</text>
+                    <text x="230" y="55" fill="#60a5fa" font-size="9" opacity="0.8">SECURE ZONE - ID REQ</text>
+                    
+                    <rect x="180" y="20" width="40" height="420" fill="#334155" fill-opacity="0.2" />
+                    <rect x="20" y="140" width="360" height="40" fill="#334155" fill-opacity="0.2" />
+                    <rect x="20" y="280" width="360" height="40" fill="#334155" fill-opacity="0.2" />
+                    <line x1="200" y1="20" x2="200" y2="440" stroke="#475569" stroke-width="1" stroke-dasharray="4 4" />
+                    <text x="188" y="280" fill="#94a3b8" font-size="6" transform="rotate(-90 188 280)" letter-spacing="1">↓ SOUTHBOUND (1.5M/S)</text>
+                    <text x="215" y="280" fill="#94a3b8" font-size="6" transform="rotate(-90 215 280)" letter-spacing="1">↑ NORTHBOUND (1.5M/S)</text>
+
+                    <rect x="20" y="180" width="160" height="100" fill="#22d3ee" fill-opacity="0.03" stroke="#334155" stroke-width="1" />
+                    <text x="30" y="200" fill="#94a3b8" font-size="11" font-weight="bold">PATIENT WARD A</text>
+                    <g stroke="#334155" stroke-width="1">
+                        <rect x="30" y="220" width="25" height="45" fill="#1e293b" rx="2" /><rect x="35" y="225" width="15" height="8" fill="#475569" rx="2" /><rect x="30" y="240" width="25" height="25" fill="#0284c7" fill-opacity="0.15" />
+                        <rect x="70" y="220" width="25" height="45" fill="#1e293b" rx="2" /><rect x="75" y="225" width="15" height="8" fill="#475569" rx="2" /><rect x="70" y="240" width="25" height="25" fill="#0284c7" fill-opacity="0.15" />
+                        <rect x="110" y="220" width="25" height="45" fill="#1e293b" rx="2" /><rect x="115" y="225" width="15" height="8" fill="#475569" rx="2" /><rect x="110" y="240" width="25" height="25" fill="#0284c7" fill-opacity="0.15" />
+                    </g>
+                    
+                    <rect x="220" y="180" width="160" height="100" fill="#22d3ee" fill-opacity="0.03" stroke="#334155" stroke-width="1" />
+                    <text x="230" y="200" fill="#94a3b8" font-size="11" font-weight="bold">PATIENT WARD B</text>
+                    <g stroke="#334155" stroke-width="1">
+                        <rect x="240" y="220" width="25" height="45" fill="#1e293b" rx="2" /><rect x="245" y="225" width="15" height="8" fill="#475569" rx="2" /><rect x="240" y="240" width="25" height="25" fill="#0284c7" fill-opacity="0.15" />
+                        <rect x="280" y="220" width="25" height="45" fill="#1e293b" rx="2" /><rect x="285" y="225" width="15" height="8" fill="#475569" rx="2" /><rect x="280" y="240" width="25" height="25" fill="#0284c7" fill-opacity="0.15" />
+                        <rect x="320" y="220" width="25" height="45" fill="#1e293b" rx="2" /><rect x="325" y="225" width="15" height="8" fill="#475569" rx="2" /><rect x="320" y="240" width="25" height="25" fill="#0284c7" fill-opacity="0.15" />
+                    </g>
+
+                    <rect x="20" y="320" width="160" height="120" fill="#8b5cf6" fill-opacity="0.05" stroke="#334155" stroke-width="1" />
+                    <text x="30" y="340" fill="#a78bfa" font-size="11" font-weight="bold">RADIOLOGY / MRI</text>
+                    <rect x="60" y="360" width="60" height="40" fill="#1e293b" stroke="#64748b" stroke-width="2" rx="10" />
+                    <circle cx="90" cy="380" r="12" fill="#0f111a" stroke="#64748b" stroke-width="2" />
+                    <rect x="30" y="375" width="30" height="10" fill="#334155" rx="2" />
+
+                    <rect x="220" y="320" width="160" height="120" fill="#10b981" fill-opacity="0.05" stroke="#334155" stroke-width="1" />
+                    <text x="230" y="340" fill="#34d399" font-size="11" font-weight="bold">TRIAGE / OUTPATIENT</text>
+                    <g stroke="#334155" stroke-width="1" fill="#1e293b">
+                        <rect x="240" y="360" width="40" height="15" rx="2" /><rect x="240" y="390" width="40" height="15" rx="2" />
+                        <rect x="300" y="360" width="40" height="15" rx="2" /><rect x="300" y="390" width="40" height="15" rx="2" />
+                    </g>
+
+                    <!-- Staff/WCs -->
+                    <g fill="#3b82f6">
+                        <circle cx="150" cy="240" r="4" /><text x="156" y="243" font-size="7" fill="#60a5fa">Staff (RN)</text>
+                        <circle cx="260" cy="380" r="4" /><text x="266" y="383" font-size="7" fill="#60a5fa">Doctor</text>
+                    </g>
+                    <g stroke="#94a3b8" stroke-width="1.5" fill="none">
+                        <circle cx="40" cy="285" r="4" /><line x1="36" y1="285" x2="44" y2="285" />
+                        <text x="30" y="278" font-size="6" fill="#94a3b8" stroke="none">Wheelchair</text>
+                        <circle cx="340" cy="420" r="4" /><line x1="336" y1="420" x2="344" y2="420" />
+                    </g>
+
+                    <!-- Lobby Crowd -->
+                    <rect x="20" y="440" width="360" height="140" fill="#facc15" fill-opacity="0.05" stroke="#facc15" stroke-width="1" stroke-dasharray="2 2" />
+                    <text x="30" y="460" fill="#facc15" font-size="12" font-weight="bold" letter-spacing="2">MAIN LOBBY (HIGH TRAFFIC)</text>
+                    <text x="30" y="475" fill="#facc15" font-size="9" opacity="0.8">CBF OBSTACLE AVOIDANCE: MAXIMUM</text>
+                    
+                    <path d="M20,20 L380,20 L380,580 L20,580 Z" stroke="#475569" stroke-width="3" />
+                    <path d="M180,20 L180,140 M220,20 L220,140 M180,180 L180,280 M220,180 L220,280 M180,320 L180,440 M220,320 L220,440" stroke="#475569" stroke-width="2" />
+                    <path d="M20,140 L180,140 M220,140 L380,140 M20,180 L180,180 M220,180 L380,180" stroke="#475569" stroke-width="2" />
+                    <path d="M20,280 L180,280 M220,280 L380,280 M20,320 L180,320 M220,320 L380,320" stroke="#475569" stroke-width="2" />
+                    <path d="M20,440 L380,440" stroke="#475569" stroke-width="2" />
+
+                    <g fill="#f97316">
+                        <circle cx="200" cy="110" r="5" /><text x="210" y="113" font-size="8" fill="#f97316">Pedestrian (0.8m/s)</text><circle cx="195" cy="122" r="4" />
+                        <circle cx="80" cy="500" r="5" /><circle cx="100" cy="520" r="4" />
+                        <circle cx="130" cy="480" r="5" /><circle cx="150" cy="540" r="4" />
+                        <circle cx="280" cy="510" r="5" /><circle cx="320" cy="490" r="4" />
+                        <circle cx="300" cy="550" r="5" /><circle cx="250" cy="530" r="4" />
+                        <text x="160" y="510" font-size="10" fill="#facc15" font-weight="bold">DENSITY: HIGH</text>
+                    </g>
+                    
+                    <!-- Docks -->
+                    <rect x="50" y="80" width="20" height="14" fill="#64748b" /><text x="45" y="70" font-size="8" fill="#94a3b8">Med Cart</text>
+                    <rect x="240" y="240" width="20" height="14" fill="#64748b" />
+                    
+                    <rect x="180" y="540" width="40" height="40" fill="#22d3ee" fill-opacity="0.1" stroke="#22d3ee" stroke-width="1" stroke-dasharray="2 2" />
+                    <text x="182" y="555" fill="#22d3ee" font-size="8" font-weight="bold">ROBOT BASE</text>
+                    <circle cx="200" cy="565" r="3" fill="#22d3ee" />
+                    
+                    <rect x="340" y="540" width="40" height="40" fill="#facc15" fill-opacity="0.1" stroke="#facc15" stroke-width="1.5" stroke-dasharray="2 2" />
+                    <text x="342" y="550" fill="#facc15" font-size="8" font-weight="bold">MAIN</text>
+                    <text x="342" y="560" fill="#facc15" font-size="8" font-weight="bold">CHARGE</text>
+                    <polygon points="360,565 355,572 358,572 354,580 364,570 361,570 365,565" fill="#facc15" />
+                    
+                    <rect x="150" y="180" width="30" height="15" fill="#facc15" fill-opacity="0.1" stroke="#facc15" stroke-width="1" /><text x="152" y="188" fill="#facc15" font-size="6" font-weight="bold">[⚡] CHARGE</text>
+                    <rect x="350" y="320" width="30" height="15" fill="#facc15" fill-opacity="0.1" stroke="#facc15" stroke-width="1" /><text x="352" y="328" fill="#facc15" font-size="6" font-weight="bold">[⚡] CHARGE</text>
+                    <rect x="130" y="270" width="25" height="10" fill="#facc15" fill-opacity="0.1" stroke="#facc15" stroke-width="1" /><text x="133" y="277" fill="#facc15" font-size="5" font-weight="bold">[⚡] DOCK</text>
+
+                    <!-- Animated Robots using Corridors actively -->
+                    <!-- Robot 1 -->
+                    <path id="path-u2" d="M215,560 L215,340 Q185,250 215,160 L215,70 L280,70 L285,70 L280,70 L215,70 L185,70 L185,220 L100,220 L105,220 L100,220 L185,220 L185,560 L360,560 L355,560 L360,560 L215,560" stroke="#22d3ee" stroke-width="2.5" class="dash-anim" fill="none" />
+                    <g>
+                      <circle r="25" stroke="#22d3ee" stroke-width="1" class="pulse-ring" />
+                      <circle r="8" fill="#22d3ee" />
+                      <rect x="15" y="-10" width="105" height="30" fill="#0f111a" fill-opacity="0.9" stroke="#22d3ee" stroke-width="1" rx="4" />
+                      <text x="20" y="2" fill="#22d3ee" font-size="10" font-weight="bold">UNITREE G1 (02)</text>
+                      <text x="20" y="14" fill="#22d3ee" font-size="8">Task: Full Workflow Sequence</text>
+                      <animateMotion dur="60s" repeatCount="indefinite">
+                        <mpath href="#path-u2" />
+                      </animateMotion>
+                    </g>
+
+                    <!-- Robot 2 -->
+                    <path id="path-u5" d="M185,70 L185,290 L130,290 L140,275 L145,275 L140,275 L130,290 L185,290 L185,440 L215,440 L215,340 Q185,250 215,160 L215,70 L185,70" stroke="#a855f7" stroke-width="2.5" class="dash-anim" fill="none" />
+                    <g>
+                      <circle r="25" stroke="#a855f7" stroke-width="1" class="pulse-ring" />
+                      <circle r="8" fill="#a855f7" />
+                      <rect x="15" y="-6" width="70" height="20" fill="#0f111a" fill-opacity="0.8" stroke="#a855f7" stroke-width="1" rx="3" />
+                      <text x="20" y="7" fill="#a855f7" font-size="9" font-weight="bold">UNIT 05 (FETCH)</text>
+                      <animateMotion dur="30s" repeatCount="indefinite">
+                        <mpath href="#path-u5" />
+                      </animateMotion>
+                    </g>
+
+                    <!-- Robot 3 -->
+                    <path id="path-u8" d="M120,520 L180,480 L200,440 L200,400" stroke="#22c55e" stroke-width="2.5" class="dash-anim" fill="none" />
+                    <g>
+                      <circle r="25" stroke="#22c55e" stroke-width="1" class="pulse-ring" />
+                      <circle r="8" fill="#22c55e" />
+                      <rect x="15" y="-10" width="100" height="26" fill="#0f111a" fill-opacity="0.8" stroke="#22c55e" stroke-width="1" rx="3" />
+                      <text x="20" y="0" fill="#22c55e" font-size="9" font-weight="bold">UNIT 08 (UV)</text>
+                      <text x="20" y="10" fill="#22c55e" font-size="8">Navigating Crowd</text>
+                      <animateMotion dur="25s" repeatCount="indefinite">
+                        <mpath href="#path-u8" />
+                      </animateMotion>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Live Telemetry Stream -->
+            <div class="mt-4 border border-slate-700/50 rounded-lg bg-slate-950/80 p-3 flex flex-col flex-1">
+                <div class="flex items-center justify-between mb-2 border-b border-slate-800 pb-2">
+                    <h3 class="font-bold text-[10px] text-slate-300 tracking-widest uppercase">LIVE FLEET TELEMETRY LOGS</h3>
+                    <div class="flex gap-1 items-center">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="text-[8px] text-green-400 font-bold tracking-widest">RECORDING</span>
+                    </div>
+                </div>
+                <div class="log-list flex flex-col gap-1.5 font-mono text-[9px] pr-2" id="logs-container">
+                    <!-- Javascript generates the logs mapping exactly to the SVG timeline -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+       const workflowEvents = [
+         { unit: "UNIT 02 (UNITREE G1)", type: "TASK", zone: "ACTIVE BASE", msg: "Time in Zone: 5s. Instruction received: Pharmacy Med Pickup." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "INFO", zone: "CORRIDOR ALPHA", msg: "Nominal speed 1.5m/s. Hugging Right Wall Northbound." },
+         { unit: "UNIT 05 (FASTBOT)", type: "INFO", zone: "SIDE CORRIDOR", msg: "Time in Zone: 12s. Tracking active: 3 units in 20m radius. No overcrowding detected." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "WARN", zone: "CORRIDOR ALPHA", msg: "Human obstacle ahead. Oncoming FastBot traffic restricting evasion. Halting." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "CBF_ACTIVE", zone: "CORRIDOR ALPHA", msg: "WAITING (4.2s elapsed): Yielding to Southbound FastBot to prevent collusion." },
+         { unit: "UNIT 05 (FASTBOT)", type: "TASK", zone: "SIDE CORRIDOR", msg: "Battery Low (22%). Executing auto-docking sequence into side corridor port." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "INFO", zone: "CORRIDOR ALPHA", msg: "Southbound lane clear (4.2s waited). Re-routing via CBF. Safe Dist: 1.2m." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "INFO", zone: "PHARMACY", msg: "Arrived at Dispensary. Authenticating..." },
+         { unit: "UNIT 05 (FASTBOT)", type: "INFO", zone: "SIDE CORRIDOR", msg: "Successfully docked. Self-charging initiated..." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "TASK", zone: "PHARMACY", msg: "Time in Zone: 8s. Medicine payload secured. Route set to WARD A." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "INFO", zone: "PATIENT WARD A", msg: "Time in Zone: 6s. Medicine safely delivered to Patient Ward A." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "WARN", zone: "PATIENT WARD A", msg: "Battery Level 18%. Mandatory return to Charging Dock." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "INFO", zone: "CORRIDOR ALPHA", msg: "Hugging Left Wall Southbound toward Charging Bay." },
+         { unit: "UNIT 05 (FASTBOT)", type: "INFO", zone: "SIDE CORRIDOR", msg: "Time in Zone: 45m. Charge 80% complete. Undocking to resume sweeper patrol." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "TASK", zone: "CHARGING DOCK", msg: "Auto-charge initiated. Self-charge logging time to 100%: 45m." },
+         { unit: "UNIT 02 (UNITREE G1)", type: "INFO", zone: "ACTIVE BASE", msg: "Time in Zone: 2m. Safely back to Active Base. Ready." }
+       ];
+       
+       let i = 0;
+       const logsContainer = document.getElementById('logs-container');
+       
+       function addLog() {
+         const ev = workflowEvents[i];
+         const date = new Date();
+         const timeStr = date.toLocaleTimeString('en-US', {hour12:false});
+         
+         const div = document.createElement('div');
+         div.className = "flex flex-col py-1 border-b border-slate-800/30 w-full";
+         
+         let colorClass = 'text-[#22d3ee] border-[#22d3ee]';
+         if (ev.type === 'WARN') colorClass = 'text-yellow-400 border-yellow-500';
+         if (ev.type === 'CBF_ACTIVE') colorClass = 'text-red-400 border-red-500';
+
+         div.innerHTML = `
+            <div class="flex justify-between items-baseline mb-1">
+              <div class="flex items-center gap-2">
+                <span class="text-slate-500">[${timeStr}]</span>
+                <span class="font-bold ${colorClass.split(' ')[0]}">${ev.unit}</span>
+              </div>
+              <span class="text-slate-400 text-[8px] border border-slate-700 px-1.5 py-0.5 rounded bg-slate-900 tracking-wider text-right">${ev.zone}</span>
+            </div>
+            <div class="pl-2 border-l-2 ${colorClass.split(' ')[1]} text-slate-300">
+              <span class="mr-1 opacity-50">&gt;</span> ${ev.msg}
+            </div>
+         `;
+         
+         logsContainer.appendChild(div);
+         if (logsContainer.children.length > 25) {
+           logsContainer.removeChild(logsContainer.firstChild);
+         }
+         logsContainer.scrollTop = logsContainer.scrollHeight;
+         
+         i = (i + 1) % workflowEvents.length;
+       }
+       
+       setInterval(addLog, 4800);
+       addLog();
+    </script>
+</body>
+</html>

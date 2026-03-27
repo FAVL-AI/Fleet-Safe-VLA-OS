@@ -1,0 +1,625 @@
+name: Universal Crawler Test Matrix
+description: Production-grade testing for patent-track innovations
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Nightly tests at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_tier:
+        description: 'Test tier to run'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+        - smoke
+        - ci
+        - nightly
+        - preprod
+        - patent
+
+env:
+  PYTHON_VERSION: '3.11'
+  DOCKER_BUILDKIT: 1
+
+jobs:
+  # Smoke Tests (every commit)
+  smoke-tests:
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.test_tier == 'smoke')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-prod.txt
+        pip install pre-commit bandit pytest pytest-cov yamllint
+        
+    - name: Run smoke tests
+      run: |
+        python tests/test_matrix.py --test-tier smoke --output smoke_results.json
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: smoke-test-results
+        path: smoke_results.json
+        
+    - name: Check test results
+      run: |
+        python -c "
+        import json
+        with open('smoke_results.json') as f:
+            results = json.load(f)
+        if results['summary']['failed'] > 0:
+            print('❌ Smoke tests failed')
+            exit(1)
+        print('✅ Smoke tests passed')
+        "
+
+  # CI Integration Tests
+  ci-integration:
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.test_tier == 'ci')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: crawler_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+          
+      qdrant:
+        image: qdrant/qdrant:latest
+        options: >-
+          --health-cmd "curl -f http://localhost:6333/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6333:6333
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-prod.txt
+        pip install pytest pytest-asyncio aiohttp
+        
+    - name: Wait for services
+      run: |
+        echo "Waiting for PostgreSQL..."
+        while ! pg_isready -h localhost -p 5432; do sleep 1; done
+        echo "Waiting for Redis..."
+        while ! redis-cli -h localhost ping; do sleep 1; done
+        echo "Waiting for Qdrant..."
+        while ! curl -f http://localhost:6333/health; do sleep 1; done
+        
+    - name: Run CI integration tests
+      run: |
+        python tests/test_matrix.py --test-tier ci --output ci_results.json
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: ci-test-results
+        path: ci_results.json
+        
+    - name: Check test results
+      run: |
+        python -c "
+        import json
+        with open('ci_results.json') as f:
+            results = json.load(f)
+        if results['summary']['failed'] > 0:
+            print('❌ CI integration tests failed')
+            exit(1)
+        print('✅ CI integration tests passed')
+        "
+
+  # Nightly Depth Tests
+  nightly-depth:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.test_tier == 'nightly')
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: crawler_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+          
+      qdrant:
+        image: qdrant/qdrant:latest
+        options: >-
+          --health-cmd "curl -f http://localhost:6333/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6333:6333
+          
+      prometheus:
+        image: prom/prometheus:latest
+        ports:
+          - 9090:9090
+          
+      grafana:
+        image: grafana/grafana:latest
+        env:
+          GF_SECURITY_ADMIN_PASSWORD: admin
+        ports:
+          - 3000:3000
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-prod.txt
+        pip install k6 locust great-expectations
+        
+    - name: Install k6
+      run: |
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+        echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+        sudo apt-get update
+        sudo apt-get install k6
+        
+    - name: Wait for services
+      run: |
+        echo "Waiting for all services..."
+        while ! pg_isready -h localhost -p 5432; do sleep 1; done
+        while ! redis-cli -h localhost ping; do sleep 1; done
+        while ! curl -f http://localhost:6333/health; do sleep 1; done
+        while ! curl -f http://localhost:9090/-/healthy; do sleep 1; done
+        while ! curl -f http://localhost:3000/api/health; do sleep 1; done
+        
+    - name: Run nightly depth tests
+      run: |
+        python tests/test_matrix.py --test-tier nightly --output nightly_results.json
+        
+    - name: Run load tests
+      run: |
+        # k6 load test
+        k6 run tests/k6/soak.js --vus 100 --duration 10m --out json=load_test_results.json
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: nightly-test-results
+        path: |
+          nightly_results.json
+          load_test_results.json
+        
+    - name: Generate performance report
+      run: |
+        python tests/generate_performance_report.py nightly_results.json load_test_results.json
+        
+    - name: Check performance targets
+      run: |
+        python -c "
+        import json
+        with open('nightly_results.json') as f:
+            results = json.load(f)
+        
+        # Check performance targets
+        targets = results['performance_targets']
+        failed_targets = []
+        
+        for test in results['detailed_results']:
+            if test['test_name'] == 'waf_evasion' and test['metrics'].get('block_rate', 0) > targets['waf_detection_rate']:
+                failed_targets.append('WAF detection rate')
+            elif test['test_name'] == 'dco_decision_latency' and test['metrics'].get('avg_latency', 0) > targets['context_switch_latency']:
+                failed_targets.append('Context switch latency')
+            elif test['test_name'] == 'shguard_recovery_time' and test['metrics'].get('avg_recovery_time', 0) > targets['mttr_seconds']:
+                failed_targets.append('MTTR')
+        
+        if failed_targets:
+            print(f'❌ Performance targets failed: {failed_targets}')
+            exit(1)
+        print('✅ All performance targets met')
+        "
+
+  # Pre-Production Chaos Tests
+  preprod-chaos:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_tier == 'preprod'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: crawler_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+          
+      qdrant:
+        image: qdrant/qdrant:latest
+        options: >-
+          --health-cmd "curl -f http://localhost:6333/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6333:6333
+          
+      jaeger:
+        image: jaegertracing/all-in-one:latest
+        ports:
+          - 16686:16686
+          - 14268:14268
+          - 14250:14250
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-prod.txt
+        pip install gremlin-sdk kubernetes
+        
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+        
+    - name: Set up kind cluster
+      run: |
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
+        chmod +x ./kind
+        sudo mv ./kind /usr/local/bin/kind
+        
+        kind create cluster --name test-cluster
+        kind export kubeconfig --name test-cluster
+        
+    - name: Deploy test environment
+      run: |
+        kubectl apply -f k8s/test-namespace.yaml
+        kubectl apply -f k8s/test-deployment.yaml
+        
+    - name: Wait for deployment
+      run: |
+        kubectl wait --for=condition=available --timeout=300s deployment/universal-crawler -n test
+        
+    - name: Run pre-production chaos tests
+      run: |
+        python tests/test_matrix.py --test-tier preprod --output preprod_results.json
+        
+    - name: Run chaos engineering tests
+      run: |
+        # Simulate chaos scenarios
+        python tests/chaos_engineering.py
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: preprod-test-results
+        path: preprod_results.json
+        
+    - name: Cleanup
+      if: always()
+      run: |
+        kind delete cluster --name test-cluster
+
+  # Patent Validation Tests
+  patent-validation:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_tier == 'patent'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: crawler_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+          
+      qdrant:
+        image: qdrant/qdrant:latest
+        options: >-
+          --health-cmd "curl -f http://localhost:6333/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6333:6333
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-prod.txt
+        pip install torch torchvision transformers sentence-transformers
+        
+    - name: Wait for services
+      run: |
+        echo "Waiting for all services..."
+        while ! pg_isready -h localhost -p 5432; do sleep 1; done
+        while ! redis-cli -h localhost ping; do sleep 1; done
+        while ! curl -f http://localhost:6333/health; do sleep 1; done
+        
+    - name: Run patent validation tests
+      run: |
+        python tests/test_matrix.py --test-tier patent --output patent_results.json
+        
+    - name: Generate patent validation report
+      run: |
+        python tests/generate_patent_report.py patent_results.json
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: patent-validation-results
+        path: |
+          patent_results.json
+          patent_validation_report.md
+        
+    - name: Check patent validation
+      run: |
+        python -c "
+        import json
+        with open('patent_results.json') as f:
+            results = json.load(f)
+        
+        patent_tests = [r for r in results['detailed_results'] if r['patent_validation']]
+        patent_passed = [r for r in patent_tests if r['status'] == 'PASS']
+        
+        if len(patent_passed) < len(patent_tests):
+            print('❌ Patent validation tests failed')
+            print(f'Passed: {len(patent_passed)}/{len(patent_tests)}')
+            exit(1)
+        print('✅ All patent validation tests passed')
+        "
+
+  # Security Scan
+  security-scan:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Run Bandit security scan
+      run: |
+        pip install bandit
+        bandit -r . -f json -o bandit-report.json
+        
+    - name: Run OWASP ZAP scan
+      uses: zaproxy/action-full-scan@v0.8.0
+      with:
+        target: 'http://localhost:8000'
+        
+    - name: Upload security reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          zap-report.html
+
+  # Performance Benchmark
+  performance-benchmark:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-prod.txt
+        pip install locust
+        
+    - name: Run performance benchmarks
+      run: |
+        python tests/performance_benchmark.py
+        
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-benchmarks
+        path: benchmark_results.json
+
+  # Compliance Check
+  compliance-check:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-prod.txt
+        pip install safety checkov
+        
+    - name: Run dependency security scan
+      run: |
+        safety check --json --output safety-report.json
+        
+    - name: Run infrastructure compliance scan
+      run: |
+        checkov -d . --output json --output-file-path checkov-report.json
+        
+    - name: Upload compliance reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: compliance-reports
+        path: |
+          safety-report.json
+          checkov-report.json
+
+  # Final Summary
+  test-summary:
+    needs: [smoke-tests, ci-integration, nightly-depth, preprod-chaos, patent-validation, security-scan, performance-benchmark, compliance-check]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Generate test summary
+      run: |
+        echo "# Universal Crawler Test Matrix Results" > test_summary.md
+        echo "" >> test_summary.md
+        echo "## Test Results Summary" >> test_summary.md
+        echo "" >> test_summary.md
+        echo "- Smoke Tests: ${{ needs.smoke-tests.result }}" >> test_summary.md
+        echo "- CI Integration: ${{ needs.ci-integration.result }}" >> test_summary.md
+        echo "- Nightly Depth: ${{ needs.nightly-depth.result }}" >> test_summary.md
+        echo "- Pre-Prod Chaos: ${{ needs.preprod-chaos.result }}" >> test_summary.md
+        echo "- Patent Validation: ${{ needs.patent-validation.result }}" >> test_summary.md
+        echo "- Security Scan: ${{ needs.security-scan.result }}" >> test_summary.md
+        echo "- Performance Benchmark: ${{ needs.performance-benchmark.result }}" >> test_summary.md
+        echo "- Compliance Check: ${{ needs.compliance-check.result }}" >> test_summary.md
+        
+    - name: Upload test summary
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-summary
+        path: test_summary.md
+        
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const summary = fs.readFileSync('test_summary.md', 'utf8');
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: summary
+          }); 

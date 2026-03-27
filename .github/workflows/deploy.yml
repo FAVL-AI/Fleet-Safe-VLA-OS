@@ -1,0 +1,58 @@
+name: Deploy SAFER-VLA PWA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Prepare PWA artifacts
+        run: |
+          # Create deployment directory with only PWA-relevant files
+          mkdir -p _site/pwa/icons _site/pwa/screenshots _site/server
+          
+          # Core PWA files
+          cp fastbot_command_center.html _site/
+          cp -r pwa/ _site/pwa/
+          
+          # Create index.html redirect
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head><meta http-equiv="refresh" content="0;url=/fastbot_command_center.html"></head>
+          <body></body>
+          </html>
+          EOF
+          
+          echo "PWA deployment prepared"
+          ls -la _site/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
