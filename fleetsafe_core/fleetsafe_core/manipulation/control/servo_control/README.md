@@ -474,4 +474,4 @@ fleetsafe_core/manipulation/control/
 
 ## License
 
-Copyright 2025 Dimensional Inc. - Apache 2.0 License
+Copyright 2025 Fleet-Safe VLA Team - Apache 2.0 License

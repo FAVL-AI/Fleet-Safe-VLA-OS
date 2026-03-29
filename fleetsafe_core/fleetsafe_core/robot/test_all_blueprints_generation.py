@@ -1,4 +1,4 @@
-# Copyright 2025-2026 Dimensional Inc.
+# Copyright 2025-2026 Fleet-Safe VLA Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ def _generate_all_blueprints_content(
     all_modules: dict[str, str],
 ) -> str:
     lines = [
-        "# Copyright 2025-2026 Dimensional Inc.",
+        "# Copyright 2025-2026 Fleet-Safe VLA Team",
         "#",
         '# Licensed under the Apache License, Version 2.0 (the "License");',
         "# you may not use this file except in compliance with the License.",

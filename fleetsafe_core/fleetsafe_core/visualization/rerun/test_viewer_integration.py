@@ -1,4 +1,4 @@
-# Copyright 2025-2026 Dimensional Inc.
+# Copyright 2025-2026 Fleet-Safe VLA Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -133,7 +133,7 @@ class TestVersionCompatibility:
     def test_versions_within_one_minor(self):
         """rerun-sdk and fleetsafe_core-viewer must be within 1 minor version.
 
-        fleetsafe_core-viewer is built from a rerun fork, so they track the same
+        fleetsafe_core-viewer is built from a rerun foundation, so they track the same
         release line. If they drift by more than one minor version, the
         gRPC protocol or internal APIs are likely incompatible.
         """

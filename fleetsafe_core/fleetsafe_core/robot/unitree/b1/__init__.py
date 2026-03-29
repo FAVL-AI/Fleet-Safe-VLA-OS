@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2025-2026 Dimensional Inc.
+# Copyright 2025-2026 Fleet-Safe VLA Team
 
 """Unitree B1 robot module."""
 

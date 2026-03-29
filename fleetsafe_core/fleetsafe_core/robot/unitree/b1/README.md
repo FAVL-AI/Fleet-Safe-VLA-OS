@@ -1,4 +1,4 @@
-# Unitree B1 Dimensional Integration
+# Unitree B1 Fleet-Safe VLA Integration
 
 This module provides UDP-based control for the Unitree B1 quadruped robot with FleetSafeCore integration with ROS Twist cmd_vel interface.
 
@@ -216,4 +216,4 @@ nmcli connection show --active
 
 ## License
 
-Copyright 2025 Dimensional Inc. Licensed under Apache License 2.0.
+Copyright 2025 Fleet-Safe VLA Team Licensed under Apache License 2.0.

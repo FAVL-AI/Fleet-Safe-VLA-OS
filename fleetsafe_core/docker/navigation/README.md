@@ -47,9 +47,9 @@ Go to the docker dir and clone the ROS navigation stack (choose the branch match
 
 ```bash
 cd docker/navigation
-git clone -b humble git@github.com:dimensionalOS/ros-navigation-autonomy-stack.git
+git clone -b humble git@github.com:Fleet-Safe-VLA/ros-navigation-autonomy-stack.git
 # or
-git clone -b jazzy git@github.com:dimensionalOS/ros-navigation-autonomy-stack.git
+git clone -b jazzy git@github.com:Fleet-Safe-VLA/ros-navigation-autonomy-stack.git
 ```
 
 Download a [Unity environment model for the Mecanum wheel platform](https://drive.google.com/drive/folders/1G1JYkccvoSlxyySuTlPfvmrWoJUO8oSs?usp=sharing) and unzip the files to `unity_models`.
@@ -76,7 +76,7 @@ ROS_DISTRO=jazzy docker compose -f docker/navigation/docker-compose.yml build
 
 ### Configure the WiFi
 
-[Read this](https://github.com/dimensionalOS/ros-navigation-autonomy-stack/tree/jazzy?tab=readme-ov-file#transmitting-data-over-wifi) to see how to configure the WiFi.
+[Read this](https://github.com/Fleet-Safe-VLA/ros-navigation-autonomy-stack/tree/jazzy?tab=readme-ov-file#transmitting-data-over-wifi) to see how to configure the WiFi.
 
 ### Configure the Livox Lidar
 
@@ -162,9 +162,9 @@ docker exec -it fleetsafe_core_hardware_container bash
 
 ##### In the container
 
-In the container to run the full navigation stack you must run both the dimensional python runfile with connection module and the navigation stack.
+In the container to run the full navigation stack you must run both the fleet-safe-vla python runfile with connection module and the navigation stack.
 
-###### Dimensional Python + Connection Module
+###### Fleet-Safe VLA Python + Connection Module
 
 For the Unitree G1
 ```bash

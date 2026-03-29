@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 import { Mail, Bell, AlertTriangle, FileText, List, Clock, Settings, User, Info, Terminal, Play, Pause, Maximize, Minimize, PanelLeft, PanelRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTelemetry } from '@/hooks/useTelemetry';
 import { useFleetAPI } from '@/hooks/useFleetAPI';
+import EngineMetrics from '@/components/EngineMetrics';
+import SafetyKernelStatus from '@/components/SafetyKernelStatus';
 
 const RobotViewer = dynamic(() => import('@/components/RobotViewer'), { ssr: false });
 
@@ -448,6 +450,10 @@ export default function Home() {
                <div className="h-full w-[99.2%] bg-[#22d3ee] shadow-[0_0_10px_#22d3ee]"></div>
              </div>
           </div>
+          
+          {/* FleetSafe-VLA-OS Native Backend Integration */}
+          <SafetyKernelStatus />
+          <EngineMetrics />
 
           <div className="glass-panel p-5 flex flex-col flex-1 gap-2 overflow-y-auto shrink-0">
              

@@ -62,7 +62,7 @@ cd "$SCRIPT_DIR"
 # Use fastlio2 branch which has both arise_slam and FASTLIO2
 TARGET_BRANCH="fastlio2"
 TARGET_REMOTE="origin"
-CLONE_URL="https://github.com/dimensionalOS/ros-navigation-autonomy-stack.git"
+CLONE_URL="https://github.com/Fleet-Safe-VLA/ros-navigation-autonomy-stack.git"
 
 # Clone or checkout ros-navigation-autonomy-stack
 if [ ! -d "ros-navigation-autonomy-stack" ]; then

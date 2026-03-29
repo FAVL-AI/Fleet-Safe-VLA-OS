@@ -5,15 +5,15 @@
 <h2>The Agentive Operating System for Physical Space</h2>
 
 [![Discord](https://img.shields.io/discord/1341146487186391173?style=flat-square&logo=discord&logoColor=white&label=Discord&color=5865F2)](https://discord.gg/fleetsafe_core)
-[![Stars](https://img.shields.io/github/stars/dimensionalOS/fleetsafe_core?style=flat-square)](https://github.com/dimensionalOS/fleetsafe_core/stargazers)
-[![Forks](https://img.shields.io/github/forks/dimensionalOS/fleetsafe_core?style=flat-square)](https://github.com/dimensionalOS/fleetsafe_core/fork)
-[![Contributors](https://img.shields.io/github/contributors/dimensionalOS/fleetsafe_core?style=flat-square)](https://github.com/dimensionalOS/fleetsafe_core/graphs/contributors)
+[![Stars](https://img.shields.io/github/stars/Fleet-Safe-VLA/fleetsafe_core?style=flat-square)](https://github.com/Fleet-Safe-VLA/fleetsafe_core/stargazers)
+
+[![Contributors](https://img.shields.io/github/contributors/Fleet-Safe-VLA/fleetsafe_core?style=flat-square)](https://github.com/Fleet-Safe-VLA/fleetsafe_core/graphs/contributors)
 ![Nix](https://img.shields.io/badge/Nix-flakes-5277C3?style=flat-square&logo=NixOS&logoColor=white)
 ![NixOS](https://img.shields.io/badge/NixOS-supported-5277C3?style=flat-square&logo=NixOS&logoColor=white)
 ![CUDA](https://img.shields.io/badge/CUDA-supported-76B900?style=flat-square&logo=nvidia&logoColor=white)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 
-<a href="https://trendshift.io/repositories/23169" target="_blank"><img src="https://trendshift.io/api/badge/repositories/23169" alt="dimensionalOS%2Ffleetsafe_core | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/23169" target="_blank"><img src="https://trendshift.io/api/badge/repositories/23169" alt="Fleet-Safe-VLA%2Ffleetsafe_core | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
 <big><big>
 
@@ -31,11 +31,11 @@
 
 # Intro
 
-Dimensional is the modern operating system for generalist robotics. We are setting the next-generation SDK standard, integrating with the majority of robot manufacturers.
+Fleet-Safe VLA is the modern operating system for generalist robotics. We are setting the next-generation SDK standard, integrating with the majority of robot manufacturers.
 
 With a simple install and no ROS required, build physical applications entirely in python that run on any humanoid, quadruped, or drone.
 
-Dimensional is agent native -- "vibecode" your robots in natural language and build (local & hosted) multi-agent systems that work seamlessly with your hardware. Agents run as native modules — subscribing to any embedded stream, from perception (lidar, camera) and spatial memory down to control loops and motor drivers.
+Fleet-Safe VLA is agent native -- "vibecode" your robots in natural language and build (local & hosted) multi-agent systems that work seamlessly with your hardware. Agents run as native modules — subscribing to any embedded stream, from perception (lidar, camera) and spatial memory down to control loops and motor drivers.
 <table>
   <tr>
     <td align="center" width="50%">
@@ -119,7 +119,7 @@ Dimensional is agent native -- "vibecode" your robots in natural language and bu
       🟧 <a href="fleetsafe_core/robot/drone/README.md">DJI Mavic</a><br>
     </td>
     <td align="center" width="20%">
-      🟥 <a href="https://github.com/dimensionalOS/openFT-sensor">Force Torque Sensor</a><br>
+      🟥 <a href="https://github.com/Fleet-Safe-VLA/openFT-sensor">Force Torque Sensor</a><br>
     </td>
   </tr>
 </table>
@@ -130,14 +130,14 @@ Dimensional is agent native -- "vibecode" your robots in natural language and bu
 </div>
 
 > [!IMPORTANT]
-> 🤖 Direct your favorite Agent (OpenClaw, Claude Code, etc.) to [AGENTS.md](AGENTS.md) and our [CLI and MCP](#agent-cli-and-mcp) interfaces to start building powerful Dimensional applications.
+> 🤖 Direct your favorite Agent (OpenClaw, Claude Code, etc.) to [AGENTS.md](AGENTS.md) and our [CLI and MCP](#agent-cli-and-mcp) interfaces to start building powerful Fleet-Safe VLA applications.
 
 # Installation
 
 ## Interactive Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/dimensionalOS/fleetsafe_core/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Fleet-Safe-VLA/fleetsafe_core/main/scripts/install.sh | bash
 ```
 
 > See [`scripts/install.sh --help`](scripts/install.sh) for non-interactive and advanced options.
@@ -308,7 +308,7 @@ if __name__ == "__main__":
 
 ```sh
 export GIT_LFS_SKIP_SMUDGE=1
-git clone -b dev https://github.com/dimensionalOS/fleetsafe_core.git
+git clone -b dev https://github.com/Fleet-Safe-VLA/fleetsafe_core.git
 cd fleetsafe_core
 
 uv sync --all-extras --no-extra dds

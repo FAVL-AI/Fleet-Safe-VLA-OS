@@ -3,7 +3,7 @@
 ═══════════════════════════════════════════════════════════════════════════════
  FLEET SAFE VLA - HFB-S | Notebook 07: 7D Cognitive Safety Modeling
 ═══════════════════════════════════════════════════════════════════════════════
- Extends the MDP with a 7-dimensional cognitive safety state space
+ Extends the MDP with a 7-fleet-safe-vla cognitive safety state space
  using Control Barrier Functions (CBF) for formal safety guarantees.
 
  State Space: s = (x, y, z, t, F, v, I) ∈ S⁷
@@ -44,7 +44,7 @@ logger = logging.getLogger("NB07_Cognitive7D")
 # ═══════════════════════════════════════════════════════════════════
 @dataclass
 class CognitiveState:
-    """7-dimensional cognitive safety state.
+    """7-fleet-safe-vla cognitive safety state.
     
     s = (x, y, z, t, F, v, I)
     

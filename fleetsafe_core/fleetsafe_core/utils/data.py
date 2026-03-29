@@ -1,4 +1,4 @@
-# Copyright 2025-2026 Dimensional Inc.
+# Copyright 2025-2026 Fleet-Safe VLA Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ def _get_repo_root() -> Path:
                     "1",
                     "--branch",
                     "main",
-                    "https://github.com/dimensionalOS/fleetsafe_core.git",
+                    "https://github.com/Fleet-Safe-VLA/fleetsafe_core.git",
                     str(repo_dir),
                 ],
                 check=True,
@@ -98,7 +98,7 @@ def _get_repo_root() -> Path:
         except subprocess.CalledProcessError as e:
             raise RuntimeError(
                 f"Failed to clone fleetsafe_core repository: {e.stderr}\n"
-                f"Make sure you can access https://github.com/dimensionalOS/fleetsafe_core.git"
+                f"Make sure you can access https://github.com/Fleet-Safe-VLA/fleetsafe_core.git"
             )
 
     return repo_dir

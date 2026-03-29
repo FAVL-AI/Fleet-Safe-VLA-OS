@@ -520,3 +520,4 @@ __pycache__/
 # Root robot definitions
 !robots/
 !robots/**
+fleet_os_engine/

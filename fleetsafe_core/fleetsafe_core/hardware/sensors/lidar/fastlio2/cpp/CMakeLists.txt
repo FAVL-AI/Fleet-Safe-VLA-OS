@@ -48,7 +48,7 @@ endif()
 
 # fleetsafe_core-lcm C++ message headers
 FetchContent_Declare(fleetsafe_core_lcm
-  GIT_REPOSITORY https://github.com/dimensionalOS/fleetsafe_core-lcm.git
+  GIT_REPOSITORY https://github.com/Fleet-Safe-VLA/fleetsafe_core-lcm.git
   GIT_TAG main
   GIT_SHALLOW TRUE
 )

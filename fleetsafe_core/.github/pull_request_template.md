@@ -27,4 +27,4 @@ Closes DIM-XXX
 
 ## Contributor License Agreement
 
-- [ ] I have read and approved the [CLA](https://github.com/dimensionalOS/fleetsafe_core/blob/main/CLA.md).
+- [ ] I have read and approved the [CLA](https://github.com/Fleet-Safe-VLA/fleetsafe_core/blob/main/CLA.md).

@@ -198,7 +198,7 @@ class ModelRegistry:
                 name="cognitive_safety",
                 display_name="7D Cognitive Safety Model",
                 category="safety",
-                description="7-dimensional cognitive safety state space — "
+                description="7-fleet-safe-vla cognitive safety state space — "
                             "[CBF, STL, COM, zone, jitter, collision_risk, trust]",
                 obs_dim=17, act_dim=3, epochs=300,
                 training_script="training/fleet_extended_train.py",

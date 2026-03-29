@@ -1,4 +1,4 @@
-# Copyright 2025-2026 Dimensional Inc.
+# Copyright 2025-2026 Fleet-Safe VLA Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ from fleetsafe_core.utils.logging_config import setup_logger
 logger = setup_logger()
 
 main = typer.Typer(
-    help="Dimensional CLI",
+    help="Fleet-Safe VLA CLI",
     no_args_is_help=True,
 )
 

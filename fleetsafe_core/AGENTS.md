@@ -1,4 +1,4 @@
-# Dimensional AGENTS.md
+# Fleet-Safe VLA AGENTS.md
 
 ## What is FleetSafeCore
 
@@ -138,7 +138,7 @@ docs/
 
 ### Modules
 
-Autonomous subsystems. Communicate via `In[T]`/`Out[T]` typed streams. Run in forkserver worker processes.
+Autonomous subsystems. Communicate via `In[T]`/`Out[T]` typed streams. Run in isolated worker processes.
 
 ```python
 from fleetsafe_core.core.module import Module

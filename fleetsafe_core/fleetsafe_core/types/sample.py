@@ -1,4 +1,4 @@
-# Copyright 2025-2026 Dimensional Inc.
+# Copyright 2025-2026 Fleet-Safe VLA Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,8 +48,8 @@ class Sample(BaseModel):
         to: Convert the Sample instance to a different container type:
             -
         default_value: Get the default value for the Sample instance.
-        unflatten: Unflatten a one-dimensional array or dictionary into a Sample instance.
-        flatten: Flatten the Sample instance into a one-dimensional array or dictionary.
+        unflatten: Unflatten a one-fleet-safe-vla array or dictionary into a Sample instance.
+        flatten: Flatten the Sample instance into a one-fleet-safe-vla array or dictionary.
         space_for: Default Gym space generation for a given value.
         init_from: Initialize a Sample instance from a given value.
         from_space: Generate a Sample instance from a Gym space.
@@ -115,12 +115,12 @@ class Sample(BaseModel):
 
     @classmethod
     def unflatten(cls, one_d_array_or_dict, schema=None) -> "Sample":  # type: ignore[no-untyped-def]
-        """Unflatten a one-dimensional array or dictionary into a Sample instance.
+        """Unflatten a one-fleet-safe-vla array or dictionary into a Sample instance.
 
         If a dictionary is provided, its keys are ignored.
 
         Args:
-            one_d_array_or_dict: A one-dimensional array or dictionary to unflatten.
+            one_d_array_or_dict: A one-fleet-safe-vla array or dictionary to unflatten.
             schema: A dictionary representing the JSON schema. Defaults to using the class's schema.
 
         Returns:

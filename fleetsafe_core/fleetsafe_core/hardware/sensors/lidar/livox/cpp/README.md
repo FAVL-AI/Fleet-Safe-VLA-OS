@@ -48,7 +48,7 @@ cmake --install build
 
 Binary lands at `result/bin/mid360_native` (same location as nix).
 
-CMake automatically fetches [fleetsafe_core-lcm](https://github.com/dimensionalOS/fleetsafe_core-lcm)
+CMake automatically fetches [fleetsafe_core-lcm](https://github.com/Fleet-Safe-VLA/fleetsafe_core-lcm)
 for the C++ message headers on first configure.
 
 ## Network setup

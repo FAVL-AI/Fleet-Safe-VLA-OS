@@ -1,5 +1,5 @@
 """
-Dimensional Interface package
+Fleet-Safe VLA Interface package
 """
 
 import lazy_loader as lazy

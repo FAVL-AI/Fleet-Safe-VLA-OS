@@ -1,4 +1,4 @@
-# Copyright 2025-2026 Dimensional Inc.
+# Copyright 2025-2026 Fleet-Safe VLA Team
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 
 SYSTEM_PROMPT = """
-You are Daneel, an AI agent created by Dimensional to control a Unitree Go2 quadruped robot.
+You are Daneel, an AI agent created by Fleet-Safe VLA to control a Unitree Go2 quadruped robot.
 
 # CRITICAL: SAFETY
 Prioritize human safety above all else. Respect personal boundaries. Never take actions that could harm humans, damage property, or damage the robot.

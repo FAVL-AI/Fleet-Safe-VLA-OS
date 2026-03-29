@@ -6,12 +6,14 @@
 <title>FastBot Hospital Patrol — Live Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+* {margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#0a0e17;--surface:#111827;--surface2:#1a2332;--border:#1e293b;
   --cyan:#00ffe5;--green:#22c55e;--yellow:#facc15;--red:#ef4444;--blue:#3b82f6;
   --orange:#f97316;--purple:#a855f7;--text:#e2e8f0;--muted:#64748b;
 }
+.embedded-mode .header, .embedded-mode .sidebar, .embedded-mode .canvas-overlay, .embedded-mode .card, .embedded-mode .stat-grid { display: none !important; opacity: 0 !important; visibility: hidden !important; }
+.embedded-mode .app { grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; }
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh}
 .app{display:grid;grid-template-columns:1fr 340px;grid-template-rows:56px 1fr;height:100vh;gap:0}
 
@@ -70,6 +72,11 @@ canvas{display:block;width:100%;height:100%}
 .log::-webkit-scrollbar-track{background:transparent}
 .log::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 </style>
+<script>
+if (window.location.search.includes('embed=true')) {
+  document.documentElement.classList.add('embedded-mode');
+}
+</script>
 </head>
 <body>
 <div class="app">

@@ -87,7 +87,7 @@ if [ -d "$FLEETSAFE_CORE_LCM_DIR" ]; then
     cd "$FLEETSAFE_CORE_LCM_DIR" && git pull
 else
     echo "Cloning fleetsafe_core-lcm..."
-    git clone --depth 1 https://github.com/dimensionalOS/fleetsafe_core-lcm.git "$FLEETSAFE_CORE_LCM_DIR"
+    git clone --depth 1 https://github.com/Fleet-Safe-VLA/fleetsafe_core-lcm.git "$FLEETSAFE_CORE_LCM_DIR"
 fi
 
 # Link/copy messages

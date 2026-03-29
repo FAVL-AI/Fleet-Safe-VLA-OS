@@ -1,19 +1,22 @@
 import numpy as np
 from typing import Tuple
 
-try:
-    from fleetsafe_core.protocol.transport.dds import DDSTransport
-except ImportError:
-    class DDSTransport:
-        def publish(self, topic, msg): pass
+
 
 class SafetyTransport:
     """
-    Wraps the core Rust DDSTransport from fleetsafe_core.
+    Wraps the core Rust DDSTransport from fleetsafe_core/dora-rs natively.
     Adds Python safety validation before publishing to hardware.
     """
     def __init__(self, kernel_config=None):
-        self.rust_transport = DDSTransport()
+        try:
+            from dora import Node
+            self.node = Node()
+            print("[SafetyTransport] Natively connected to Rust Dora-Daemon!")
+        except Exception as e:
+            print(f"[SafetyTransport] Rust Daemon connection bypass (Mocking for UI only): {e}")
+            self.node = None
+
         from fleetsafe_vla.kernel.safety_kernel import SafetyKernel
         self.safety_kernel = SafetyKernel(kernel_config)
         self.total_msgs = 0
@@ -46,7 +49,8 @@ class SafetyTransport:
         is_safe, error_reason, safe_action = self.validate(msg)
         
         if is_safe:
-            self.rust_transport.publish(topic, msg)
+            if self.node:
+                self.node.send_output(topic, str(msg).encode('utf-8'))
             return True
         else:
             self.interventions += 1
@@ -62,12 +66,14 @@ class SafetyTransport:
                 if isinstance(msg, dict):
                     msg["action"] = np.zeros_like(safe_action)
                     msg["recalibrate_anchor"] = True
-                self.rust_transport.publish(topic, msg)
+                if self.node:
+                    self.node.send_output(topic, str(msg).encode('utf-8'))
             else:
                 self.recalibrating = False
                 # Semantic projection was successful, publish safely shifted action
                 if isinstance(msg, dict):
                     msg["action"] = safe_action
-                self.rust_transport.publish(topic, msg)
+                if self.node:
+                    self.node.send_output(topic, str(msg).encode('utf-8'))
                 
             return False
