@@ -301,6 +301,7 @@ const RobotViewer = React.memo(function RobotViewer({ onEncounter }: { onEncount
       <WebGLErrorBoundary>
         <Canvas
           shadows
+          gl={{ alpha: true, antialias: true }}
           camera={{ position: [0, 1.2, 4], fov: 40 }}
           onCreated={({ gl }) => {
             const canvas = gl.domElement;
@@ -310,7 +311,7 @@ const RobotViewer = React.memo(function RobotViewer({ onEncounter }: { onEncount
             });
           }}
         >
-          <fog attach="fog" args={['#0f111a', 5, 18]} />
+          {/* Removed solid fog so background image is visible clearly */}
           <ambientLight intensity={0.6} />
           
           <directionalLight position={[2, 5, 3]} intensity={1.5} color="#ffffff" castShadow />
@@ -334,10 +335,10 @@ const RobotViewer = React.memo(function RobotViewer({ onEncounter }: { onEncount
           <LabeledDoor position={[3, -0.4, 0]} label={"Unit 02\n[Caution]"} isRight />
           <LabeledDoor position={[-3, -0.4, -4]} label={"Server Terminal\n[Danger]"} />
 
-          {/* Ground plane */}
+          {/* Transparent ground plane just to catch shadows */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.4, 0]} receiveShadow>
             <planeGeometry args={[15, 25]} />
-            <meshStandardMaterial color="#0b0c11" roughness={1} />
+            <shadowMaterial opacity={0.4} />
           </mesh>
 
           <OrbitControls 

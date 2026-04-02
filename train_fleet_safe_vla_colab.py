@@ -159,7 +159,7 @@ def main():
     )
     
     print("[FLEET-Safe] Commencing State-of-the-Art Training. Our CBF boundaries guarantees zero-collision gradients.")
-    # trainer.train()
+    trainer.train()
 
 if __name__ == "__main__":
     main()
