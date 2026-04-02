@@ -1,56 +1,64 @@
 This is BibTeX, Version 0.99e (TeX Live 2026)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
-The style file: IEEEtran.bst
-Reallocated singl_function (elt_size=4) to 100 items from 50.
-Reallocated singl_function (elt_size=4) to 100 items from 50.
-Reallocated singl_function (elt_size=4) to 100 items from 50.
-Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-Reallocated singl_function (elt_size=4) to 100 items from 50.
+The style file: plain.bst
 Database file #1: references.bib
--- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
--- http://www.michaelshell.org/tex/ieeetran/bibtex/
--- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
-
-Done.
-You've used 39 entries,
-            4087 wiz_defined-function locations,
-            1009 strings with 14348 characters,
-and the built_in function-call counts, 25325 in all, are:
-= -- 1917
-> -- 669
-< -- 138
-+ -- 354
-- -- 135
-* -- 1169
-:= -- 3831
-add.period$ -- 83
-call.type$ -- 39
-change.case$ -- 42
-chr.to.int$ -- 324
-cite$ -- 39
-duplicate$ -- 1958
-empty$ -- 2294
-format.name$ -- 167
-if$ -- 5917
+Warning--I didn't find a database entry for "altman1999cmdp"
+Warning--I didn't find a database entry for "maler2004stl"
+Warning--I didn't find a database entry for "li2017stl_rl"
+Warning--I didn't find a database entry for "openvla2024"
+Warning--I didn't find a database entry for "groot2025"
+Warning--I didn't find a database entry for "wandb2020"
+Warning--I didn't find a database entry for "ho2020ddpm"
+Warning--I didn't find a database entry for "chi2023diffusion"
+Warning--I didn't find a database entry for "tobin2017domainrand"
+Warning--I didn't find a database entry for "safevla2025"
+Warning--I didn't find a database entry for "pi0_2025"
+Warning--I didn't find a database entry for "rt2_2023"
+Warning--I didn't find a database entry for "octo2024"
+Warning--I didn't find a database entry for "pytorch2019"
+Warning--I didn't find a database entry for "hofer2021simtoreal"
+Warning--I didn't find a database entry for "ieee7010_2020"
+Warning--I didn't find a database entry for "mhra2023guidance"
+You've used 1 entry,
+            2118 wiz_defined-function locations,
+            519 strings with 4394 characters,
+and the built_in function-call counts, 322 in all, are:
+= -- 27
+> -- 23
+< -- 0
++ -- 9
+- -- 8
+* -- 23
+:= -- 66
+add.period$ -- 3
+call.type$ -- 1
+change.case$ -- 7
+chr.to.int$ -- 0
+cite$ -- 1
+duplicate$ -- 10
+empty$ -- 18
+format.name$ -- 8
+if$ -- 59
 int.to.chr$ -- 0
-int.to.str$ -- 39
-missing$ -- 371
-newline$ -- 140
-num.names$ -- 39
-pop$ -- 946
+int.to.str$ -- 1
+missing$ -- 1
+newline$ -- 8
+num.names$ -- 2
+pop$ -- 7
 preamble$ -- 1
-purify$ -- 0
-quote$ -- 2
-skip$ -- 1960
+purify$ -- 6
+quote$ -- 0
+skip$ -- 7
 stack$ -- 0
-substring$ -- 809
-swap$ -- 1370
-text.length$ -- 30
+substring$ -- 5
+swap$ -- 1
+text.length$ -- 0
 text.prefix$ -- 0
-top$ -- 5
-type$ -- 39
+top$ -- 0
+type$ -- 4
 warning$ -- 0
-while$ -- 90
-width$ -- 41
-write$ -- 367
+while$ -- 2
+width$ -- 2
+write$ -- 12
+(There were 17 warnings)
