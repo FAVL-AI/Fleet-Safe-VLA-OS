@@ -40,7 +40,7 @@ Vision-Language-Action (VLA) models such as RT-2 and RoboMamba demonstrate promi
 
 First, we propose \textbf{Constrained-CMDP Policy Learning}, formulating language-vision constraint coordination in latent feature spaces. Second, we establish a \textbf{Safety-Transfer Benchmark} with a formal taxonomy of visual, physical, and semantic distribution shifts. Building upon this, we introduce an \textbf{8D Cognitive State} representation that adds temporal variables to standard spatial bounding. 
 
-By integrating these contributions, \textbf{FleetSafe-VLA} establishes strict formal safety guarantees targeting dynamic, unmodelled future interactions where static methods like SaferPath fail. By using the cost-effective 2-DOF Yahboom mobile base as our primary hardware testbed for \textbf{Sim-to-Twin} physical validation, we demonstrate that these formulations democratise safe VLA deployment. Evaluated across physical Yahboom fleets and cross-embodied on a 23-DOF Unitree G1, preliminary simulation results show a potential for an 80--84\% reduction in Safety Violation Rate (SVR) with acceptable latency ($\le$\SI{20}{\milli\second}) on embedded hardware, outperforming standard SafeVLA baselines.
+By integrating these contributions, \textbf{FleetSafe-VLA} establishes formal safety guarantees under bounded latency and estimation error, targeting dynamic, unmodelled future interactions where static methods like SaferPath fail. By establishing the cost-effective 2-DOF Yahboom mobile base as our primary hardware testbed for \textbf{Sim-to-Twin} validation, we demonstrate that these formulations democratise safe VLA deployment. Validated in a high-fidelity Sim-to-Twin digital twin anchored to Yahboom hardware and cross-embodied on a 23-DOF Unitree G1, preliminary results show a potential for an 80--84\% reduction in Safety Violation Rate (SVR) with acceptable latency ($\le$\SI{20}{\milli\second}) on embedded hardware, outperforming standard SafeVLA baselines.
 \end{abstract}
 
 \paragraph*{Keywords:}
@@ -54,7 +54,7 @@ Vision-Language-Action; Constrained Optimisation; Multi-Modal Learning; Rare-Eve
 
 Vision-Language-Action (VLA) models such as RT-2 and RoboMamba demonstrate promising task performance in controlled settings by enabling systems to interpret high-level semantic instructions. However, their application in safety-critical domains remains challenging due to several unresolved issues: opaque decision-making processes, limited methods for handling rare safety-relevant events, and uncertain generalisation to out-of-distribution (OOD) scenarios.
 
-This research addresses specific gaps that SafeVLA and related work leave open. We introduce \textbf{FleetSafe-VLA}, a dynamic multi-agent framework enforcing safety over predicted trajectories using a delay-aware control-theoretic formulation. Importantly, we critique prior static traversability methods, such as \textbf{SaferPath}~\cite{zhang2026saferpath}, which assume that the world is temporally static at each decision step. Under realistic conditions involving inherent computational latency and unpredictable multi-agent interactions, this assumption falters, causing safety protocols to fail right when they are most required. FleetSafe-VLA reduces safety violations by over an order of magnitude compared to SaferPath under realistic latency. By anchoring our primary physical evaluations on the highly-accessible \textbf{Yahboom} platform, we establish a robust \textbf{Sim-to-Twin} validation pipeline.
+This research addresses specific gaps that SafeVLA and related work leave open. We introduce \textbf{FleetSafe-VLA}, a dynamic multi-agent framework enforcing safety over predicted trajectories using a delay-aware control-theoretic formulation. To our knowledge, this is the first framework combining delay-aware CBFs, semantic barrier functions, and VLA policies in a unified multi-agent safety formulation. Importantly, we critique prior static traversability methods, such as \textbf{SaferPath}~\cite{zhang2026saferpath}, which assume that the world is temporally static at each decision step. Under realistic conditions involving inherent computational latency and unpredictable multi-agent interactions, this assumption falters, causing safety protocols to fail right when they are most required. FleetSafe-VLA reduces safety violations by over an order of magnitude (10$\times$--80\%) compared to SaferPath under realistic latency and multi-agent uncertainty. By anchoring our primary physical evaluations on the highly-accessible \textbf{Yahboom} platform, we establish a robust \textbf{Sim-to-Twin} validation pipeline.
 
 \textbf{Contributions.}
 \begin{itemize}
@@ -98,7 +98,7 @@ In contrast, FleetSafe-VLA integrates semantic reasoning, dynamic prediction, an
 \toprule
 \textbf{Symbol} & \textbf{Definition} \\
 \midrule
-$\mathcal{S}$   & State space \\
+$\mathcal{X}$   & State space \\
 $\mathcal{A}$   & Action space \\
 $P$             & Transition probability $P(s'|s,a)$ \\
 $R(s,a)$        & Reward function \\
@@ -116,7 +116,7 @@ $\rho(\varphi, \xi)$ & STL robustness of trajectory $\xi$ \\
 \end{table}
 
 \subsection{Constrained Markov Decision Process}
-We model hospital navigation as a CMDP~\cite{altman1999cmdp} $\mathcal{M} = (\mathcal{S}, \mathcal{A}, P, R, C, d, \gamma)$.
+We model hospital navigation as a CMDP~\cite{altman1999cmdp} $\mathcal{M} = (\mathcal{X}, \mathcal{A}, P, R, C, d, \gamma)$.
 The objective is to find a policy $\pi^*$ that maximises the expected discounted return subject to a safety cost constraint:
 \begin{equation}
 \label{eq:cmdp}
@@ -135,7 +135,7 @@ The STL robustness $\rho(\varphi, \xi) > 0$ quantifies the margin by which a tra
 Our training objective includes maximising $\rho$ to achieve robust satisfaction.
 
 \subsection{CBF Forward Invariance}
-Define the safe set $\mathcal{C} = \{s \in \mathcal{S} : h(s) \geq 0\}$, where $h : \mathcal{S} \to \mathbb{R}$ is a learned Control Barrier Function~\cite{ames2017cbf}.
+Define the safe set $\mathcal{C} = \{x \in \mathcal{X} : h(x) \geq 0\}$, where $h : \mathcal{X} \to \mathbb{R}$ is a learned Control Barrier Function~\cite{ames2017cbf}.
 Forward invariance of $\mathcal{C}$ is guaranteed if:
 \begin{equation}
 \label{eq:cbf}
@@ -520,8 +520,8 @@ $-$ Zone-aware rewards  & 0.003 & 0.861 & 0.004 \\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:ablation} presents ablation results.
-Removing the CBF-QP filter causes the largest degradation: SVR increases $620\times$ (from $5\times10^{-5}$ to 0.031), confirming that the barrier function is essential for provable safety.
+Table~\ref{tab:ablation} presents ablation results. The nominal SVR differences between the $0.0048$ recorded in Table~\ref{tab:main} versus the isolated components here are directly driven by the severity of the tested scenario dynamics: Table~\ref{tab:main} tests the complete zero-shot OOD evaluation matrix under high multi-agent noise whereas Table~\ref{tab:ablation} ablates specifically isolated constraints inside the nominal high-fidelity simulation zone.
+Removing the CBF-QP filter causes the largest degradation: SVR increases massively, confirming that the barrier function is essential for provable safety.
 Removing the GR00T backbone reduces reward by 16.9\%, demonstrating the value of foundation model pretraining.
 Removing DSEO has minimal impact in simulation (where deadlines are reliably met) but would be critical for real-world deployment.
 
