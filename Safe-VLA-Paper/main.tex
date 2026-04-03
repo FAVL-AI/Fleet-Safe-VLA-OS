@@ -82,10 +82,10 @@ We make the following contributions:
 Prior work such as OpenVLA~\cite{openvla2024} and RT-2~\cite{richter2023rt2} demonstrates strong semantic reasoning but lacks formal safety guarantees.
 
 \textbf{Safety-Constrained Navigation.}
-SaferPath~\cite{zhang2026saferpath} integrates optimisation-based safety via static traversability maps. However, it structurally fails to anticipate dynamic intersections due to unmodelled future interactions, making it computationally unsafe under VLA inference latency. FleetSafe-VLA solves this exact gap by enforcing prediction-bound dynamic envelopes.
+SaferPath~\cite{zhang2026saferpath} integrates optimisation-based safety via static traversability maps. However, it structurally fails to anticipate dynamic intersections due to unmodelled future interactions, making it fails under latency due to lack of prediction under VLA inference latency. FleetSafe-VLA solves this exact gap by enforcing prediction-bound dynamic envelopes.
 
 \textbf{Control Barrier Functions.}
-CBFs provide formal guarantees but are typically applied to static or low-dimensional systems~\cite{ames2017cbf}.
+CBFs provide formal guarantees but are typically applied to static or low-dimensional systems~\cite{ames2017cbf}. Recent extensions explore hybrid MPC-CBF formulations for dynamic feasibility and enriched robustness~\cite{zeng2021mpccbf, dawson2023cbfsurvey}.
 
 \textbf{Model Predictive Control.}
 MPC methods optimise trajectories but are computationally expensive and lack analytic guarantees under delay~\cite{grandia2021mpc}.
@@ -153,7 +153,7 @@ Forward invariance of $\mathcal{C}$ is guaranteed if:
 Given a proposed action $a_\text{nom}$ from the policy, the CBF-QP finds the closest safe action:
 \begin{equation}
 \label{eq:qp}
-a^* = \arg\min_{a} \; \|a - a_\text{nom}\|^2 \quad \text{s.t.} \quad \nabla_a h(s)^\top a + \alpha \cdot h(s) \geq 0
+a^* = \arg\min_{a} \; \|a - a_\text{nom}\|^2 \quad \text{s.t.} \quad \dot{h}(\hat{x}, a) \ge -\alpha h(\hat{x}) - \gamma v_{\max}\tau_{\max} - L_h \epsilon
 \end{equation}
 
 % =============================================================================
@@ -230,7 +230,7 @@ To address the static assumptions of architectures like SaferPath, FleetSafe-VLA
 s = \underbrace{(x, y, v, \dot{p})}_{\text{4D Spatial/Dynamic}} \;\cup\; \underbrace{(\Delta t)}_{\text{1D Temporal}} \;\cup\; \underbrace{(g, \iota, a)}_{\text{3D Semantic}}
 \end{equation}
 We refer to this explicitly as an 8D cognitive state space.
-Surrounding agent intent ($\iota$) is inferred dynamically via Transformer-based trajectory forecasting priors, while continuous system awareness ($a$) is computed directly from dense attention maps targeting restrictive visual boundaries. By modelling these parameters alongside physical geometry, actuation delay ($\Delta t$), and language goal alignment ($g$), the Semantic Barrier Functions (SBF) are parametrised directly into an 8-dimensional space. Specifically, we define the language-conditioned SBF as:
+Intent ($\iota$) is inferred using short-horizon trajectory prediction from a transformer-based motion prior, while awareness ($a$) is computed from normalised attention maps over safety-critical regions (e.g., humans, restricted zones). By modelling these parameters alongside physical geometry, actuation delay ($\Delta t$), and language goal alignment ($g$), the Semantic Barrier Functions (SBF) are parametrised directly into an 8-dimensional space. Specifically, we define the language-conditioned SBF as:
 \begin{equation}
 h_{SBF}(x, \ell) = \|p - p_h\|^2 - d_{min}^2(\ell)
 \end{equation}
@@ -259,7 +259,7 @@ Define the delay-robust CBF constraint:
 where $\alpha, \gamma > 0$. Let the control input be computed via the Quadratic Program:
 \begin{equation}
 \begin{aligned}
-u^* &= \arg\min_u \|u - u_{\text{vla}}\|^2 + \lambda \delta^2 \\
+u^* &= \arg\min_{u, \delta} \|u - u_{\text{vla}}\|^2 + \lambda \delta^2 \\
 \text{s.t.} \quad \dot{h}(\hat{x}, u) &\geq -\alpha h(\hat{x}) - \gamma v_{\max} \tau_{\max} - L_h \epsilon - \delta \\
 U_\text{min} &\le u \le U_\text{max}
 \end{aligned}
@@ -271,7 +271,11 @@ h(x(t)) \ge -\epsilon_h, \quad \forall t \ge 0
 where $\epsilon_h = \frac{\gamma v_{\max} \tau_{\max} + L_h \epsilon}{\alpha}$. Thus, for an STL specification $\varphi = \square(h(x) \geq -\epsilon_h)$, the delay-robust CBF condition ensures satisfaction under bounded latency. This result establishes \emph{practical safety} under bounded uncertainty, ensuring that violations remain arbitrarily small for sufficiently small latency and estimation error.
 
 \textbf{Proof Sketch.}
-We consider the time derivative of the barrier function under estimated state $\hat{x}$: $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$, where the error term $\Delta_h$ arises from state estimation error and satisfies $|\Delta_h| \le L_h \|x - \hat{x}\| \le L_h \epsilon$. Additionally, latency introduces a worst-case drift in state evolution bounded by $\|\Delta x_{\tau}\| \le v_{\max} \tau_{\max}$, which induces an additional degradation term $\Delta_\tau \le \gamma v_{\max} \tau_{\max}$. Combining these, we obtain:
+We consider the time derivative of the barrier function under estimated state $\hat{x}$:
+\begin{equation}
+\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h
+\end{equation}
+where the error term $\Delta_h$ arises from state estimation error and satisfies $|\Delta_h| \le L_h \|x - \hat{x}\| \le L_h \epsilon$. Additionally, latency introduces a worst-case drift in state evolution bounded by $\|\Delta x_{\tau}\| \le v_{\max} \tau_{\max}$, which induces an additional degradation term $\Delta_\tau \le \gamma v_{\max} \tau_{\max}$. Combining these, we obtain:
 \begin{equation}
 \dot{h}(x,u) \ge -\alpha h(x) - \gamma v_{\max} \tau_{\max} - L_h \epsilon
 \end{equation}
@@ -421,7 +425,7 @@ This design reduces EMI issues inherent in mobile robotics and demonstrates rigo
 \subsection{Simulation Environment \& Dataset Composition}
 We evaluate in a high-fidelity digital twin, and stress-test it with controlled perturbations. The system dynamics dimension is defined by state $x \in \mathbb{R}^n$ and control $u \in \mathbb{R}^m$. The highly accessible 2-DOF Yahboom mobile base forms our physical anchor with $n=4, m=2$, while the complex Unitree G1 humanoid scales the formulation to $n=47, m=23$. All experiments run in real-time with total system latency <50ms. The safety layer (CBF-QP) is computationally efficient, strictly bounding QP solve times to <10ms per step.
 
-For training and baseline comparisons, we utilise a massive $850{,}000$-episode multi-modal dataset. This amalgamates the standard open-source datasets explicitly used by prior works like \textit{SaferPath}~\cite{zhang2026saferpath} (e.g., nuScenes trajectory data scaled to indoor limits) alongside proprietary real-world semantic data collection aligned identically to our digital twin. The twin encompasses 12 distinct zones (lobby, corridor, ward, ICU, pharmacy, lift, stairwell, consultation room, reception, staff room, operating theatre, emergency department). Domain randomisation~\cite{tobin2017domainrand} is aggressively applied to all synthetic observations featuring gaussian state noise ($\sigma = 0.02$).
+For training and baseline comparisons, we utilise a large-scale $850{,}000$-episode multi-modal dataset. This amalgamates the standard open-source datasets explicitly used by prior works like \textit{SaferPath}~\cite{zhang2026saferpath} (e.g., nuScenes trajectory data scaled to indoor limits) alongside proprietary real-world semantic data collection aligned identically to our digital twin. The twin encompasses 12 distinct zones (lobby, corridor, ward, ICU, pharmacy, lift, stairwell, consultation room, reception, staff room, operating theatre, emergency department). Domain randomisation~\cite{tobin2017domainrand} is aggressively applied to all synthetic observations featuring gaussian state noise ($\sigma = 0.02$).
 
 \subsection{Safety-Transfer Benchmark}
 To properly evaluate uncertain generalisation, we establish a Safety-Transfer Benchmark featuring a systematic taxonomy of visual, physical, and semantic distribution shifts. While existing suites like Safety-CHORES offer in-distribution benchmarking, our framework characterises when and how learned safety properties transfer to Out-of-Distribution (OOD) environments, subsequently proposing algorithmic improvements for edge-case recovery.
@@ -641,10 +645,13 @@ We will open-source the code, training logs, and model checkpoints to allow the 
 \appendix
 \section{Proof of Theorem 1}
 
-\textbf{Theorem:}
-Under bounded latency $\tau \le \tau_\text{max}$ and estimation error $\|\epsilon\| \le \epsilon_\text{max}$, the safe set $\mathcal{C} = \{x : h_L(x) \geq 0\}$ remains forward invariant.
+\textbf{Theorem (Consistent with Main Result):}
+Under bounded latency $\tau \le \tau_{\max}$ and estimation error $\|x - \hat{x}\| \le \epsilon$, the safe set remains \emph{practically forward invariant}:
+\begin{equation}
+h(x(t)) \ge -\epsilon_h, \quad \forall t
+\end{equation}
 
-\textbf{Proof:}
+\textbf{Proof Summary:}
 Let the system dynamics be modelled as $\dot{x}(t) = f(x(t)) + g(x(t))u(t - \tau)$. By definition of the Control Barrier Function, safety fundamentally enforces $\dot{h}_L(x,u) \ge -\alpha(h_L(x))$ for some extended class-$\mathcal{K}$ function $\alpha$.
 
 Given the existence of application delay $\tau$, the physical state naturally deviates across the bounded interval $[t-\tau, t]$. Assuming $f$ and $g$ are locally Lipschitz continuous, the maximum state deviation remains strictly bounded via $L_f \tau + L_g U_\text{max} \tau$, where $L_f$ and $L_g$ act as established Lipschitz constants.
@@ -653,7 +660,7 @@ Therefore, absorbing the worst-case physical evolution occurring across the dela
 \[
 \dot{h}_L(x,u) - L_h(L_f + L_g U_\text{max})\tau - \delta(\epsilon_\text{max}) \geq -\alpha h_L(x)
 \]
-Because our modified delay-robust CBF constraint (Equation 9) dynamically accommodates this boundary bound prior to any optimization, the continuous-time margin is guaranteed explicitly non-negative directly at the true actuation step. Consequently, this demonstrates mathematically that $h(x(t)) \ge 0 \; \forall t$, fully maintaining forward invariance under maximum bounded $\tau$ limits. $\blacksquare$
+Because our modified delay-robust CBF constraint (Equation 9) dynamically accommodates this boundary bound prior to any optimization, the continuous-time margin shifts appropriately. Consequently, this formalizes mathematically that $h(x(t)) \ge -\epsilon_h, \quad \forall t$, maintaining practical forward invariance under bounded uncertainty. $\blacksquare$
 
 ---
 
