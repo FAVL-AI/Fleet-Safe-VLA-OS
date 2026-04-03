@@ -221,7 +221,7 @@ To combat the failing static assumptions of architectures like SaferPath, FleetS
 \subsection{Delay-Robust Control Barrier Function QP}
 We enforce safety via a CBF constraint with $\alpha(\cdot)$ as a class-$\mathcal{K}$ function. The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1:
 \begin{equation}
-u^* = \arg\min_{u \in \mathcal{U}} \|u - u_{\text{vla}}\|^2 \quad \text{s.t.} \quad \dot{h}_L(x, u) \geq -\alpha(h_L(x)), \quad U_\text{min} \le u \le U_\text{max}
+u^* = \arg\min_{u \in \mathcal{U}} \|u - u_{\text{vla}}\|^2 \quad \text{s.t.} \quad \dot{h}_L(x, u) \geq -\alpha(h_L(x)) - \gamma \|\dot{x}\| \tau, \quad U_\text{min} \le u \le U_\text{max}
 \end{equation}
 
 Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
@@ -401,6 +401,7 @@ To fully capture the temporal and spatial demands of fleet coordination, we adop
     \item \textbf{STL Robustness} ($\rho$): quantitative satisfaction margin for the temporal $\square$ (always) predicates~\cite{maler2004stl}.
     \item \textbf{DMR} (Deadline Miss Rate): fraction of control inferences exceeding the \SI{50}{\milli\second} QoS deadline.
     \item \textbf{TTP} (Time-To-Preempt): End-to-end latency from violation detection to emergency safe-stop actuation.
+    \item \textbf{AC} (Action Cost): Action jitter penalization and overall control smoothness.
     \item \textbf{Fleet Efficiency}: Normalised traversal time across the fleet compared to the optimal unconstrained path.
     \item \textbf{Cost / Reward}: Standard expected cumulative cost and multi-agent return.
 \end{itemize}
@@ -588,7 +589,7 @@ Hospital robot deployment raises significant ethical concerns~\cite{ieee7010_202
 \label{sec:conclusion}
 
 We have detailed FLEET-Safe VLA: a framework aimed at putting strict, provable safety boundaries around vision-language-action models for hospital logistics.
-Pairing a large foundation model backbone with a CBF-QP filter and hardware-level preemption yielded an 84\% drop in safety violations and acceptable real-time latency ($\le$\SI{20}{\milli\second}) over SafeVLA. Crucially, by addressing the dangerous static traversability limitations present in works like SaferPath, the newly established Safety-Transfer Benchmark and 7D state variables provide unparalleled robustness.
+Pairing a large foundation model backbone with a CBF-QP filter and hardware-level preemption yielded an 84\% drop in safety violations and acceptable real-time latency ($\le$\SI{20}{\milli\second}) over SafeVLA. Crucially, by addressing the dangerous static traversability limitations present in works like SaferPath, the newly established Safety-Transfer Benchmark and 7D state variables provide unparalleled robustness. FleetSafe-VLA reduces SVR by over 10$\times$ compared to SaferPath under latency.
 Testing the same safety logic on both a basic wheeled robot and a complex 23-DOF humanoid confirms that the mathematical bounds hold up, regardless of the physical chassis.
 We will open-source the code, training logs, and model checkpoints heavily to allow the community to reproduce and expand on these findings.
 
