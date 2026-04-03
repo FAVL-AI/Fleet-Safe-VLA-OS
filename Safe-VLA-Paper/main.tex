@@ -227,7 +227,7 @@ We enforce safety via a CBF constraint with $\alpha(\cdot)$ as a class-$\mathcal
 \begin{equation}
 u^* = \arg\min_{u \in \mathcal{U}} \|u - u_{\text{vla}}\|^2 \quad \text{s.t.} \quad \dot{h}_L(x, u) \geq -\alpha(h_L(x)) - \gamma \|\dot{x}\| \tau, \quad U_\text{min} \le u \le U_\text{max}
 \end{equation}
-
+The underlying active-set solver bounds computational complexity to $\mathcal{O}(n^3 + mn^2)$ per step, where $n$ is the control dimension and $m$ is the number of active barrier constraints.
 Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
 
 \textbf{Theorem 1 (Delay-Robust Safety Guarantee).}
@@ -250,10 +250,10 @@ We model actuation uncertainty $u_{\text{real}} = u^* + \epsilon$ with bounded d
 \REQUIRE Dataset $\mathcal{D}$, cost limit $d$, CBF decay $\alpha$, learning rates $\eta_\pi$, $\eta_\lambda$
 \STATE Initialise policy $\pi_\theta$, CBF $h_\phi$, Lagrange multiplier $\lambda$
 \FOR{epoch $= 1, \ldots, E$}
-    \FOR{batch $(s,a,r,c,s') \in \mathcal{D}$}
-        \STATE $a_\text{nom} \leftarrow \pi_\theta(s)$ \COMMENT{DiT action generation}
-        \STATE $a^* \leftarrow \text{CBF-QP}(a_\text{nom}, h_\phi(s))$ \COMMENT{Safety projection}
-        \STATE $\mathcal{L}_\pi \leftarrow -\hat{A}(s,a) + \lambda \cdot \hat{C}(s,a)$ \COMMENT{PPO-Lagrangian}
+    \FOR{batch $(x,a,r,c,x') \in \mathcal{D}$}
+        \STATE $a_\text{nom} \leftarrow \pi_\theta(x)$ \COMMENT{DiT action generation}
+        \STATE $a^* \leftarrow \text{CBF-QP}(a_\text{nom}, h_\phi(x))$ \COMMENT{Safety projection}
+        \STATE $\mathcal{L}_\pi \leftarrow -\hat{A}(x,a) + \lambda \cdot \hat{C}(x,a)$ \COMMENT{PPO-Lagrangian}
         \STATE $\mathcal{L}_\text{diff} \leftarrow \| \epsilon - \epsilon_\theta(z_t, t) \|^2$ \COMMENT{Diffusion loss}
         \STATE $\mathcal{L}_\text{CBF} \leftarrow$ Barrier loss (safe/unsafe states)
         \STATE $\theta \leftarrow \theta - \eta_\pi \nabla_\theta (\mathcal{L}_\pi + \mathcal{L}_\text{diff} + \mathcal{L}_\text{CBF})$
@@ -392,7 +392,7 @@ We compare against six systems spanning VLA models and safe RL:
 SafeVLA~\cite{safevla2025},
 GR00T N1~\cite{groot2025},
 $\pi_0$~\cite{pi0_2025},
-OpenVLA~\cite{openvla2024},
+OpenVLA~\cite{kim2024openvla},
 RT-2~\cite{brohan2023rt2},
 and Octo~\cite{octo2024}.
 Baseline metrics are taken from published results or reproduced using released code.
@@ -434,7 +434,7 @@ All experiments use PyTorch~2.1~\cite{pytorch2019} with mixed-precision FP16 tra
 SafeVLA~\cite{safevla2025}      & 0.030 & 0.45 & 12.5\% & 120\,ms & 0.72 & 0.156 & 0.826 \\
 GR00T N1~\cite{groot2025}       & 0.015 & 0.52 & 4.2\% & 45\,ms & 0.76 & 0.089 & 0.810 \\
 $\pi_0$~\cite{pi0_2025}        & 0.020 & 0.48 & 3.5\% & 35\,ms & 0.81 & 0.120 & 0.850 \\
-OpenVLA~\cite{openvla2024}      & 0.045 & 0.25 & 18.0\% & 85\,ms & 0.65 & 0.200 & 0.780 \\
+OpenVLA~\cite{kim2024openvla}      & 0.045 & 0.25 & 18.0\% & 85\,ms & 0.65 & 0.200 & 0.780 \\
 RT-2~\cite{brohan2023rt2}            & 0.038 & 0.30 & 25.5\% & 200\,ms & 0.61 & 0.175 & 0.740 \\
 Octo~\cite{octo2024}            & 0.042 & 0.28 & 2.1\% & 25\,ms & 0.68 & 0.190 & 0.760 \\
 \bottomrule
