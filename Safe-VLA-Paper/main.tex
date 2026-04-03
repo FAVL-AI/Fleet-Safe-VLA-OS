@@ -231,9 +231,8 @@ u^* = \arg\min_{u \in \mathcal{U}} \|u - u_{\text{vla}}\|^2 \quad \text{s.t.} \q
 Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
 
 \textbf{Theorem 1 (Delay-Robust Safety Guarantee).}
-Under bounded perception latency $\tau$ and estimation error $\epsilon$, 
-the safe set $\mathcal{C} = \{x : h(x) \geq 0\}$ remains forward invariant 
-under the proposed CBF-QP controller.
+The safe set $\mathcal{C} = \{x : h(x) \geq 0\}$ remains forward invariant under bounded latency and estimation error 
+when using the proposed CBF-QP controller.
 
 \textbf{Proof Sketch.}
 The modified CBF constraint incorporates a delay compensation term 
