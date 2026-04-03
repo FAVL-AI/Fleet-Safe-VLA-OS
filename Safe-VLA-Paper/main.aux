@@ -7,6 +7,8 @@
 \citation{altman1999cmdp}
 \citation{maler2004stl,li2017stl_rl}
 \citation{ames2017cbf}
+\citation{openvla2024}
+\citation{groot2025}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{2}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Problem Formulation}{2}{section.3}\protected@file@percent }
 \newlabel{sec:problem}{{3}{2}{Problem Formulation}{section.3}{}}
@@ -19,37 +21,31 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Safety Specification via Signal Temporal Logic}{2}{subsection.3.3}\protected@file@percent }
 \newlabel{eq:stl}{{2}{2}{Safety Specification via Signal Temporal Logic}{equation.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}CBF Forward Invariance}{2}{subsection.3.4}\protected@file@percent }
-\citation{openvla2024}
-\citation{groot2025}
+\newlabel{eq:cbf}{{3}{2}{CBF Forward Invariance}{equation.3}{}}
+\newlabel{eq:qp}{{4}{2}{CBF Forward Invariance}{equation.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Methodology}{2}{section.4}\protected@file@percent }
+\newlabel{sec:method}{{4}{2}{Methodology}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Architecture Overview}{2}{subsection.4.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  \textbf  {FleetSafe-VLA Architecture.} A Vision-Language Model (VLM) generates high-level actions, which are filtered through a 7D cognitive safety model. Semantic Barrier Functions (SBF) encode task and zone constraints, while a delay-robust CBF-QP layer enforces continuous-time safety under latency and multi-agent dynamics. }}{3}{figure.caption.4}\protected@file@percent }
 \newlabel{fig:architecture}{{1}{3}{\textbf {FleetSafe-VLA Architecture.} A Vision-Language Model (VLM) generates high-level actions, which are filtered through a 7D cognitive safety model. Semantic Barrier Functions (SBF) encode task and zone constraints, while a delay-robust CBF-QP layer enforces continuous-time safety under latency and multi-agent dynamics}{figure.caption.4}{}}
-\newlabel{eq:cbf}{{3}{3}{CBF Forward Invariance}{equation.3}{}}
-\newlabel{eq:qp}{{4}{3}{CBF Forward Invariance}{equation.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Methodology}{3}{section.4}\protected@file@percent }
-\newlabel{sec:method}{{4}{3}{Methodology}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Architecture Overview}{3}{subsection.4.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Vision-Language-Action Backbone Integration}{3}{subsection.4.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Problem Setup}{3}{subsection.4.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Semantic Safe Set \& Barrier Functions}{3}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Constrained-CMDP Policy Learning in Latent Feature Space}{3}{subsection.4.5}\protected@file@percent }
 \citation{wandb2020}
 \citation{ho2020ddpm,chi2023diffusion}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Delay-Robust Control Barrier Function QP}{4}{subsection.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Robust Actuation Model}{4}{subsection.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Training Algorithm}{4}{subsection.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Importance-Weighted Near-Violation Learning}{4}{subsection.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Delay-Robust Control Barrier Function QP}{4}{subsection.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Robust Actuation Model}{4}{subsection.4.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Training Algorithm}{4}{subsection.4.9}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces FLEET-Safe VLA Training (PPO-Lagrangian + CBF)}}{4}{algorithm.1}\protected@file@percent }
 \newlabel{alg:training}{{1}{4}{FLEET-Safe VLA Training (PPO-Lagrangian + CBF)}{algorithm.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Hyperparameters}{4}{subsection.4.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.10}Hyperparameters}{4}{subsection.4.10}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Hyperparameter Configuration}}{4}{table.caption.5}\protected@file@percent }
 \newlabel{tab:hyper}{{2}{4}{Hyperparameter Configuration}{table.caption.5}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}System Implementation}{4}{section.5}\protected@file@percent }
 \newlabel{sec:system}{{5}{4}{System Implementation}{section.5}{}}
 \citation{tobin2017domainrand}
-\citation{safevla2025}
-\citation{groot2025}
-\citation{pi0_2025}
-\citation{openvla2024}
-\citation{rt2_2023}
-\citation{octo2024}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Multi-Robot Fleet Coordination}{5}{subsection.5.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Fleet Command Dashboard}{5}{subsection.5.2}\protected@file@percent }
 \newlabel{sec:ui_dashboard}{{5.2}{5}{Fleet Command Dashboard}{subsection.5.2}{}}
@@ -59,7 +55,13 @@
 \@writefile{toc}{\contentsline {section}{\numberline {6}Experimental Design}{5}{section.6}\protected@file@percent }
 \newlabel{sec:experiments}{{6}{5}{Experimental Design}{section.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Simulation Environment}{5}{subsection.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Baselines}{5}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Safety-Transfer Benchmark}{5}{subsection.6.2}\protected@file@percent }
+\citation{safevla2025}
+\citation{groot2025}
+\citation{pi0_2025}
+\citation{openvla2024}
+\citation{rt2_2023}
+\citation{octo2024}
 \citation{maler2004stl}
 \citation{pytorch2019}
 \citation{safevla2025}
@@ -68,43 +70,44 @@
 \citation{openvla2024}
 \citation{rt2_2023}
 \citation{octo2024}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Evaluation Metrics}{6}{subsection.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Hardware}{6}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Baselines}{6}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Evaluation Metrics}{6}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Hardware}{6}{subsection.6.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {7}Results}{6}{section.7}\protected@file@percent }
 \newlabel{sec:results}{{7}{6}{Results}{section.7}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Main Results}{6}{subsection.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Inference Efficiency via KV Cache Compression}{6}{subsection.7.2}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Detailed system architecture dataflow demonstrating the integration of the delay-robust Semantic Barrier Functions.}}{6}{figure.caption.8}\protected@file@percent }
 \newlabel{fig:arch_detail}{{3}{6}{Detailed system architecture dataflow demonstrating the integration of the delay-robust Semantic Barrier Functions}{figure.caption.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Training Convergence}{6}{subsection.7.3}\protected@file@percent }
-\citation{tobin2017domainrand}
-\citation{hofer2021simtoreal}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Inference Efficiency via KV Cache Compression}{6}{subsection.7.2}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Benchmark Comparison Against Six Baselines. Best results in \textbf  {bold}. $\downarrow $ = lower is better, $\uparrow $ = higher is better. Our method achieves provably near-zero SVR while maximizing Fleet Efficiency under strict multi-agent constraints.}}{7}{table.caption.7}\protected@file@percent }
 \newlabel{tab:main}{{3}{7}{Benchmark Comparison Against Six Baselines. Best results in \textbf {bold}. $\downarrow $ = lower is better, $\uparrow $ = higher is better. Our method achieves provably near-zero SVR while maximizing Fleet Efficiency under strict multi-agent constraints}{table.caption.7}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  \textbf  {Robustness under latency and noise.} (Left) Safety Violation Rate (SVR) as latency increases. (Middle) Deadline Miss Rate (DMR) under sensor noise. (Right) Time-To-Preempt (TTP) demonstrating proactive safety behaviour. FleetSafe-VLA maintains stability under perturbations, whereas static baselines degrade rapidly. }}{7}{figure.caption.9}\protected@file@percent }
 \newlabel{fig:robustness}{{4}{7}{\textbf {Robustness under latency and noise.} (Left) Safety Violation Rate (SVR) as latency increases. (Middle) Deadline Miss Rate (DMR) under sensor noise. (Right) Time-To-Preempt (TTP) demonstrating proactive safety behaviour. FleetSafe-VLA maintains stability under perturbations, whereas static baselines degrade rapidly}{figure.caption.9}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Inference efficiency with KV cache compression.}}{7}{table.caption.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Ablation Studies}{7}{subsection.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Training Convergence}{7}{subsection.7.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces W\&B training dashboard showing GR00T backbone runs for both Yahboom (red) and G1 CMDP (maroon). All 28+ panels log per-epoch metrics. Curves show smooth convergence with no catastrophic forgetting or safety regressions.}}{7}{figure.caption.11}\protected@file@percent }
 \newlabel{fig:convergence}{{5}{7}{W\&B training dashboard showing GR00T backbone runs for both Yahboom (red) and G1 CMDP (maroon). All 28+ panels log per-epoch metrics. Curves show smooth convergence with no catastrophic forgetting or safety regressions}{figure.caption.11}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Cross-Embodiment Transfer}{7}{subsection.7.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Discussion}{7}{section.8}\protected@file@percent }
-\newlabel{sec:discussion}{{8}{7}{Discussion}{section.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Limitations}{7}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Ablation Studies}{7}{subsection.7.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Ablation Study (Yahboom). Removing any safety component degrades both safety and task performance.}}{7}{table.caption.12}\protected@file@percent }
+\newlabel{tab:ablation}{{5}{7}{Ablation Study (Yahboom). Removing any safety component degrades both safety and task performance}{table.caption.12}{}}
+\citation{tobin2017domainrand}
+\citation{hofer2021simtoreal}
 \citation{ieee7010_2020,mhra2023guidance}
 \bibstyle{plain}
 \bibdata{references}
 \bibcite{ames2017cbf}{1}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Ablation Study (Yahboom). Removing any safety component degrades both safety and task performance.}}{8}{table.caption.12}\protected@file@percent }
-\newlabel{tab:ablation}{{5}{8}{Ablation Study (Yahboom). Removing any safety component degrades both safety and task performance}{table.caption.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Cross-Embodiment Transfer}{8}{subsection.7.5}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Cross-Embodiment Results: Same Safety Layer, Different Bodies}}{8}{table.caption.13}\protected@file@percent }
 \newlabel{tab:cross}{{6}{8}{Cross-Embodiment Results: Same Safety Layer, Different Bodies}{table.caption.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Discussion}{8}{section.8}\protected@file@percent }
+\newlabel{sec:discussion}{{8}{8}{Discussion}{section.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Limitations}{8}{subsection.8.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Sim-to-Real Transfer Strategy}{8}{subsection.8.2}\protected@file@percent }
 \newlabel{sec:data}{{8.2}{8}{Sim-to-Real Transfer Strategy}{subsection.8.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Ethical Considerations}{8}{subsection.8.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {9}Conclusion}{8}{section.9}\protected@file@percent }
 \newlabel{sec:conclusion}{{9}{8}{Conclusion}{section.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {A}Proof of Theorem 1}{8}{appendix.A}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A}Proof of Theorem 1}{9}{appendix.A}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {B}Additional Ablations}{9}{appendix.B}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Ablation study demonstrating contribution of each component.}}{9}{table.caption.15}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {C}Reviewer Rebuttal (Anticipated Concerns)}{9}{appendix.C}\protected@file@percent }
