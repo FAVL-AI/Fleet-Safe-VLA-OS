@@ -54,7 +54,7 @@ Vision-Language-Action; Constrained Optimisation; Multi-Modal Learning; Rare-Eve
 
 Vision-Language-Action (VLA) models such as RT-2 and RoboMamba demonstrate promising task performance in controlled settings by enabling systems to interpret high-level semantic instructions. However, their application in safety-critical domains remains challenging due to several unresolved issues: opaque decision-making processes, limited methods for handling rare safety-relevant events, and uncertain generalisation to out-of-distribution (OOD) scenarios.
 
-This research addresses specific gaps that SafeVLA and related work leave open. We introduce \textbf{FleetSafe-VLA}, a dynamic multi-agent framework enforcing safety over predicted trajectories using a delay-aware control-theoretic formulation. Importantly, we critique prior static traversability methods, such as \textbf{SaferPath}~\cite{zhang2026saferpath}, which assume that the world is temporally static at each decision step. Under realistic conditions involving inherent computational latency and unpredictable multi-agent interactions, this assumption falters, causing safety protocols to fail right when they are most required. By anchoring our primary physical evaluations on the highly-accessible \textbf{Yahboom} platform, we establish a robust \textbf{Sim-to-Twin} validation pipeline.
+This research addresses specific gaps that SafeVLA and related work leave open. We introduce \textbf{FleetSafe-VLA}, a dynamic multi-agent framework enforcing safety over predicted trajectories using a delay-aware control-theoretic formulation. Importantly, we critique prior static traversability methods, such as \textbf{SaferPath}~\cite{zhang2026saferpath}, which assume that the world is temporally static at each decision step. Under realistic conditions involving inherent computational latency and unpredictable multi-agent interactions, this assumption falters, causing safety protocols to fail right when they are most required. FleetSafe-VLA reduces safety violations by over an order of magnitude compared to SaferPath under realistic latency. By anchoring our primary physical evaluations on the highly-accessible \textbf{Yahboom} platform, we establish a robust \textbf{Sim-to-Twin} validation pipeline.
 
 \textbf{Contributions.}
 \begin{itemize}
@@ -191,7 +191,7 @@ We consider a robotic system with nonlinear control-affine dynamics:
 \begin{equation}
 \dot{x}(t) = f(x(t)) + g(x(t))u(t)
 \end{equation}
-where $x \in \mathcal{X} \subset \mathbb{R}^n$ is the system state and $u \in \mathcal{U} \subset \mathbb{R}^m$ is the control input. A Vision-Language-Action (VLA) policy produces a nominal control:
+where $x \in \mathcal{X} \subset \mathbb{R}^8$ is the 8D system state and $u \in \mathcal{U} \subset \mathbb{R}^m$ is the control input. A Vision-Language-Action (VLA) policy produces a nominal control:
 \begin{equation}
 u_{\text{vla}}(t) = \pi_\theta(x(t), L)
 \end{equation}
@@ -199,9 +199,9 @@ conditioned on state $x$ and language instruction $L$. Our objective is to compu
 
 \subsection{Semantic Safe Set \& Barrier Functions}
 We define a language-conditioned safe set $\mathcal{C}_L = \{ x \in \mathcal{X} \mid h_L(x) \geq 0 \}$ where $h_L : \mathcal{X} \to \mathbb{R}$ is a Semantic Barrier Function (SBF) generated from instruction $L$.
-To support complex geometries and multiple simultaneous hazards systematically, the holistic SBF is strictly compositional, defined as a minimum over constituent constraints:
+The barrier is actively modulated by dynamic semantic context $c_i$ (e.g., restricted zones, human intent vectors), yielding a rigorous composition of semantic constraints:
 \begin{equation}
-h_{\text{total}}(x) = \min \left( h_{\text{human}}(x),\; h_{\text{zone}}(x),\; h_{\text{obstacle}}(x) \right)
+h_{\text{SBF}}(x) = \min_i h_i(x; c_i)
 \end{equation}
 Semantic zones are obtained via language-conditioned scene parsing and mapped to continuous safety constraints:
 \begin{itemize}
@@ -394,7 +394,7 @@ SafeVLA~\cite{safevla2025},
 GR00T N1~\cite{groot2025},
 $\pi_0$~\cite{pi0_2025},
 OpenVLA~\cite{openvla2024},
-RT-2~\cite{rt2_2023},
+RT-2~\cite{brohan2023rt2},
 and Octo~\cite{octo2024}.
 Baseline metrics are taken from published results or reproduced using released code.
 
@@ -436,7 +436,7 @@ SafeVLA~\cite{safevla2025}      & 0.030 & 0.45 & 12.5\% & 120\,ms & 0.72 & 0.156
 GR00T N1~\cite{groot2025}       & 0.015 & 0.52 & 4.2\% & 45\,ms & 0.76 & 0.089 & 0.810 \\
 $\pi_0$~\cite{pi0_2025}        & 0.020 & 0.48 & 3.5\% & 35\,ms & 0.81 & 0.120 & 0.850 \\
 OpenVLA~\cite{openvla2024}      & 0.045 & 0.25 & 18.0\% & 85\,ms & 0.65 & 0.200 & 0.780 \\
-RT-2~\cite{rt2_2023}            & 0.038 & 0.30 & 25.5\% & 200\,ms & 0.61 & 0.175 & 0.740 \\
+RT-2~\cite{brohan2023rt2}            & 0.038 & 0.30 & 25.5\% & 200\,ms & 0.61 & 0.175 & 0.740 \\
 Octo~\cite{octo2024}            & 0.042 & 0.28 & 2.1\% & 25\,ms & 0.68 & 0.190 & 0.760 \\
 \bottomrule
 \end{tabular}
