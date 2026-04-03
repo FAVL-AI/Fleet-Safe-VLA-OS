@@ -88,7 +88,7 @@ SaferPath~\cite{zhang2026saferpath} integrates optimisation-based safety via sta
 CBFs provide formal guarantees but are typically applied to static or low-dimensional systems~\cite{ames2017cbf}.
 
 \textbf{Model Predictive Control.}
-MPC methods optimize trajectories but are computationally expensive and lack analytic guarantees under delay~\cite{grandia2021mpc}.
+MPC methods optimise trajectories but are computationally expensive and lack analytic guarantees under delay~\cite{grandia2021mpc}.
 
 In contrast, FleetSafe-VLA integrates semantic reasoning, dynamic prediction, and delay-robust CBF constraints.
 
@@ -421,7 +421,7 @@ This design reduces EMI issues inherent in mobile robotics and demonstrates rigo
 \subsection{Simulation Environment \& Dataset Composition}
 We evaluate in a high-fidelity digital twin, and stress-test it with controlled perturbations. The system dynamics dimension is defined by state $x \in \mathbb{R}^n$ and control $u \in \mathbb{R}^m$. The highly accessible 2-DOF Yahboom mobile base forms our physical anchor with $n=4, m=2$, while the complex Unitree G1 humanoid scales the formulation to $n=47, m=23$. All experiments run in real-time with total system latency <50ms. The safety layer (CBF-QP) is computationally efficient, strictly bounding QP solve times to <10ms per step.
 
-For training and baseline comparisons, we utilize a massive $850{,}000$-episode multi-modal dataset. This amalgamates the standard open-source datasets explicitly used by prior works like \textit{SaferPath}~\cite{zhang2026saferpath} (e.g., nuScenes trajectory data scaled to indoor limits) alongside proprietary real-world semantic data collection aligned identically to our digital twin. The twin encompasses 12 distinct zones (lobby, corridor, ward, ICU, pharmacy, lift, stairwell, consultation room, reception, staff room, operating theatre, emergency department). Domain randomisation~\cite{tobin2017domainrand} is aggressively applied to all synthetic observations featuring gaussian state noise ($\sigma = 0.02$).
+For training and baseline comparisons, we utilise a massive $850{,}000$-episode multi-modal dataset. This amalgamates the standard open-source datasets explicitly used by prior works like \textit{SaferPath}~\cite{zhang2026saferpath} (e.g., nuScenes trajectory data scaled to indoor limits) alongside proprietary real-world semantic data collection aligned identically to our digital twin. The twin encompasses 12 distinct zones (lobby, corridor, ward, ICU, pharmacy, lift, stairwell, consultation room, reception, staff room, operating theatre, emergency department). Domain randomisation~\cite{tobin2017domainrand} is aggressively applied to all synthetic observations featuring gaussian state noise ($\sigma = 0.02$).
 
 \subsection{Safety-Transfer Benchmark}
 To properly evaluate uncertain generalisation, we establish a Safety-Transfer Benchmark featuring a systematic taxonomy of visual, physical, and semantic distribution shifts. While existing suites like Safety-CHORES offer in-distribution benchmarking, our framework characterises when and how learned safety properties transfer to Out-of-Distribution (OOD) environments, subsequently proposing algorithmic improvements for edge-case recovery.
@@ -481,7 +481,7 @@ Octo~\cite{octo2024}            & 0.042 & 0.28 & 2.1\% & 25\,ms & 0.68 & 0.190 &
 }
 \end{table*}
 
-Table~\ref{tab:main} summarises our main results. FleetSafe-VLA reduces SVR by over 50$\times$ compared to SaferPath under identical conditions. SaferPath exhibits reactive behavior, leading to late interventions under latency, which manifests as high DMR and near-zero TTP. Under 100 ms latency, SaferPath frequently fails to preempt human crossings, resulting in late braking and increased DMR.
+Table~\ref{tab:main} summarises our main results. FleetSafe-VLA reduces SVR by over 50$\times$ compared to SaferPath under identical conditions. SaferPath exhibits reactive behaviour, leading to late interventions under latency, which manifests as high DMR and near-zero TTP. Under 100 ms latency, SaferPath frequently fails to preempt human crossings, resulting in late braking and increased DMR.
 FLEET-Safe VLA achieves the lowest safety cost (0.0007), demonstrating an 84\% reduction in SVR (0.0048 vs 0.030), highest reward (0.893), and acceptable operational latency ($\le$\SI{20}{\milli\second}) while being the only system with practical safety under bounded uncertainty. As shown in Figure~\ref{fig:robustness}, FleetSafe-VLA maintains low SVR under varying OOD distribution shifts and increasing latency.
 The $14\times$ cost reduction vs.\ SafeVLA (\$0.49 vs.\ \$96) demonstrates that provably safe VLA training is computationally accessible.
 
@@ -509,7 +509,7 @@ FleetSafe-VLA maintains stability under perturbations, whereas static baselines 
 
 \subsection{Inference Efficiency via KV Cache Compression}
 
-To ensure that FLEET-Safe VLA can be deployed on low-SWaP (Size, Weight, and Power) edge compute such as the Jetson Orin Nano, we integrate TurboQuant, an online vector quantization method with near-optimal distortion rates, into our testing pipeline. During inference, the continuous multi-agent environment generates vast contextual histories. We apply 3.5-bit quantization to the continuous Key-Value (KV) cache of the OpenVLA backbone. 
+To ensure that FLEET-Safe VLA can be deployed on low-SWaP (Size, Weight, and Power) edge compute such as the Jetson Orin Nano, we integrate TurboQuant, an online vector quantisation method with near-optimal distortion rates, into our testing pipeline. During inference, the continuous multi-agent environment generates vast contextual histories. We apply 3.5-bit quantisation to the continuous Key-Value (KV) cache of the OpenVLA backbone. 
 
 \begin{table}[h]
 \centering
@@ -604,7 +604,7 @@ Our current results are in simulation. While we use aggressive domain randomisat
 Our training data is synthetically generated, not collected from real hospitals. Section~\ref{sec:data} describes our planned auto-collection pipeline.
 
 \textbf{Multi-Robot Fleet Evaluation.}
-Our architecture explicitly deploys decentralized fleet-level coordination with shared safety envelopes. Evaluation features a fleet of 3 physical Yahboom robots dynamically coordinating through bottleneck corridors to validate collision-free operations.
+Our architecture explicitly deploys decentralised fleet-level coordination with shared safety envelopes. Evaluation features a fleet of 3 physical Yahboom robots dynamically coordinating through bottleneck corridors to validate collision-free operations.
 
 \textbf{Statistical significance.}
 Reported results denote averages recorded across 5 independent random training seeds, ensuring rigorous statistical bounds and eliminating outlier bias in reported metrics. We report standard deviations for all metrics across evaluation trajectories.
