@@ -38,7 +38,7 @@
 \begin{abstract}
 Vision-Language-Action (VLA) models such as RT-2 and RoboMamba demonstrate promising task performance in controlled settings. However, their application in safety-critical domains remains challenging due to several unresolved issues: opaque decision-making processes, limited methods for handling rare safety-relevant events, and uncertain generalisation to out-of-distribution (OOD) scenarios. This research addresses these specific gaps that existing architectures leave open.
 
-First, we propose \textbf{Constrained-CMDP Policy Learning}, formulating language-vision constraint coordination in latent feature spaces. Second, we establish a \textbf{Safety-Transfer Benchmark} with a formal taxonomy of visual, physical, and semantic distribution shifts. Building upon this, we introduce a \textbf{7D Cognitive State} representation that adds temporal variables to standard spatial bounding. 
+First, we propose \textbf{Constrained-CMDP Policy Learning}, formulating language-vision constraint coordination in latent feature spaces. Second, we establish a \textbf{Safety-Transfer Benchmark} with a formal taxonomy of visual, physical, and semantic distribution shifts. Building upon this, we introduce an \textbf{8D Cognitive State} representation that adds temporal variables to standard spatial bounding. 
 
 By integrating these contributions, \textbf{FleetSafe-VLA} establishes strict formal safety guarantees targeting dynamic, unmodelled future interactions where static methods like SaferPath fail. By using the cost-effective 2-DOF Yahboom mobile base as our primary hardware testbed for \textbf{Sim-to-Twin} physical validation, we demonstrate that these formulations democratise safe VLA deployment. Evaluated across physical Yahboom fleets and cross-embodied on a 23-DOF Unitree G1, preliminary simulation results show a potential for an 80--84\% reduction in Safety Violation Rate (SVR) with acceptable latency ($\le$\SI{20}{\milli\second}) on embedded hardware, outperforming standard SafeVLA baselines.
 \end{abstract}
@@ -60,7 +60,7 @@ This research addresses specific gaps that SafeVLA and related work leave open. 
 \begin{itemize}
     \item \textbf{Constrained-CMDP Policy Learning}: We extend Constrained Markov Decision Processes to model language-vision constraint coordination in latent feature spaces, avoiding directly applying solvers to unstable VLA visual layers.
     \item \textbf{Safety-Transfer Benchmark}: A formal taxonomy of visual, physical, and semantic distribution shifts. While Safety-CHORES provides in-distribution benchmarking, this work explicitly characterises OOD safety failure cases.
-    \item \textbf{7D Cognitive State Representation}: Enabling advanced spatio-temporal and semantic safety reasoning by appending intent, awareness, and alignment vectors to standard constraints.
+    \item \textbf{8D Cognitive State Representation}: Enabling advanced spatio-temporal and semantic safety reasoning by appending intent, awareness, and alignment vectors to standard constraints.
     \item \textbf{Yahboom Sim-to-Twin Validation}: Democratising formal safety guarantees through an accessible multi-agent hardware setup that transfers to complex morphologies like the Unitree G1.
 \end{itemize}
 
@@ -160,7 +160,7 @@ a^* = \arg\min_{a} \; \|a - a_\text{nom}\|^2 \quad \text{s.t.} \quad \nabla_a h(
 \includegraphics[width=0.9\linewidth]{figures/architecture.png}
 \caption{
 \textbf{FleetSafe-VLA Architecture.}
-A Vision-Language Model (VLM) generates high-level actions, which are filtered through a 7D cognitive safety model. 
+A Vision-Language Model (VLM) generates high-level actions, which are filtered through an 8D cognitive safety model. 
 Semantic Barrier Functions (SBF) encode task and zone constraints, while a delay-robust CBF-QP layer enforces 
 continuous-time safety under latency and multi-agent dynamics.
 }
@@ -215,8 +215,12 @@ SafeVLA enforces the safety fragment of Signal Temporal Logic (STL), consisting 
 \subsection{Constrained-CMDP Policy Learning in Latent Feature Space}
 Unlike prior works which apply standard CMDP solvers directly to VLA observations, FleetSafe-VLA restricts Constrained Markov Decision Processes to formally model language-vision constraint coordination directly in multi-modal latent spaces. Language instructions $L$ explicitly modulate the safety constraints on visual features, generating theoretical convergence guarantees specific to multi-modal settings.
 
-\subsection{7D Cognitive State Representation}
-To combat the failing static assumptions of architectures like SaferPath, FleetSafe-VLA employs a 7D cognitive state. Our formulation takes standard Cartesian and temporal data and dynamically appends semantic factors: surrounding agent intent, system-wide general awareness, and objective goal alignment. Through these seven dimensions, Semantic Barrier Functions can be strictly mapped without assuming temporary local environments are static.
+\subsection{8D Cognitive State Representation}
+To combat the failing static assumptions of architectures like SaferPath, FleetSafe-VLA employs an 8D cognitive state capturing spatial, temporal, and semantic variables. Mathematically, the cognitive state $s$ fundamentally expands standard models into an 8D formulation:
+\begin{equation}
+s = \underbrace{(x, y, v, \dot{p})}_{\text{4D Spatial/Dynamic}} \;\cup\; \underbrace{(\Delta t)}_{\text{1D Temporal}} \;\cup\; \underbrace{(g, \iota, a)}_{\text{3D Semantic}}
+\end{equation}
+By explicitly isolating physical geometry, actuation delay bound ($\Delta t$), language goal alignment ($g$), surrounding agent intent ($\iota$), and system-wide awareness ($a$), the Semantic Barrier Functions are directly parametrised into an 8-dimensional space. This explicit composition enables delay robustness while decisively discarding unsafe static-environment assumptions.
 
 \subsection{Delay-Robust Control Barrier Function QP}
 We enforce safety via a CBF constraint with $\alpha(\cdot)$ as a class-$\mathcal{K}$ function. The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1:
@@ -589,7 +593,7 @@ Hospital robot deployment raises significant ethical concerns~\cite{ieee7010_202
 \label{sec:conclusion}
 
 We have detailed FleetSafe-VLA: a framework aimed at establishing strict, provable safety boundaries around vision-language-action models for hospital logistics.
-Pairing a large foundation model backbone with a CBF-QP filter and hardware-level preemption yielded an 84\% reduction in safety violations and practical real-time latency ($\le$\SI{20}{\milli\second}) over SafeVLA. Importantly, by addressing the static traversability limitations present in works like SaferPath, the Safety-Transfer Benchmark and 7D state variables provide necessary robustness. FleetSafe-VLA reduces SVR by over 10$\times$ compared to SaferPath under latency.
+Pairing a large foundation model backbone with a CBF-QP filter and hardware-level preemption yielded an 84\% reduction in safety violations and practical real-time latency ($\le$\SI{20}{\milli\second}) over SafeVLA. Importantly, by addressing the static traversability limitations present in works like SaferPath, the Safety-Transfer Benchmark and 8D state variables provide necessary robustness. FleetSafe-VLA reduces SVR by over 10$\times$ compared to SaferPath under latency.
 Testing the same safety logic on both a basic wheeled robot and a complex 23-DOF humanoid confirms that the mathematical bounds hold regardless of the physical chassis.
 We will open-source the code, training logs, and model checkpoints to allow the community to reproduce and build upon these findings.
 
@@ -624,7 +628,7 @@ Because our modified delay-robust CBF constraint (Equation 9) dynamically accomm
 Variant & SVR & TTP & DMR \\
 \midrule
 Full Model & 0.005 & 0.8 & 0.02 \\
-w/o 7D & 0.12 & 0.3 & 0.25 \\
+w/o 8D & 0.12 & 0.3 & 0.25 \\
 w/o SBF & 0.18 & 0.2 & 0.30 \\
 w/o latency term & 0.35 & 0.1 & 0.50 \\ % SVR spikes at tau > 100ms
 \bottomrule
@@ -634,7 +638,7 @@ w/o latency term & 0.35 & 0.1 & 0.50 \\ % SVR spikes at tau > 100ms
 
 \section{Reviewer Rebuttal (Anticipated Concerns)}
 
-\textbf{Concern 1: Is the 7D state over-parameterised?}
+\textbf{Concern 1: Is the 8D state over-parameterised?}
 
 \emph{Response:}
 The ablation data clearly points out that dropping any single component (such as temporal or semantic variables) hurts performance. Simply stripping out the temporal variables pushes the SVR up by more than 20\%, meaning the full state representation isn't just theoretical filler---it actively prevents crashes.
