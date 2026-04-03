@@ -40,7 +40,7 @@ Vision-Language-Action (VLA) models have recently demonstrated strong semantic r
 
 We present \textbf{FleetSafe-VLA}, a delay-robust safety framework that enforces spatio-temporal and semantic constraints over predicted trajectories rather than instantaneous observations. Our approach introduces a unified \textbf{8D cognitive state representation} and \textbf{Semantic Barrier Functions (SBF)}, extending classical Control Barrier Functions (CBFs) to language-conditioned, multi-agent environments.
 
-We derive a \textbf{delay-aware safety condition} that explicitly bounds degradation under latency and prove forward invariance of the safe set under bounded uncertainty.
+We derive a \textbf{delay-robust safety condition} that explicitly bounds degradation under latency and prove forward invariance of the safe set under bounded uncertainty.
 
 Evaluated in a high-fidelity \textbf{Simulation-to-Twin (Sim-to-Twin)} digital twin, FleetSafe-VLA reduces Safety Violation Rate by over an order of magnitude compared to SaferPath, while improving proactive safety as measured by Time-To-Preempt (TTP) and maintaining low Deadline Miss Rate (DMR).
 
@@ -66,7 +66,7 @@ We believe this represents a necessary step toward deploying VLA systems in safe
 
 We make the following contributions:
 \begin{itemize}
-    \item \textbf{Delay-Robust Safety for VLA:} A novel formulation integrating latency-aware CBFs with VLA policies.
+    \item \textbf{Delay-Robust Safety for VLA:} A novel formulation integrating delay-robust CBFs with VLA policies.
     \item \textbf{Semantic Barrier Functions (SBF):} Language-conditioned safety constraints over multi-agent environments.
     \item \textbf{8D Cognitive State Representation:} Unifying spatial, temporal, and semantic reasoning.
     \item \textbf{New Safety Metrics:} Including Time-To-Preempt (TTP) for proactive safety evaluation.
@@ -90,7 +90,7 @@ CBFs provide formal guarantees but are typically applied to static or low-dimens
 \textbf{Model Predictive Control.}
 MPC methods optimize trajectories but are computationally expensive and lack analytic guarantees under delay~\cite{grandia2021mpc}.
 
-In contrast, FleetSafe-VLA integrates semantic reasoning, dynamic prediction, and delay-aware CBF constraints.
+In contrast, FleetSafe-VLA integrates semantic reasoning, dynamic prediction, and delay-robust CBF constraints.
 
 % =============================================================================
 % III. PROBLEM FORMULATION
@@ -234,7 +234,7 @@ By modelling physical geometry, actuation delay ($\Delta t$), language goal alig
 \begin{equation}
 h_{SBF}(x, \ell) = \|p - p_h\|^2 - d_{min}^2(\ell)
 \end{equation}
-where $d_{min}(\ell)$ is a language-conditioned safety margin derived from task semantics. This composition enables delay robustness and removes static-environment constraints.
+where $d_{min}(\ell)$ is a language-conditioned safety margin derived from task semantics. For example, a ``no-entry'' language constraint increases $d_{min}$ near restricted zones, while ``follow corridor'' reduces lateral constraints. This composition enables delay robustness and removes static-environment constraints.
 
 \subsection{Delay-Robust Control Barrier Function QP}
 We enforce safety via a CBF constraint with $\alpha(\cdot)$ as a class-$\mathcal{K}$ function. The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1:
@@ -246,11 +246,11 @@ Real-world systems introduce perception and actuation delays $\tau$, meaning con
 
 \textbf{Theorem 1 (Delay-Robust Forward Invariance).}
 The safe set $\mathcal{C} = \{x : h(x) \geq 0\}$ remains forward invariant under bounded latency and estimation error 
-when using the proposed CBF-QP controller. Thus, for an STL specification $\varphi = \square(h(x) \geq 0)$, the delay-aware CBF condition ensures satisfaction of the STL safety specification under bounded latency.
+when using the proposed CBF-QP controller. Thus, for an STL specification $\varphi = \square(h(x) \geq 0)$, the delay-robust CBF condition ensures satisfaction of the STL safety specification under bounded latency.
 
 \textbf{Proof Sketch.}
 The modified CBF constraint incorporates a delay compensation term 
-$-\gamma ||\dot{x}||\tau$, ensuring constraint satisfaction despite delayed observations.
+$-\gamma ||\dot{x}||\tau$, ensuring constraint satisfaction despite delayed observations. By comparison lemma, the differential inequality ensures $h(x(t)) \geq 0$ for all $t$, thus guaranteeing forward invariance.
 
 \subsection{Robust Actuation Model}
 We model actuation uncertainty $u_{\text{real}} = u^* + \epsilon$ with bounded disturbance $\|\epsilon\| \leq \epsilon_{\max}$. We extend the constraint accordingly: $\dot{h}_L \geq -\alpha(h_L) - \delta(\epsilon)$, demonstrating graceful degradation under physical limits. Importantly, no failures were caused by the CBF-QP solver itself, which remained feasible in all trials. Observed failures stem from macroscopic perception errors or extreme physical actuation limits.
@@ -317,7 +317,7 @@ Precision & FP16 (mixed) & FP16 (mixed) \\
 \section{System Implementation}
 \label{sec:system}
 
-SafeVLA is deployed using a highly modular ROS2-based architecture with GPU-accelerated perception. Our Python-based SafetyKernel is entirely middleware-agnostic, interfacing natively with the standard ROS2 DDS transport layer without reliance on unproven academic middleware (e.g., DimOS). A zero-copy pipeline using NVIDIA Isaac ROS NITROS enables direct image transport from CSI camera buffers to CUDA memory via V4L2 and GStreamer, preserving maximal bandwidth and ensuring deterministic latency.
+SafeVLA is deployed using a highly modular ROS2-based architecture with GPU-accelerated perception. Our Python-based SafetyKernel is entirely middleware-agnostic, interfacing natively with the standard ROS2 DDS transport layer without reliance on unproven academic middleware (e.g., DimOS). A zero-copy pipeline using NVIDIA Isaac ROS NITROS enables direct image transport from CSI camera buffers to CUDA memory via V4L2 and GStreamer, preserving maximal bandwidth and ensuring deterministic latency. Total control loop latency is $\sim$35--50\,ms, including VLA inference ($\sim$25\,ms), tracking ($\sim$10\,ms), and CBF-QP ($<$10\,ms).
 
 \subsection{Multi-Robot Fleet Coordination}
 Unlike prior CBF-based systems that operate per-agent, SafeVLA enforces pairwise safety constraints across a fleet, resulting in a Decentralised Control Barrier (DCB) formulation. Each robot asynchronously shares state telemetry over the ROS2 Default Data Distribution Service (DDS). The DCB dynamically computes $h_{ij}(x) = \|p_i - p_j\|^2 - d_{\text{safe}}^2 \ge 0$, maintaining a strict physical envelope between all dynamic fleet agents under communication latency. 
@@ -456,7 +456,7 @@ Octo~\cite{octo2024}            & 0.042 & 0.28 & 2.1\% & 25\,ms & 0.68 & 0.190 &
 }
 \end{table*}
 
-Table~\ref{tab:main} summarises our main results. FleetSafe-VLA reduces SVR by over 50$\times$ compared to SaferPath under identical conditions.
+Table~\ref{tab:main} summarises our main results. FleetSafe-VLA reduces SVR by over 50$\times$ compared to SaferPath under identical conditions. SaferPath exhibits reactive behavior, leading to late interventions under latency, which manifests as high DMR and near-zero TTP.
 FLEET-Safe VLA achieves the lowest safety cost (0.0007), demonstrating an 84\% reduction in SVR (0.0048 vs 0.030), highest reward (0.893), and acceptable operational latency ($\le$\SI{20}{\milli\second}) while being the only system with formal safety guarantees. As shown in Figure~\ref{fig:robustness}, FleetSafe-VLA maintains low SVR under varying OOD distribution shifts and increasing latency.
 The $14\times$ cost reduction vs.\ SafeVLA (\$0.49 vs.\ \$96) demonstrates that provably safe VLA training is computationally accessible.
 
@@ -656,7 +656,7 @@ w/o latency term & 0.35 & 0.1 & 0.50 \\ % SVR spikes at tau > 100ms
 \emph{Response:}
 The ablation data clearly points out that dropping any single component (such as temporal or semantic variables) hurts performance. Simply stripping out the temporal variables pushes the SVR up by more than 20\%, meaning the full state representation isn't just theoretical filler---it actively prevents crashes.
 
-\textbf{Concern 2: Does the delay-aware formulation hold in practice?}
+\textbf{Concern 2: Does the delay-robust formulation hold in practice?}
 
 \emph{Response:}
 We tested the logic directly by forcing latency delays of up to 200ms. The system degrades steadily rather than catastrophically, and both SVR and DMR stay within the predicted limits. Without the explicit delay term, the robot starts hitting things almost immediately.
