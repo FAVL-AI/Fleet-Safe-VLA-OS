@@ -230,31 +230,52 @@ To address the static assumptions of architectures like SaferPath, FleetSafe-VLA
 s = \underbrace{(x, y, v, \dot{p})}_{\text{4D Spatial/Dynamic}} \;\cup\; \underbrace{(\Delta t)}_{\text{1D Temporal}} \;\cup\; \underbrace{(g, \iota, a)}_{\text{3D Semantic}}
 \end{equation}
 We refer to this explicitly as an 8D cognitive state space.
-By modelling physical geometry, actuation delay ($\Delta t$), language goal alignment ($g$), surrounding agent intent ($\iota$), and system awareness ($a$), the Semantic Barrier Functions (SBF) are parametrised directly into an 8-dimensional space. Specifically, we define the language-conditioned SBF as:
+Surrounding agent intent ($\iota$) is inferred dynamically via Transformer-based trajectory forecasting priors, while continuous system awareness ($a$) is computed directly from dense attention maps targeting restrictive visual boundaries. By modelling these parameters alongside physical geometry, actuation delay ($\Delta t$), and language goal alignment ($g$), the Semantic Barrier Functions (SBF) are parametrised directly into an 8-dimensional space. Specifically, we define the language-conditioned SBF as:
 \begin{equation}
 h_{SBF}(x, \ell) = \|p - p_h\|^2 - d_{min}^2(\ell)
 \end{equation}
 where $d_{min}(\ell)$ is a language-conditioned safety margin derived from task semantics. For example, a ``no-entry'' language constraint increases $d_{min}$ near restricted zones, while ``follow corridor'' reduces lateral constraints. This composition enables delay robustness and removes static-environment constraints.
 
 \subsection{Delay-Robust Control Barrier Function QP}
-We enforce safety via a CBF constraint with $\alpha(\cdot)$ as a class-$\mathcal{K}$ function. The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1:
+
+The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1. The underlying active-set solver bounds computational complexity to $\mathcal{O}(n^3 + mn^2)$ per step, where $n$ is the control dimension and $m$ is the number of active barrier constraints. In practice, we solve QPs with $n < 20$, yielding $<10$\,ms solve time on embedded GPUs. Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
+
+\textbf{Theorem 1 (Delay-Robust Safety Guarantee).}
+Consider a control-affine system $\dot{x} = f(x) + g(x)u$ where $f$ and $g$ are locally Lipschitz continuous. Let $h : \mathbb{R}^n \to \mathbb{R}$ be a continuously differentiable Control Barrier Function defining the safe set $\mathcal{C} = \{x \in \mathbb{R}^n : h(x) \ge 0\}$.
+
+Assume:
+\begin{itemize}
+\item \textbf{(A1)} Bounded state estimation error: $\|x - \hat{x}\| \le \epsilon$
+\item \textbf{(A2)} Bounded latency: $\tau \le \tau_{\max}$
+\item \textbf{(A3)} Bounded velocity: $\|\dot{x}\| \le v_{\max}$
+\item \textbf{(A4)} $h(x)$ is Lipschitz with constant $L_h$
+\item \textbf{(A5)} The QP remains feasible via relaxation (slack variable $\delta \ge 0$)
+\end{itemize}
+
+Define the delay-robust CBF constraint:
+\begin{equation}
+\dot{h}(\hat{x}, u) \ge -\alpha h(\hat{x}) - \gamma v_{\max} \tau_{\max} - L_h \epsilon - \delta
+\end{equation}
+where $\alpha, \gamma > 0$. Let the control input be computed via the Quadratic Program:
 \begin{equation}
 \begin{aligned}
-u^* &= \arg\min_{u \in \mathcal{U}} \|u - u_{\text{vla}}\|^2 \\
-\text{s.t.} \quad \dot{h}_L(x, u) &\geq -\alpha(h_L(x)) - \gamma \|\dot{x}\| \tau \\
+u^* &= \arg\min_u \|u - u_{\text{vla}}\|^2 + \lambda \delta^2 \\
+\text{s.t.} \quad \dot{h}(\hat{x}, u) &\geq -\alpha h(\hat{x}) - \gamma v_{\max} \tau_{\max} - L_h \epsilon - \delta \\
 U_\text{min} &\le u \le U_\text{max}
 \end{aligned}
 \end{equation}
-The underlying active-set solver bounds computational complexity to $\mathcal{O}(n^3 + mn^2)$ per step, where $n$ is the control dimension and $m$ is the number of active barrier constraints. In practice, we solve QPs with $n < 20$, yielding $<10$\,ms solve time on embedded GPUs.
-Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
-
-\textbf{Theorem 1 (Delay-Robust Forward Invariance).}
-The safe set $\mathcal{C} = \{x : h(x) \geq 0\}$ remains forward invariant under bounded latency and estimation error 
-when using the proposed CBF-QP controller. Thus, for an STL specification $\varphi = \square(h(x) \geq 0)$, the delay-robust CBF condition ensures satisfaction of the STL safety specification under bounded latency.
+Then, the safe set $\mathcal{C}$ is forward invariant up to a bounded relaxation, i.e.:
+\begin{equation}
+h(x(t)) \ge -\epsilon_h, \quad \forall t \ge 0
+\end{equation}
+where $\epsilon_h = \frac{\gamma v_{\max} \tau_{\max} + L_h \epsilon}{\alpha}$. Thus, for an STL specification $\varphi = \square(h(x) \geq -\epsilon_h)$, the delay-robust CBF condition ensures satisfaction under bounded latency. This result establishes \emph{practical safety} under bounded uncertainty, ensuring that violations remain arbitrarily small for sufficiently small latency and estimation error.
 
 \textbf{Proof Sketch.}
-The modified CBF constraint incorporates a delay compensation term 
-$-\gamma ||\dot{x}||\tau$, ensuring constraint satisfaction despite delayed observations. By comparison lemma, the differential inequality ensures $h(x(t)) \geq 0$ for all $t$, thus guaranteeing forward invariance.
+We consider the time derivative of the barrier function under estimated state $\hat{x}$: $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$, where the error term $\Delta_h$ arises from state estimation error and satisfies $|\Delta_h| \le L_h \|x - \hat{x}\| \le L_h \epsilon$. Additionally, latency introduces a worst-case drift in state evolution bounded by $\|\Delta x_{\tau}\| \le v_{\max} \tau_{\max}$, which induces an additional degradation term $\Delta_\tau \le \gamma v_{\max} \tau_{\max}$. Combining these, we obtain:
+\begin{equation}
+\dot{h}(x,u) \ge -\alpha h(x) - \gamma v_{\max} \tau_{\max} - L_h \epsilon
+\end{equation}
+By enforcing the relaxed constraint via the QP, and following standard CBF forward invariance arguments~\cite{ames2017cbf}, we obtain $h(x(t)) \ge -\epsilon_h$, which establishes practical safety under bounded uncertainty and delay. \hfill $\blacksquare$
 
 \subsection{Robust Actuation Model}
 We model actuation uncertainty $u_{\text{real}} = u^* + \epsilon$ with bounded disturbance $\|\epsilon\| \leq \epsilon_{\max}$. We extend the constraint accordingly: $\dot{h}_L \geq -\alpha(h_L) - \delta(\epsilon)$, demonstrating graceful degradation under physical limits. Importantly, no failures were caused by the CBF-QP solver itself, which remained feasible in all trials. Observed failures stem from macroscopic perception errors or extreme physical actuation limits.
@@ -461,7 +482,7 @@ Octo~\cite{octo2024}            & 0.042 & 0.28 & 2.1\% & 25\,ms & 0.68 & 0.190 &
 \end{table*}
 
 Table~\ref{tab:main} summarises our main results. FleetSafe-VLA reduces SVR by over 50$\times$ compared to SaferPath under identical conditions. SaferPath exhibits reactive behavior, leading to late interventions under latency, which manifests as high DMR and near-zero TTP. Under 100 ms latency, SaferPath frequently fails to preempt human crossings, resulting in late braking and increased DMR.
-FLEET-Safe VLA achieves the lowest safety cost (0.0007), demonstrating an 84\% reduction in SVR (0.0048 vs 0.030), highest reward (0.893), and acceptable operational latency ($\le$\SI{20}{\milli\second}) while being the only system with formal safety guarantees. As shown in Figure~\ref{fig:robustness}, FleetSafe-VLA maintains low SVR under varying OOD distribution shifts and increasing latency.
+FLEET-Safe VLA achieves the lowest safety cost (0.0007), demonstrating an 84\% reduction in SVR (0.0048 vs 0.030), highest reward (0.893), and acceptable operational latency ($\le$\SI{20}{\milli\second}) while being the only system with practical safety under bounded uncertainty. As shown in Figure~\ref{fig:robustness}, FleetSafe-VLA maintains low SVR under varying OOD distribution shifts and increasing latency.
 The $14\times$ cost reduction vs.\ SafeVLA (\$0.49 vs.\ \$96) demonstrates that provably safe VLA training is computationally accessible.
 
 \begin{figure}[t]
