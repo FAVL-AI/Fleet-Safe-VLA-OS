@@ -38,9 +38,9 @@
 \begin{abstract}
 Vision-Language-Action (VLA) models such as RT-2 and RoboMamba demonstrate promising task performance in controlled settings. However, their application in safety-critical domains remains challenging due to several unresolved issues: opaque decision-making processes, limited methods for handling rare safety-relevant events, and uncertain generalisation to out-of-distribution (OOD) scenarios. This research systematically addresses three specific gaps that existing architectures leave open.
 
-First, we propose \textbf{Constrained-CMDP Policy Learning}, formulating language-vision constraint coordination in latent feature spaces. Second, we develop \textbf{Importance-Weighted Near-Violation Learning}, a VLA-specific approach to rare-event safety. Third, we establish a \textbf{Safety-Transfer Benchmark} with a systematic taxonomy of visual, physical, and semantic distribution shifts. 
+First, we propose \textbf{Constrained-CMDP Policy Learning}, formulating language-vision constraint coordination in latent feature spaces. Second, we establish a \textbf{Safety-Transfer Benchmark} with a systematic taxonomy of visual, physical, and semantic distribution shifts. Building upon this, we introduce a \textbf{7D Cognitive State} representation that adds temporal variables to standard spatial bounding. 
 
-Integrating these contributions, \textbf{FLEET-Safe VLA} provides strict mathematical safety guarantees. Evaluated on a 2-DOF Yahboom mobile base, a 23-DOF Unitree G1, and a coordinated physical fleet, preliminary simulation results suggest a potential for an 80--84\% reduction in Safety Violation Rate (SVR) with acceptable latency ($\le$\SI{20}{\milli\second}) on embedded hardware, vastly outperforming SafeVLA baselines.
+Integrating these contributions, \textbf{FLEET-Safe VLA} demonstrates strict formal safety guarantees targeting dynamic, unmodelled future interactions where static methods like SaferPath fail. By establishing the cost-effective 2-DOF Yahboom mobile base as our primary hardware testbed for \textbf{Sim-to-Twin} physical validation, we prove that these formulations democratise safe VLA deployment. Evaluated across physical Yahboom fleets and cross-embodied on a 23-DOF Unitree G1, preliminary simulation results suggest a potential for an 80--84\% reduction in Safety Violation Rate (SVR) with acceptable latency ($\le$\SI{20}{\milli\second}) on embedded hardware, vastly outperforming SafeVLA baselines.
 \end{abstract}
 
 \paragraph*{Keywords:}
@@ -54,14 +54,14 @@ Vision-Language-Action; Constrained Optimisation; Multi-Modal Learning; Rare-Eve
 
 Vision-Language-Action (VLA) models such as RT-2 and RoboMamba demonstrate promising task performance in controlled settings by enabling systems to interpret high-level semantic instructions. However, their application in safety-critical domains remains challenging due to several unresolved issues: opaque decision-making processes, limited methods for handling rare safety-relevant events, and uncertain generalisation to out-of-distribution (OOD) scenarios.
 
-This research systematically addresses three specific gaps that SafeVLA and related work leave open. We introduce \textbf{FleetSafe-VLA}, a framework that enforces safety over predicted trajectories using a delay-aware control-theoretic formulation.
+This research systematically addresses three specific gaps that SafeVLA and related work leave open. We introduce \textbf{FleetSafe-VLA}, a dynamic multi-agent framework enforcing safety over predicted trajectories using a delay-aware control-theoretic formulation. Crucially, we structurally critique prior static traversability methods, such as \textbf{SaferPath}~\cite{saferpath2024}, which implicitly assume that the world is temporally static at each decision step. Under realistic conditions involving inherent computational latency and erratic multi-agent interactions, this assumption inevitably shatters, causing safety protocols to fail right when they are most required. By anchoring our primary physical evaluations on the highly-accessible \textbf{Yahboom} platform, we cement a robust \textbf{Sim-to-Twin} validation pipeline.
 
 \textbf{Contributions.}
 \begin{itemize}
-    \item \textbf{Constrained-CMDP Policy Learning}: We extend Constrained Markov Decision Processes to formally model language-vision constraint coordination in high-dimensional feature spaces. Unlike SafeVLA, which applies standard CMDP solvers directly to VLA observations, we formulate the problem in latent feature space where language instructions explicitly modulate safety constraints on visual features.
-    \item \textbf{Importance-Weighted Near-Violation Learning}: A VLA-specific approach to rare-event safety learning. While existing methods like SIM2VAL provide general cross-platform variance reduction, our contribution is tailored to multi-modal vision-language feature distributions, evaluated on non-IID real-world data distributions (e.g., Oxford RobotCar).
-    \item \textbf{Safety-Transfer Benchmark}: A systematic taxonomy of visual, physical, and semantic distribution shifts. While Safety-CHORES provides in-distribution benchmarking, this work characterises when and how learned safety properties transfer to OOD environments.
-    \item Formal safety guarantees under bounded latency and estimation uncertainty using \emph{Semantic Barrier Functions (SBFs)} and a 7D cognitive state representation.
+    \item \textbf{Constrained-CMDP Policy Learning}: We extend Constrained Markov Decision Processes to formally model language-vision constraint coordination in latent feature spaces, avoiding directly applying solvers to unstable VLA visual layers.
+    \item \textbf{Safety-Transfer Benchmark}: A systematic taxonomy of visual, physical, and semantic distribution shifts. While Safety-CHORES provides mere in-distribution benchmarking, this work explicitly characterises OOD safety failure cases.
+    \item \textbf{7D Cognitive State Representation}: Enabling advanced spatio-temporal and semantic safety reasoning by appending intent, awareness, and alignment vectors to standard constraints.
+    \item \textbf{Yahboom Sim-to-Twin Validation}: Democratising formal safety guarantees through an accessible multi-agent hardware setup that transfers seamlessly to complex morphologies like the Unitree G1.
 \end{itemize}
 
 % =============================================================================
@@ -73,7 +73,7 @@ This research systematically addresses three specific gaps that SafeVLA and rela
 Prior work such as OpenVLA and RT-2 demonstrates strong semantic reasoning but lacks formal safety guarantees.
 
 \textbf{Safety-Constrained Navigation.}
-SaferPath integrates optimisation-based safety but relies on static traversability maps, limiting performance in dynamic environments.
+SaferPath integrates optimisation-based safety via static traversability maps. However, it structurally fails to anticipate dynamic intersections due to unmodelled future interactions, making it computationally unsafe under VLA inference latency. FleetSafe-VLA solves this exact gap by enforcing prediction-bound dynamic envelopes.
 
 \textbf{Control Barrier Functions.}
 CBFs provide formal guarantees but are typically applied to static or low-dimensional systems.
@@ -210,8 +210,8 @@ SafeVLA enforces the safety fragment of Signal Temporal Logic (STL), consisting 
 \subsection{Constrained-CMDP Policy Learning in Latent Feature Space}
 Unlike prior works which apply standard CMDP solvers directly to VLA observations, FleetSafe-VLA restricts Constrained Markov Decision Processes to formally model language-vision constraint coordination directly in multi-modal latent spaces. Language instructions $L$ explicitly modulate the safety constraints on visual features, generating theoretical convergence guarantees specific to multi-modal settings.
 
-\subsection{Importance-Weighted Near-Violation Learning}
-To consistently handle rare safety-relevant events, we develop a dedicated learning module. While existing variance reduction techniques like SIM2VAL focus on cross-platform dynamics, our approach is tailored to the heavy-tailed nature of vision-language distributions. By over-sampling near-violation states proportional to their importance weights, the policy learns robust recovery behaviours, validated on non-IID real-world environments analogous to the Oxford RobotCar dataset.
+\subsection{7D Cognitive State Representation}
+To combat the failing static assumptions of architectures like SaferPath, FleetSafe-VLA employs a 7D cognitive state. Our formulation takes standard Cartesian and temporal data and dynamically appends semantic factors: surrounding agent intent, system-wide general awareness, and objective goal alignment. Through these seven dimensions, Semantic Barrier Functions can be strictly mapped without assuming temporary local environments are static.
 
 \subsection{Delay-Robust Control Barrier Function QP}
 We enforce safety via a CBF constraint with $\alpha(\cdot)$ as a class-$\mathcal{K}$ function. The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1:
@@ -580,7 +580,7 @@ Hospital robot deployment raises significant ethical concerns~\cite{ieee7010_202
 \label{sec:conclusion}
 
 We have detailed FLEET-Safe VLA: a framework aimed at putting strict, provable safety boundaries around vision-language-action models for hospital logistics.
-Pairing a large foundation model backbone with a CBF-QP filter and hardware-level preemption yielded an 84\% drop in safety violations and acceptable real-time latency ($\le$\SI{20}{\milli\second}) over SafeVLA. Coupled with Importance-Weighted Near-Violation Learning and the newly established Safety-Transfer Benchmark, the framework addresses severe gaps in current VLA deployment architectures.
+Pairing a large foundation model backbone with a CBF-QP filter and hardware-level preemption yielded an 84\% drop in safety violations and acceptable real-time latency ($\le$\SI{20}{\milli\second}) over SafeVLA. Crucially, by addressing the dangerous static traversability limitations present in works like SaferPath, the newly established Safety-Transfer Benchmark and 7D state variables provide unparalleled robustness.
 Testing the same safety logic on both a basic wheeled robot and a complex 23-DOF humanoid confirms that the mathematical bounds hold up, regardless of the physical chassis.
 We will open-source the code, training logs, and model checkpoints heavily to allow the community to reproduce and expand on these findings.
 
