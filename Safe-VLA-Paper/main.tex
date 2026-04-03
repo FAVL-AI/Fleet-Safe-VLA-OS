@@ -216,11 +216,11 @@ SafeVLA enforces the safety fragment of Signal Temporal Logic (STL), consisting 
 Unlike prior works which apply standard CMDP solvers directly to VLA observations, FleetSafe-VLA restricts Constrained Markov Decision Processes to formally model language-vision constraint coordination directly in multi-modal latent spaces. Language instructions $L$ explicitly modulate the safety constraints on visual features, generating theoretical convergence guarantees specific to multi-modal settings.
 
 \subsection{8D Cognitive State Representation}
-To combat the failing static assumptions of architectures like SaferPath, FleetSafe-VLA employs an 8D cognitive state capturing spatial, temporal, and semantic variables. Mathematically, the cognitive state $s$ fundamentally expands standard models into an 8D formulation:
+To address the static assumptions of architectures like SaferPath, FleetSafe-VLA employs an 8D cognitive state capturing spatial, temporal, and semantic variables. The cognitive state $s$ extends standard models into an 8D formulation:
 \begin{equation}
 s = \underbrace{(x, y, v, \dot{p})}_{\text{4D Spatial/Dynamic}} \;\cup\; \underbrace{(\Delta t)}_{\text{1D Temporal}} \;\cup\; \underbrace{(g, \iota, a)}_{\text{3D Semantic}}
 \end{equation}
-By explicitly isolating physical geometry, actuation delay bound ($\Delta t$), language goal alignment ($g$), surrounding agent intent ($\iota$), and system-wide awareness ($a$), the Semantic Barrier Functions are directly parametrised into an 8-dimensional space. This explicit composition enables delay robustness while decisively discarding unsafe static-environment assumptions.
+By modelling physical geometry, actuation delay ($\Delta t$), language goal alignment ($g$), surrounding agent intent ($\iota$), and system awareness ($a$), the Semantic Barrier Functions are parametrised directly into an 8-dimensional space. This composition enables delay robustness and removes static-environment constraints.
 
 \subsection{Delay-Robust Control Barrier Function QP}
 We enforce safety via a CBF constraint with $\alpha(\cdot)$ as a class-$\mathcal{K}$ function. The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1:
