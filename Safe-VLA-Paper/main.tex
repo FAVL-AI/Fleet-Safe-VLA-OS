@@ -62,7 +62,7 @@ FleetSafe-VLA differs fundamentally from prior approaches. While existing method
 
 This shift---from reactive, map-based safety to predictive, cognitively-aware safety---enables robust operation in realistic multi-agent environments.
 
-We believe this represents a necessary step toward deploying VLA systems in safety-critical real-world settings.
+This represents an important step toward deploying VLA systems in safety-critical real-world settings.
 
 We make the following contributions:
 \begin{itemize}
@@ -82,7 +82,7 @@ We make the following contributions:
 Prior work such as OpenVLA~\cite{openvla2024} and RT-2~\cite{richter2023rt2} demonstrates strong semantic reasoning but lacks formal safety guarantees.
 
 \textbf{Safety-Constrained Navigation.}
-SaferPath~\cite{zhang2026saferpath} integrates optimisation-based safety via static traversability maps. However, it is limited in its ability to anticipate dynamic intersections due to unmodelled future interactions, making it unable to handle latency effectively due to lack of prediction under VLA inference latency. FleetSafe-VLA addresses this limitation by enforcing prediction-bound dynamic envelopes.
+SaferPath~\cite{zhang2026saferpath} integrates optimisation-based safety via static traversability maps. However, it is limited in its ability to anticipate dynamic intersections due to unmodelled future interactions, making it unable to handle latency effectively due to its lack of predictive modelling under inference latency. FleetSafe-VLA addresses this limitation by enforcing prediction-bound dynamic envelopes.
 
 \textbf{Control Barrier Functions.}
 CBFs provide formal guarantees but are typically applied to static or low-dimensional systems~\cite{ames2017cbf}. Recent extensions explore hybrid MPC-CBF formulations for dynamic feasibility and enriched robustness~\cite{zeng2021mpccbf, dawson2023cbfsurvey}.
