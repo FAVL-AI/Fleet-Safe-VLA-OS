@@ -129,7 +129,10 @@ We model hospital navigation as a CMDP~\cite{altman1999cmdp} $\mathcal{M} = (\ma
 The objective is to find a policy $\pi^*$ that maximises the expected discounted return subject to a safety cost constraint:
 \begin{equation}
 \label{eq:cmdp}
-\pi^* = \arg\max_{\pi} \; \mathbb{E}_\pi \!\left[\sum_{t=0}^{T} \gamma^t R(s_t, a_t)\right] \;\;\text{s.t.}\;\; \mathbb{E}_\pi \!\left[\sum_{t=0}^{T} \gamma^t C(s_t, a_t)\right] \leq d
+\begin{aligned}
+\pi^* &= \arg\max_{\pi} \; \mathbb{E}_\pi \!\left[\sum_{t=0}^{T} \gamma^t R(s_t, a_t)\right] \\
+&\text{s.t.} \quad \mathbb{E}_\pi \!\left[\sum_{t=0}^{T} \gamma^t C(s_t, a_t)\right] \leq d
+\end{aligned}
 \end{equation}
 
 \subsection{Safety Specification via Signal Temporal Logic}
@@ -153,7 +156,10 @@ Forward invariance of $\mathcal{C}$ is guaranteed if:
 Given a proposed action $a_\text{nom}$ from the policy, the CBF-QP finds the closest safe action:
 \begin{equation}
 \label{eq:qp}
-a^* = \arg\min_{a} \; \|a - a_\text{nom}\|^2 \quad \text{s.t.} \quad \dot{h}(\hat{x}, a) \ge -\alpha h(\hat{x}) - \gamma v_{\max}\tau_{\max} - L_h \epsilon
+\begin{aligned}
+a^* &= \arg\min_{a} \; \|a - a_\text{nom}\|^2 \\
+&\text{s.t.} \quad \dot{h}(\hat{x}, a) \ge -\alpha h(\hat{x}) - \gamma v_{\max}\tau_{\max} - L_h \epsilon
+\end{aligned}
 \end{equation}
 
 % =============================================================================
