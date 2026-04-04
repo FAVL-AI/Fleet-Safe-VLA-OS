@@ -225,7 +225,7 @@ SafeVLA enforces the safety fragment of Signal Temporal Logic (STL), consisting 
 Unlike prior works which apply standard CMDP solvers directly to VLA observations, FleetSafe-VLA restricts Constrained Markov Decision Processes to formally model language-vision constraint coordination directly in multi-modal latent spaces. Language instructions $L$ explicitly modulate the safety constraints on visual features, which empirically stabilises multi-modal training and guides latent policy projection. Safety is enforced over predicted future trajectories rather than instantaneous states.
 
 \subsection{8D Cognitive State Representation}
-To address the static assumptions of architectures like SaferPath, FleetSafe-VLA employs an 8D cognitive state capturing spatial, temporal, and semantic variables. In this framework, we strictly use $x$ to denote the low-level continuous system dynamics, while $s$ is used to denote the full cognitive state within the CMDP. The cognitive state $s$ extends standard models into an 8D formulation:
+To address the static assumptions of architectures like SaferPath, FleetSafe-VLA employs an 8D cognitive state capturing spatial, temporal, and semantic variables. In this framework, we strictly use $x$ to denote the low-level continuous system dynamics, while $s$ is used to denote the full cognitive state within the CMDP. We note that $n = 8$ corresponds to the full cognitive state dimension. The cognitive state $s$ extends standard models into an 8D formulation:
 \begin{equation}
 s = \underbrace{(x, y, v, \dot{p})}_{\text{4D Spatial/Dynamic}} \;\cup\; \underbrace{(\Delta t)}_{\text{1D Temporal}} \;\cup\; \underbrace{(g, \iota, a)}_{\text{3D Semantic}}
 \end{equation}
@@ -277,7 +277,7 @@ Then for all trajectories $x(t)$ under $u^*$, the barrier satisfies:
 \begin{equation}
 h(x(t)) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}, \quad \forall t \ge 0
 \end{equation}
-Thus, explicitly establishing the theoretical connection, the STL robustness degree $\rho(\varphi, x, t) \ge -(\epsilon_h + \delta_{\max}) / \alpha$ provides bounded safety guarantees. This ensures practical safety under bounded uncertainty.
+Thus, explicitly establishing the theoretical connection, the STL robustness degree $\rho(\varphi, x, t) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}$ provides bounded safety guarantees. This ensures practical safety under bounded uncertainty.
 
 \textbf{Proof Sketch (Reviewer-Proof).}
 First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $\gamma v_{\max}\tau_{\max}$. Combining these alongside the bounded QP slack constraint ($\delta \le \delta_{\max}$), $\dot{h}(x,u) \ge -\alpha h(x) - \epsilon_h - \delta_{\max}$. Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_h + \delta_{\max})$ using an integrating factor yields $h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_h + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})$. Under the lower limit condition as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}$. \hfill $\blacksquare$
@@ -662,7 +662,7 @@ Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_h + \delt
 \begin{equation}
 h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_h + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})
 \end{equation}
-Evaluating the lower limit as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}$. Consequently, this formalizes mathematically that practical forward invariance is rigorously established under bounded uncertainty. $\blacksquare$
+Evaluating the lower limit as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}$. Consequently, this establishes practical forward invariance under bounded uncertainty. $\blacksquare$
 
 ---
 
@@ -703,6 +703,6 @@ The QP solve requires less than 10ms per step and contributes under 5\% of total
 \textbf{Concern 4: Reliability of intent and awareness estimation?}
 
 \emph{Response:}
-The robot draws its intent and awareness estimates from past trajectory data and visual cues. Since these are never perfect, we factored bounded estimation errors directly into the math. The empirical trials show the robot still reacts safely even when its sensors are noisy.
+Intent and awareness are estimated from trajectory history and visual attention cues. Since these are never perfect, we factored bounded estimation errors directly into the math. The empirical trials show the robot still reacts safely even when its sensors are noisy.
 
 \end{document}
