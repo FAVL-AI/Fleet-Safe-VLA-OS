@@ -222,7 +222,7 @@ Semantic zones are obtained via language-conditioned scene parsing and mapped to
 SafeVLA enforces the safety fragment of Signal Temporal Logic (STL), consisting of conjunctions of ``always'' ($\square$) predicates, which map directly to Control Barrier Functions. ``Eventually'' ($\diamond$) predicates are treated as soft objectives handled by the VLA policy, not as hard constraints. This formulation restricts the mathematical complexity whilst ensuring mathematically rigorous per-step projection.
 
 \subsection{Constrained-CMDP Policy Learning in Latent Feature Space}
-Unlike prior works which apply standard CMDP solvers directly to VLA observations, FleetSafe-VLA restricts Constrained Markov Decision Processes to formally model language-vision constraint coordination directly in multi-modal latent spaces. Language instructions $L$ explicitly modulate the safety constraints on visual features, which empirically stabilises multi-modal training and guides latent policy projection. Safety is enforced over predicted future trajectories rather than instantaneous states.
+Unlike prior works which apply standard CMDP solvers directly to VLA observations, FleetSafe-VLA restricts Constrained Markov Decision Processes to formally model language-vision constraint coordination directly in multi-modal latent spaces. Language instructions $L$ explicitly modulate the safety constraints on visual features, which empirically stabilises multi-modal training and guides latent policy projection. FleetSafe-VLA enforces forward invariance of safety constraints over predicted spatio-temporal trajectories under bounded delay and uncertainty rather than instantaneous states.
 
 \subsection{8D Cognitive State Representation}
 To address the static assumptions of architectures like SaferPath, FleetSafe-VLA employs an 8D cognitive state capturing spatial, temporal, and semantic variables. In this framework, we strictly use $x$ to denote the low-level continuous system dynamics, while $s$ is used to denote the full cognitive state within the CMDP. We note that $n = 8$ corresponds to the full cognitive state dimension. The cognitive state $s$ extends standard models into an 8D formulation:
@@ -271,7 +271,7 @@ u^* &= \arg\min_{u, \delta} \quad \|u - u_{\text{vla}}\|^2 + \lambda \delta^2 \\
 U_\text{min} &\le u \le U_\text{max}
 \end{aligned}
 \end{equation}
-where $\epsilon_h = L_h \epsilon + \gamma v_{\max} \tau_{\max}$, and $L_h$ is the Lipschitz constant of the barrier function $h$. Here, $\dot{h}(\hat{x}, u) = \nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u)$. We ensure feasibility via slack relaxation, guaranteeing a solution exists at each timestep.
+where $\epsilon_h = L_h \epsilon + \gamma v_{\max} \tau_{\max}$, and $L_h$ is the Lipschitz constant of the barrier function $h$. Here, $\dot{h}(\hat{x}, u) = \nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u)$ defines the Lie derivative. We introduce slack variables $\delta \ge 0$ to ensure feasibility of the objective with penalty $\lambda |\delta|^2$, guaranteeing a solution exists at each timestep.
 
 Then for all trajectories $x(t)$ under $u^*$, the barrier satisfies:
 \begin{equation}
