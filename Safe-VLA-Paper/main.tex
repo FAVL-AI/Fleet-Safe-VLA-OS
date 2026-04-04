@@ -44,7 +44,7 @@ We derive a \textbf{delay-robust safety condition} that explicitly bounds degrad
 
 Evaluated in a high-fidelity Simulation-to-Twin (Sim-to-Twin) environment, FleetSafe-VLA reduces Safety Violation Rate by over an order of magnitude compared to SaferPath, while improving proactive safety as measured by Time-To-Preempt (TTP) and maintaining low Deadline Miss Rate (DMR).
 
-Our results establish that \textbf{formal safety, semantic reasoning, and real-time constraints can be unified} in VLA systems without compromising performance.
+Our results establish that \textbf{formal safety, semantic reasoning, and real-time constraints can be unified} in VLA systems without compromising performance. FleetSafe-VLA establishes a unified framework bridging semantic reasoning and formally verified control under real-time constraints.
 \end{abstract}
 
 \paragraph*{Keywords:}
@@ -237,7 +237,7 @@ h_{SBF}(x, \ell) = \min_i \left( \|p - p_{h,i}\|^2 - d_{min}^2(\ell)_i \right)
 where $d_{min}(\ell)$ is a language-conditioned safety margin derived from task semantics. For example, a ``no-entry'' language constraint increases $d_{min}$ near restricted zones, while ``follow corridor'' reduces lateral constraints. Assuming each $h_i$ is locally Lipschitz, the minimum operation strictly preserves forward invariance under Filippov solutions and Clarke generalized gradients~\cite{clarke1990nonsmooth}. This composition enables delay robustness and removes static-environment constraints.
 
 \subsection{Delay-Robust Control Barrier Function QP}
-The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1. The underlying active-set solver bounds computational complexity to $\mathcal{O}(n^3 + mn^2)$ per step, where $n$ is the control dimension and $m$ is the number of active safety constraints (agents, zones, semantic constraints). In practice, the number of active constraints is sparse and scales with local agent density, enabling real-time performance despite worst-case cubic complexity. We solve QPs with $n < 20$, yielding $<10$\,ms solve time on embedded GPUs. Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
+The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1. The underlying active-set solver bounds computational complexity to $\mathcal{O}(n^3 + mn^2)$ per step, where $n$ is the state dimension and $m$ is the number of active safety constraints (agents, zones, semantic constraints). In practice, the number of active constraints is sparse and scales with local agent density, enabling real-time performance despite worst-case cubic complexity. We solve QPs with $n < 20$, yielding $<10$\,ms solve time on embedded GPUs. Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
 
 \textbf{Theorem 1 (Delay-Robust Practical Forward Invariance).}
 
@@ -267,11 +267,11 @@ Let control be defined via:
 \begin{equation}
 \begin{aligned}
 u^* &= \arg\min_{u, \delta} \quad \|u - u_{\text{vla}}\|^2 + \lambda \delta^2 \\
-\text{s.t.} \quad \dot{h}(\hat{x}, u) &\geq -\alpha h(\hat{x}) - \epsilon_h - \delta \\
+\text{s.t.} \quad \nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u) &\geq -\alpha h(\hat{x}) - \epsilon_h - \delta \\
 U_\text{min} &\le u \le U_\text{max}
 \end{aligned}
 \end{equation}
-where $\epsilon_h = L_h \epsilon + \gamma v_{\max} \tau_{\max}$, and $L_h$ is the Lipschitz constant of the barrier function $h$. Here, $\dot{h}(\hat{x}, u) = \nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u)$. Infeasibility is handled via relaxation with slack variables, ensuring continuity of control.
+where $\epsilon_h = L_h \epsilon + \gamma v_{\max} \tau_{\max}$, and $L_h$ is the Lipschitz constant of the barrier function $h$. Here, $\dot{h}(\hat{x}, u) = \nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u)$. We ensure feasibility via slack relaxation, guaranteeing a solution exists at each timestep.
 
 Then for all trajectories $x(t)$ under $u^*$, the barrier satisfies:
 \begin{equation}
