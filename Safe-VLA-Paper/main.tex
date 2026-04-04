@@ -82,7 +82,7 @@ We make the following contributions:
 Prior work such as OpenVLA~\cite{openvla2024} and RT-2~\cite{richter2023rt2} demonstrates strong semantic reasoning but lacks formal safety guarantees.
 
 \textbf{Safety-Constrained Navigation.}
-SaferPath~\cite{zhang2026saferpath} integrates optimisation-based safety via static traversability maps. However, it structurally fails to anticipate dynamic intersections due to unmodelled future interactions, making it fails under latency due to lack of prediction under VLA inference latency. FleetSafe-VLA solves this exact gap by enforcing prediction-bound dynamic envelopes.
+SaferPath~\cite{zhang2026saferpath} integrates optimisation-based safety via static traversability maps. However, it is limited in its ability to anticipate dynamic intersections due to unmodelled future interactions, making it fail under latency due to lack of prediction under VLA inference latency. FleetSafe-VLA solves this exact gap by enforcing prediction-bound dynamic envelopes.
 
 \textbf{Control Barrier Functions.}
 CBFs provide formal guarantees but are typically applied to static or low-dimensional systems~\cite{ames2017cbf}. Recent extensions explore hybrid MPC-CBF formulations for dynamic feasibility and enriched robustness~\cite{zeng2021mpccbf, dawson2023cbfsurvey}.
@@ -133,7 +133,7 @@ The objective is to find a policy $\pi^*$ that maximises the expected discounted
 \end{equation}
 
 \subsection{Safety Specification via Signal Temporal Logic}
-We formalise hospital safety requirements as STL~\cite{maler2004stl, li2017stl_rl} specifications.
+We formalise hospital safety requirements as STL~\cite{donze2010stl, li2017stl_rl} specifications.
 Let $\varphi_\text{zone}$ denote the zone compliance specification:
 \begin{equation}
 \label{eq:stl}
@@ -271,7 +271,7 @@ u^* &= \arg\min_{u, \delta} \quad \|u - u_{\text{vla}}\|^2 + \lambda \delta^2 \\
 U_\text{min} &\le u \le U_\text{max}
 \end{aligned}
 \end{equation}
-where $\epsilon_h = L_h \epsilon + \gamma v_{\max} \tau_{\max}$, and $L_h$ is the Lipschitz constant of the barrier function $h$. Here, $\dot{h}(\hat{x}, u) = \nabla h(\hat{x})^\top f(\hat{x}, u)$. Infeasibility is handled via relaxation with slack variables, ensuring continuity of control.
+where $\epsilon_h = L_h \epsilon + \gamma v_{\max} \tau_{\max}$, and $L_h$ is the Lipschitz constant of the barrier function $h$. Here, $\dot{h}(\hat{x}, u) = \nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u)$. Infeasibility is handled via relaxation with slack variables, ensuring continuity of control.
 
 Then for all trajectories $x(t)$ under $u^*$, the barrier satisfies:
 \begin{equation}
@@ -693,7 +693,7 @@ The ablation data clearly points out that dropping any single component (such as
 \textbf{Concern 2: Does the delay-robust formulation hold in practice?}
 
 \emph{Response:}
-We tested the logic directly by forcing latency delays of up to 200ms. The system degrades steadily rather than catastrophically, and both SVR and DMR stay within the predicted limits. Without the explicit delay term, the robot starts hitting things almost immediately.
+We tested the logic directly by forcing latency delays of up to 200ms. The system degrades steadily rather than catastrophically, and both SVR and DMR stay within the predicted limits. Without the explicit delay term, performance degrades significantly, leading to frequent safety violations.
 
 \textbf{Concern 3: Computational overhead of CBF-QP?}
 
