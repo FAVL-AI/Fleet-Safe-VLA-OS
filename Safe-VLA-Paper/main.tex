@@ -42,7 +42,7 @@ We present \textbf{FleetSafe-VLA}, a delay-robust safety framework that enforces
 
 We derive a \textbf{delay-robust safety condition} that explicitly bounds degradation under latency and prove forward invariance of the safe set under bounded uncertainty.
 
-Evaluated in a high-fidelity \textbf{Simulation-to-Twin (Sim-to-Twin)} digital twin, FleetSafe-VLA reduces Safety Violation Rate by over an order of magnitude compared to SaferPath, while improving proactive safety as measured by Time-To-Preempt (TTP) and maintaining low Deadline Miss Rate (DMR).
+Evaluated in a high-fidelity Simulation-to-Twin (Sim-to-Twin) environment, FleetSafe-VLA reduces Safety Violation Rate by over an order of magnitude compared to SaferPath, while improving proactive safety as measured by Time-To-Preempt (TTP) and maintaining low Deadline Miss Rate (DMR).
 
 Our results demonstrate that \textbf{formal safety, semantic reasoning, and real-time constraints can be unified} in VLA systems without compromising performance.
 \end{abstract}
@@ -70,7 +70,7 @@ We make the following contributions:
     \item \textbf{Semantic Barrier Functions (SBF):} Language-conditioned safety constraints over multi-agent environments.
     \item \textbf{8D Cognitive State Representation:} Unifying spatial, temporal, and semantic reasoning.
     \item \textbf{New Safety Metrics:} Including Time-To-Preempt (TTP) for proactive safety evaluation.
-    \item \textbf{Sim-to-Twin Validation:} A high-fidelity digital twin demonstrating robustness under noise and latency.
+    \item \textbf{Simulation-to-Twin Validation:} A high-fidelity Simulation-to-Twin (Sim-to-Twin) environment demonstrating robustness under noise and latency.
 \end{itemize}
 
 % =============================================================================
@@ -261,7 +261,7 @@ Assume:
 \item \textbf{(A5)} QP feasibility via bounded slack $\delta \le \delta_{\max}$
 \end{itemize}
 
-Assume $h(x)$ is Lipschitz continuous with constant $L_h$, and the disturbance induced by delay and estimation error is bounded.
+Assume $h(x)$ is Lipschitz continuous with constant $L_h$, and the system operates under bounded disturbance $d(t)$ such that $\|d(t)\| \le \epsilon_h$.
 
 Let control be defined via:
 \begin{equation}
@@ -618,7 +618,7 @@ Reported results denote averages recorded across 5 independent random training s
 \label{sec:data}
 We plan a three-stage sim-to-real pipeline:
 (1)~train in Isaac Sim with domain randomisation,
-(2)~validate in a sim-to-sim transfer environment with different visual appearance,
+(2)~validate in a Simulation-to-Twin (Sim-to-Twin) transfer environment with different visual appearance,
 (3)~deploy on hardware with runtime CBF-QP safety monitoring.
 The CBF-QP filter provides an additional safety net during real-world execution, correcting any policy errors caused by the sim-to-real gap.
 
