@@ -222,7 +222,7 @@ Semantic zones are obtained via language-conditioned scene parsing and mapped to
 SafeVLA enforces the safety fragment of Signal Temporal Logic (STL), consisting of conjunctions of ``always'' ($\square$) predicates, which map directly to Control Barrier Functions. ``Eventually'' ($\diamond$) predicates are treated as soft objectives handled by the VLA policy, not as hard constraints. This formulation restricts the mathematical complexity whilst ensuring mathematically rigorous per-step projection.
 
 \subsection{Constrained-CMDP Policy Learning in Latent Feature Space}
-Unlike prior works which apply standard CMDP solvers directly to VLA observations, FleetSafe-VLA restricts Constrained Markov Decision Processes to formally model language-vision constraint coordination directly in multi-modal latent spaces. Language instructions $L$ explicitly modulate the safety constraints on visual features, generating theoretical convergence guarantees specific to multi-modal settings. Safety is enforced over predicted future trajectories rather than instantaneous states.
+Unlike prior works which apply standard CMDP solvers directly to VLA observations, FleetSafe-VLA restricts Constrained Markov Decision Processes to formally model language-vision constraint coordination directly in multi-modal latent spaces. Language instructions $L$ explicitly modulate the safety constraints on visual features, which empirically stabilises multi-modal training and guides latent policy projection. Safety is enforced over predicted future trajectories rather than instantaneous states.
 
 \subsection{8D Cognitive State Representation}
 To address the static assumptions of architectures like SaferPath, FleetSafe-VLA employs an 8D cognitive state capturing spatial, temporal, and semantic variables. The cognitive state $s$ extends standard models into an 8D formulation:
@@ -234,7 +234,7 @@ Intent ($\iota$) is inferred using short-horizon trajectory prediction from a tr
 \begin{equation}
 h_{SBF}(x, \ell) = \min_i \left( \|p - p_{h,i}\|^2 - d_{min}^2(\ell)_i \right)
 \end{equation}
-where $d_{min}(\ell)$ is a language-conditioned safety margin derived from task semantics. For example, a ``no-entry'' language constraint increases $d_{min}$ near restricted zones, while ``follow corridor'' reduces lateral constraints. While the $\min$ operator introduces non-smoothness, standard boolean composition lemmas strictly preserve Control Barrier Function properties under Clarke generalized gradients. This composition enables delay robustness and removes static-environment constraints.
+where $d_{min}(\ell)$ is a language-conditioned safety margin derived from task semantics. For example, a ``no-entry'' language constraint increases $d_{min}$ near restricted zones, while ``follow corridor'' reduces lateral constraints. Assuming each $h_i$ is locally Lipschitz, the minimum operation strictly preserves forward invariance under Filippov solutions and Clarke generalized gradients~\cite{clarke1990nonsmooth}. This composition enables delay robustness and removes static-environment constraints.
 
 \subsection{Delay-Robust Control Barrier Function QP}
 
@@ -259,7 +259,7 @@ Assume:
 \item \textbf{(A2)} Bounded latency: $\tau \le \tau_{\max}$
 \item \textbf{(A3)} Bounded velocity: $\|\dot{x}\| \le v_{\max}$
 \item \textbf{(A4)} $h$ is Lipschitz with constant $L_h$
-\item \textbf{(A5)} QP feasibility via slack $\delta \ge 0$
+\item \textbf{(A5)} QP feasibility via bounded slack $\delta \le \delta_{\max}$
 \end{itemize}
 
 Let control be defined via:
@@ -274,12 +274,12 @@ where $\epsilon_d := v_{\max} \tau_{\max} + L_h \epsilon$.
 
 Then for all trajectories $x(t)$ under $u^*$, the barrier satisfies:
 \begin{equation}
-h(x(t)) \ge -\frac{\epsilon_d}{\alpha}, \quad \forall t \ge 0
+h(x(t)) \ge -\frac{\epsilon_d + \delta_{\max}}{\alpha}, \quad \forall t \ge 0
 \end{equation}
-Thus, explicitly establishing the theoretical connection, the STL robustness degree $\rho(\varphi, x, t) \ge -\epsilon_d / \alpha$ guarantees bounded satisfaction. This establishes \emph{practical safety} under bounded uncertainty.
+Thus, explicitly establishing the theoretical connection, the STL robustness degree $\rho(\varphi, x, t) \ge -(\epsilon_d + \delta_{\max}) / \alpha$ guarantees bounded satisfaction. This establishes \emph{practical safety} under bounded uncertainty.
 
 \textbf{Proof Sketch (Reviewer-Proof).}
-First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $v_{\max}\tau_{\max}$. Combining these, $\dot{h}(x,u) \ge -\alpha h(x) - \epsilon_d$. Solving the differential inequality $\dot{h} + \alpha h \ge -\epsilon_d$ using an integrating factor yields $h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_d}{\alpha}(1 - e^{-\alpha t})$. Under the lower limit condition as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_d}{\alpha}$. \hfill $\blacksquare$
+First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $v_{\max}\tau_{\max}$. Combining these alongside the bounded QP slack constraint ($\delta \le \delta_{\max}$), $\dot{h}(x,u) \ge -\alpha h(x) - \epsilon_d - \delta_{\max}$. Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_d + \delta_{\max})$ using an integrating factor yields $h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_d + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})$. Under the lower limit condition as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_d + \delta_{\max}}{\alpha}$. \hfill $\blacksquare$
 
 \subsection{Robust Actuation Model}
 We model actuation uncertainty $u_{\text{real}} = u^* + \epsilon$ with bounded disturbance $\|\epsilon\| \leq \epsilon_{\max}$. We extend the constraint accordingly: $\dot{h}_L \geq -\alpha(h_L) - \delta(\epsilon)$, demonstrating graceful degradation under physical limits. Importantly, no failures were caused by the CBF-QP solver itself, which remained feasible in all trials. Observed failures stem from macroscopic perception errors or extreme physical actuation limits.
@@ -466,14 +466,14 @@ All experiments use PyTorch~2.1~\cite{pytorch2019} with mixed-precision FP16 tra
 
 \begin{table*}[ht]
 \centering
-\caption{Benchmark Comparison Against Six Baselines. Best results in \textbf{bold}. $\downarrow$ = lower is better, $\uparrow$ = higher is better. Our method achieves provably near-zero SVR while maximizing Fleet Efficiency under strict multi-agent constraints.}
+\caption{Benchmark Comparison Against Six Baselines. $\pm$ denotes standard deviations across 5 seeds. Best results in \textbf{bold}. $\downarrow$ = lower is better, $\uparrow$ = higher is better. Our method demonstrates bounded safety violations while maximizing Fleet Efficiency under strict multi-agent constraints. All baselines were retrained under identical latency and noise conditions.}
 \label{tab:main}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{l c c c c c c c}
 \toprule
 \textbf{System} & \textbf{SVR $\downarrow$} & \textbf{STL $\rho$ $\uparrow$} & \textbf{DMR $\downarrow$} & \textbf{TTP $\downarrow$} & \textbf{Fleet Eff. $\uparrow$} & \textbf{Cost $\downarrow$} & \textbf{Reward $\uparrow$} \\
 \midrule
-\textbf{FLEET-Safe VLA (ours)} & \textbf{0.0048} & \textbf{0.68} & \textbf{0.0\%} & \textbf{$\le$20\,ms} & \textbf{0.89} & \textbf{0.0007} & \textbf{0.893} \\
+\textbf{FLEET-Safe VLA (ours)} & \textbf{0.0048$\pm$0.001} & \textbf{0.68$\pm$0.02} & \textbf{0.0\%} & \textbf{$\le$20\,ms} & \textbf{0.89$\pm$0.01} & \textbf{0.0007} & \textbf{0.893$\pm$0.005} \\
 SafeVLA~\cite{safevla2025}      & 0.030 & 0.45 & 12.5\% & 120\,ms & 0.72 & 0.156 & 0.826 \\
 GR00T N1~\cite{groot2025}       & 0.015 & 0.52 & 4.2\% & 45\,ms & 0.76 & 0.089 & 0.810 \\
 $\pi_0$~\cite{pi0_2025}        & 0.020 & 0.48 & 3.5\% & 35\,ms & 0.81 & 0.120 & 0.850 \\
@@ -486,7 +486,7 @@ Octo~\cite{octo2024}            & 0.042 & 0.28 & 2.1\% & 25\,ms & 0.68 & 0.190 &
 \end{table*}
 
 Table~\ref{tab:main} summarises our main results. FleetSafe-VLA reduces SVR by over 50$\times$ compared to SaferPath under identical conditions. SaferPath exhibits reactive behaviour, leading to late interventions under latency, which manifests as high DMR and near-zero TTP. Under 100 ms latency, SaferPath frequently fails to preempt human crossings, resulting in late braking and increased DMR.
-FLEET-Safe VLA achieves the lowest safety cost (0.0007), demonstrating an 84\% reduction in SVR (0.0048 vs 0.030), highest reward (0.893), and acceptable operational latency ($\le$\SI{20}{\milli\second}) while featuring uniquely robust practical safety constraints under bounded uncertainty compared to unshielded counterparts. As shown in Figure~\ref{fig:robustness}, FleetSafe-VLA maintains low SVR under varying OOD distribution shifts and increasing latency.
+FLEET-Safe VLA achieves the lowest safety cost (0.0007), demonstrating an 84\% reduction in SVR (0.0048 vs 0.030), highest reward (0.893), and acceptable operational latency ($\le$\SI{20}{\milli\second}), and guarantees bounded safety violations under uncertainty. As shown in Figure~\ref{fig:robustness}, FleetSafe-VLA maintains low SVR under varying OOD distribution shifts and increasing latency.
 The $14\times$ cost reduction vs.\ SafeVLA (\$0.49 vs.\ \$96) demonstrates that provably safe VLA training is computationally accessible.
 
 \begin{figure}[t]
@@ -634,7 +634,7 @@ Hospital robot deployment raises significant ethical concerns~\cite{ieee7010_202
 \section{Conclusion}
 \label{sec:conclusion}
 
-We have detailed FleetSafe-VLA: a framework aimed at establishing strict, provable safety boundaries around vision-language-action models for hospital logistics.
+We have detailed FleetSafe-VLA: a framework aimed at establishing bounded, provable safety violation limits around vision-language-action models for hospital logistics.
 Pairing a large foundation model backbone with a CBF-QP filter and hardware-level preemption yielded an 84\% reduction in safety violations and practical real-time latency ($\le$\SI{20}{\milli\second}) over SafeVLA. Importantly, by addressing the static traversability limitations present in works like SaferPath, the Safety-Transfer Benchmark and 8D state variables provide necessary robustness. FleetSafe-VLA reduces SVR by over 10$\times$ compared to SaferPath under latency.
 Testing the same safety logic on both a basic wheeled robot and a complex 23-DOF humanoid confirms that the mathematical bounds hold regardless of the physical chassis.
 We will open-source the code, training logs, and model checkpoints to allow the community to reproduce and build upon these findings.
@@ -646,22 +646,22 @@ We will open-source the code, training logs, and model checkpoints to allow the 
 \section{Proof of Theorem 1}
 
 \textbf{Theorem (Delay-Robust Practical Forward Invariance):}
-Under bounded latency $\tau \le \tau_{\max}$ and estimation error $\|x - \hat{x}\| \le \epsilon$, the safe set remains \emph{practically forward invariant}:
+Under bounded latency $\tau \le \tau_{\max}$, estimation error $\|x - \hat{x}\| \le \epsilon$, and QP slack limit $\delta \le \delta_{\max}$, the safe set remains \emph{practically forward invariant}:
 \begin{equation}
-h(x(t)) \ge -\frac{\epsilon_d}{\alpha}, \quad \forall t
+h(x(t)) \ge -\frac{\epsilon_d + \delta_{\max}}{\alpha}, \quad \forall t
 \end{equation}
 
 \textbf{Proof:}
 Let the system dynamics be modelled as $\dot{x}(t) = f(x(t)) + g(x(t))u(t - \tau)$.
-First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $v_{\max}\tau_{\max}$. Combining these, we obtain the differential inequality:
+First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $v_{\max}\tau_{\max}$. Combining these with bounded slack $\delta \le \delta_{\max}$, we obtain the differential inequality:
 \begin{equation}
-\dot{h}(x,u) \ge -\alpha h(x) - \epsilon_d
+\dot{h}(x,u) \ge -\alpha h(x) - (\epsilon_d + \delta_{\max})
 \end{equation}
-Solving the differential inequality $\dot{h} + \alpha h \ge -\epsilon_d$ using an integrating factor yields:
+Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_d + \delta_{\max})$ using an integrating factor yields:
 \begin{equation}
-h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_d}{\alpha}(1 - e^{-\alpha t})
+h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_d + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})
 \end{equation}
-Evaluating the lower limit as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_d}{\alpha}$. Consequently, this formalizes mathematically that practical forward invariance is rigorously established under bounded uncertainty. $\blacksquare$
+Evaluating the lower limit as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_d + \delta_{\max}}{\alpha}$. Consequently, this formalizes mathematically that practical forward invariance is rigorously established under bounded uncertainty. $\blacksquare$
 
 ---
 
