@@ -82,7 +82,7 @@ We make the following contributions:
 Prior work such as OpenVLA~\cite{openvla2024} and RT-2~\cite{richter2023rt2} demonstrates strong semantic reasoning but lacks formal safety guarantees.
 
 \textbf{Safety-Constrained Navigation.}
-SaferPath~\cite{zhang2026saferpath} integrates optimisation-based safety via static traversability maps. However, it is limited in its ability to anticipate dynamic intersections due to unmodelled future interactions, making it fail under latency due to lack of prediction under VLA inference latency. FleetSafe-VLA solves this exact gap by enforcing prediction-bound dynamic envelopes.
+SaferPath~\cite{zhang2026saferpath} integrates optimisation-based safety via static traversability maps. However, it is limited in its ability to anticipate dynamic intersections due to unmodelled future interactions, making it unable to handle latency effectively due to lack of prediction under VLA inference latency. FleetSafe-VLA addresses this limitation by enforcing prediction-bound dynamic envelopes.
 
 \textbf{Control Barrier Functions.}
 CBFs provide formal guarantees but are typically applied to static or low-dimensional systems~\cite{ames2017cbf}. Recent extensions explore hybrid MPC-CBF formulations for dynamic feasibility and enriched robustness~\cite{zeng2021mpccbf, dawson2023cbfsurvey}.
@@ -225,7 +225,7 @@ SafeVLA enforces the safety fragment of Signal Temporal Logic (STL), consisting 
 Unlike prior works which apply standard CMDP solvers directly to VLA observations, FleetSafe-VLA restricts Constrained Markov Decision Processes to formally model language-vision constraint coordination directly in multi-modal latent spaces. Language instructions $L$ explicitly modulate the safety constraints on visual features, which empirically stabilises multi-modal training and guides latent policy projection. Safety is enforced over predicted future trajectories rather than instantaneous states.
 
 \subsection{8D Cognitive State Representation}
-To address the static assumptions of architectures like SaferPath, FleetSafe-VLA employs an 8D cognitive state capturing spatial, temporal, and semantic variables. The cognitive state $s$ extends standard models into an 8D formulation:
+To address the static assumptions of architectures like SaferPath, FleetSafe-VLA employs an 8D cognitive state capturing spatial, temporal, and semantic variables. In this framework, we strictly use $x$ to denote the low-level continuous system dynamics, while $s$ is used to denote the full cognitive state within the CMDP. The cognitive state $s$ extends standard models into an 8D formulation:
 \begin{equation}
 s = \underbrace{(x, y, v, \dot{p})}_{\text{4D Spatial/Dynamic}} \;\cup\; \underbrace{(\Delta t)}_{\text{1D Temporal}} \;\cup\; \underbrace{(g, \iota, a)}_{\text{3D Semantic}}
 \end{equation}
@@ -670,9 +670,9 @@ Evaluating the lower limit as $t \to \infty$, we obtain the guaranteed envelope 
 
 \begin{table}[h]
 \centering
-\begin{tabular}{lccc}
+\begin{tabular}{@{}lccc@{}}
 \toprule
-Variant & SVR & TTP & DMR \\
+\textbf{Variant} & \textbf{SVR} & \textbf{TTP} & \textbf{DMR} \\
 \midrule
 Full Model & 0.005 & 0.8 & 0.02 \\
 w/o 8D & 0.12 & 0.3 & 0.25 \\
@@ -680,7 +680,7 @@ w/o SBF & 0.18 & 0.2 & 0.30 \\
 w/o latency term & 0.35 & 0.1 & 0.50 \\ % SVR spikes at tau > 100ms
 \bottomrule
 \end{tabular}
-\caption{Ablation study demonstrating contribution of each component.}
+\caption{Ablation study establishing the contribution of each component.}
 \end{table}
 
 \section{Reviewer Rebuttal (Anticipated Concerns)}
