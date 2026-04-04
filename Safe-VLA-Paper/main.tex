@@ -237,8 +237,7 @@ h_{SBF}(x, \ell) = \min_i \left( \|p - p_{h,i}\|^2 - d_{min}^2(\ell)_i \right)
 where $d_{min}(\ell)$ is a language-conditioned safety margin derived from task semantics. For example, a ``no-entry'' language constraint increases $d_{min}$ near restricted zones, while ``follow corridor'' reduces lateral constraints. Assuming each $h_i$ is locally Lipschitz, the minimum operation strictly preserves forward invariance under Filippov solutions and Clarke generalized gradients~\cite{clarke1990nonsmooth}. This composition enables delay robustness and removes static-environment constraints.
 
 \subsection{Delay-Robust Control Barrier Function QP}
-
-The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1. The underlying active-set solver bounds computational complexity to $\mathcal{O}(n^3 + mn^2)$ per step, where $n$ is the control dimension and $m$ is the number of active safety constraints (agents, zones, semantic constraints). In practice, we solve QPs with $n < 20$, yielding $<10$\,ms solve time on embedded GPUs. Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
+The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1. The underlying active-set solver bounds computational complexity to $\mathcal{O}(n^3 + mn^2)$ per step, where $n$ is the control dimension and $m$ is the number of active safety constraints (agents, zones, semantic constraints). In practice, the number of active constraints scales linearly with the number of nearby agents, yielding near real-time performance in dense environments. We solve QPs with $n < 20$, yielding $<10$\,ms solve time on embedded GPUs. Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
 
 \textbf{Theorem 1 (Delay-Robust Practical Forward Invariance).}
 
@@ -266,20 +265,20 @@ Let control be defined via:
 \begin{equation}
 \begin{aligned}
 u^* &= \arg\min_{u, \delta} \quad \|u - u_{\text{vla}}\|^2 + \lambda \delta^2 \\
-\text{s.t.} \quad \dot{h}(\hat{x}, u) &\geq -\alpha h(\hat{x}) - \epsilon_d - \delta \\
+\text{s.t.} \quad \dot{h}(\hat{x}, u) &\geq -\alpha h(\hat{x}) - \epsilon_h - \delta \\
 U_\text{min} &\le u \le U_\text{max}
 \end{aligned}
 \end{equation}
-where $\epsilon_d := v_{\max} \tau_{\max} + L_h \epsilon$, and $L_h$ is the Lipschitz constant of the barrier function.
+where $\epsilon_h = L_h \epsilon + \gamma v_{\max} \tau_{\max}$, and $L_h$ is the Lipschitz constant of the barrier function $h$.
 
 Then for all trajectories $x(t)$ under $u^*$, the barrier satisfies:
 \begin{equation}
-h(x(t)) \ge -\frac{\epsilon_d + \delta_{\max}}{\alpha}, \quad \forall t \ge 0
+h(x(t)) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}, \quad \forall t \ge 0
 \end{equation}
-Thus, explicitly establishing the theoretical connection, the STL robustness degree $\rho(\varphi, x, t) \ge -(\epsilon_d + \delta_{\max}) / \alpha$ provides bounded safety guarantees. This ensures practical safety under bounded uncertainty.
+Thus, explicitly establishing the theoretical connection, the STL robustness degree $\rho(\varphi, x, t) \ge -(\epsilon_h + \delta_{\max}) / \alpha$ provides bounded safety guarantees. This ensures practical safety under bounded uncertainty.
 
 \textbf{Proof Sketch (Reviewer-Proof).}
-First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $v_{\max}\tau_{\max}$. Combining these alongside the bounded QP slack constraint ($\delta \le \delta_{\max}$), $\dot{h}(x,u) \ge -\alpha h(x) - \epsilon_d - \delta_{\max}$. Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_d + \delta_{\max})$ using an integrating factor yields $h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_d + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})$. Under the lower limit condition as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_d + \delta_{\max}}{\alpha}$. \hfill $\blacksquare$
+First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $\gamma v_{\max}\tau_{\max}$. Combining these alongside the bounded QP slack constraint ($\delta \le \delta_{\max}$), $\dot{h}(x,u) \ge -\alpha h(x) - \epsilon_h - \delta_{\max}$. Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_h + \delta_{\max})$ using an integrating factor yields $h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_h + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})$. Under the lower limit condition as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}$. \hfill $\blacksquare$
 
 \subsection{Robust Actuation Model}
 We model actuation uncertainty $u_{\text{real}} = u^* + \epsilon$ with bounded disturbance $\|\epsilon\| \leq \epsilon_{\max}$. We extend the constraint accordingly: $\dot{h}_L \geq -\alpha(h_L) - \delta(\epsilon)$, demonstrating graceful degradation under physical limits. Importantly, no failures were caused by the CBF-QP solver itself, which remained feasible in all trials. Observed failures stem from macroscopic perception errors or extreme physical actuation limits.
@@ -648,20 +647,20 @@ Real-world Sim-to-Real validation is deferred to future work, where additional c
 \textbf{Theorem (Delay-Robust Practical Forward Invariance):}
 Under bounded latency $\tau \le \tau_{\max}$, estimation error $\|x - \hat{x}\| \le \epsilon$, and QP slack limit $\delta \le \delta_{\max}$, the safe set remains \emph{practically forward invariant}:
 \begin{equation}
-h(x(t)) \ge -\frac{\epsilon_d + \delta_{\max}}{\alpha}, \quad \forall t
+h(x(t)) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}, \quad \forall t
 \end{equation}
 
 \textbf{Proof:}
 Let the system dynamics be modelled as $\dot{x}(t) = f(x(t)) + g(x(t))u(t - \tau)$.
-First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $v_{\max}\tau_{\max}$. Combining these with bounded slack $\delta \le \delta_{\max}$, we obtain the differential inequality:
+First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $\gamma v_{\max}\tau_{\max}$. Combining these with bounded slack $\delta \le \delta_{\max}$, we obtain the differential inequality:
 \begin{equation}
-\dot{h}(x,u) \ge -\alpha h(x) - (\epsilon_d + \delta_{\max})
+\dot{h}(x,u) \ge -\alpha h(x) - (\epsilon_h + \delta_{\max})
 \end{equation}
-Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_d + \delta_{\max})$ using an integrating factor yields:
+Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_h + \delta_{\max})$ using an integrating factor yields:
 \begin{equation}
-h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_d + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})
+h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_h + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})
 \end{equation}
-Evaluating the lower limit as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_d + \delta_{\max}}{\alpha}$. Consequently, this formalizes mathematically that practical forward invariance is rigorously established under bounded uncertainty. $\blacksquare$
+Evaluating the lower limit as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}$. Consequently, this formalizes mathematically that practical forward invariance is rigorously established under bounded uncertainty. $\blacksquare$
 
 ---
 
