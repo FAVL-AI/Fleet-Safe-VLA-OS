@@ -273,7 +273,8 @@ Let control be defined via:
 \begin{equation}
 \begin{aligned}
 u^* &= \arg\min_{u, \delta} \quad \|u - u_{\text{vla}}\|^2 + \lambda \delta^2 \\
-\text{s.t.} \quad \nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u) &\geq -\alpha h(\hat{x}) - \alpha\epsilon_h - \delta \\
+\text{s.t.} \quad &\nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u) \\
+&\quad \geq -\alpha h(\hat{x}) - \alpha\epsilon_h - \delta \\
 U_\text{min} &\le u \le U_\text{max}
 \end{aligned}
 \end{equation}
@@ -525,6 +526,7 @@ To ensure that FLEET-Safe VLA can be deployed on low-SWaP (Size, Weight, and Pow
 \begin{table}[h]
 \centering
 \caption{Inference efficiency with KV cache compression.}
+\resizebox{\columnwidth}{!}{
 \begin{tabular}{lccc}
 \toprule
 \textbf{Method} & \textbf{VRAM (MB)} $\downarrow$ & \textbf{Latency (s)} $\downarrow$ & \textbf{Throughput} $\uparrow$ \\
@@ -533,6 +535,7 @@ Baseline        & 8200 & 0.120 & 8.3 \\
 + TurboQuant    & 4100 & 0.105 & 9.5 \\
 \bottomrule
 \end{tabular}
+}
 \end{table}
 
 We verify that KV cache compression does not alter safety-critical metrics (SVR, TTP, DMR), confirming that efficiency gains are orthogonal to the proposed safety framework.
