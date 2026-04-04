@@ -229,7 +229,7 @@ To address the static assumptions of architectures like SaferPath, FleetSafe-VLA
 \begin{equation}
 s = \underbrace{(x, y, v, \dot{p})}_{\text{4D Spatial/Dynamic}} \;\cup\; \underbrace{(\Delta t)}_{\text{1D Temporal}} \;\cup\; \underbrace{(g, \iota, a)}_{\text{3D Semantic}}
 \end{equation}
-We refer to this explicitly as an 8D cognitive state space.
+We refer to this explicitly as an 8D cognitive state space. The semantic variables $(g, \iota, a)$ are estimated via VLA embeddings and are treated as bounded latent variables with estimation error incorporated into the safety margin.
 Intent ($\iota$) is inferred using short-horizon trajectory prediction from a transformer-based motion prior, while awareness ($a$) is computed from normalised attention maps over safety-critical regions (e.g., humans, restricted zones). By modelling these parameters alongside physical geometry, actuation delay ($\Delta t$), and language goal alignment ($g$), the Semantic Barrier Functions (SBF) are parametrised directly into an 8-dimensional space. Specifically, we define the language-conditioned SBF as the composition over multiple semantics $h_i$:
 \begin{equation}
 h_{SBF}(x, \ell) = \min_i \left( \|p - p_{h,i}\|^2 - d_{min}^2(\ell)_i \right)
@@ -237,7 +237,7 @@ h_{SBF}(x, \ell) = \min_i \left( \|p - p_{h,i}\|^2 - d_{min}^2(\ell)_i \right)
 where $d_{min}(\ell)$ is a language-conditioned safety margin derived from task semantics. For example, a ``no-entry'' language constraint increases $d_{min}$ near restricted zones, while ``follow corridor'' reduces lateral constraints. Assuming each $h_i$ is locally Lipschitz, the minimum operation strictly preserves forward invariance under Filippov solutions and Clarke generalized gradients~\cite{clarke1990nonsmooth}. This composition enables delay robustness and removes static-environment constraints.
 
 \subsection{Delay-Robust Control Barrier Function QP}
-The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1. The underlying active-set solver bounds computational complexity to $\mathcal{O}(n^3 + mn^2)$ per step, where $n$ is the control dimension and $m$ is the number of active safety constraints (agents, zones, semantic constraints). In practice, the number of active constraints scales linearly with the number of nearby agents, yielding near real-time performance in dense environments. We solve QPs with $n < 20$, yielding $<10$\,ms solve time on embedded GPUs. Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
+The CBF-QP is solved using OSQP with warm-starting enabled, ensuring deterministic real-time performance. Empirically, solve times remain below \SI{1}{\milli\second} for Yahboom and \SI{3.5}{\milli\second} for Unitree G1. The underlying active-set solver bounds computational complexity to $\mathcal{O}(n^3 + mn^2)$ per step, where $n$ is the control dimension and $m$ is the number of active safety constraints (agents, zones, semantic constraints). In practice, the number of active constraints is sparse and scales with local agent density, enabling real-time performance despite worst-case cubic complexity. We solve QPs with $n < 20$, yielding $<10$\,ms solve time on embedded GPUs. Real-world systems introduce perception and actuation delays $\tau$, meaning control applied is $u(t) = u^*(t - \tau)$.
 
 \textbf{Theorem 1 (Delay-Robust Practical Forward Invariance).}
 
@@ -260,6 +260,8 @@ Assume:
 \item \textbf{(A4)} $h$ is Lipschitz with constant $L_h$
 \item \textbf{(A5)} QP feasibility via bounded slack $\delta \le \delta_{\max}$
 \end{itemize}
+
+Assume $h(x)$ is Lipschitz continuous with constant $L_h$, and the disturbance induced by delay and estimation error is bounded.
 
 Let control be defined via:
 \begin{equation}
@@ -484,7 +486,7 @@ Octo~\cite{octo2024}            & 0.042 & 0.28 & 2.1\% & 25\,ms & 0.68 & 0.190 &
 }
 \end{table*}
 
-Table~\ref{tab:main} summarises our main results. FleetSafe-VLA reduces SVR by over 50$\times$ compared to SaferPath under identical conditions. SaferPath exhibits reactive behaviour, leading to late interventions under latency, which manifests as high DMR and near-zero TTP. Under 100 ms latency, SaferPath frequently fails to preempt human crossings, resulting in late braking and increased DMR.
+Table~\ref{tab:main} summarises our main results. Notably, FleetSafe-VLA maintains low SVR and DMR even under high latency, while SaferPath degrades rapidly due to its reactive formulation. FleetSafe-VLA reduces SVR by over 50$\times$ compared to SaferPath under identical conditions. SaferPath exhibits reactive behaviour, leading to late interventions under latency, which manifests as high DMR and near-zero TTP. Under 100 ms latency, SaferPath frequently fails to preempt human crossings, resulting in late braking and increased DMR.
 FLEET-Safe VLA achieves the lowest safety cost (0.0007), demonstrating a statistically significant 84\% reduction (95\% CI) in SVR (0.0048 vs 0.030), highest reward (0.893), and acceptable operational latency ($\le$\SI{20}{\milli\second}), and provides bounded safety guarantees under uncertainty. As shown in Figure~\ref{fig:robustness}, FleetSafe-VLA is robust under perturbations, maintaining low SVR under varying OOD distribution shifts and increasing latency.
 The $14\times$ cost reduction vs.\ SafeVLA (\$0.49 vs.\ \$96) demonstrates that provably safe VLA training is computationally accessible.
 
