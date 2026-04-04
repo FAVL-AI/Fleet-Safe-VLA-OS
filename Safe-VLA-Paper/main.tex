@@ -267,7 +267,7 @@ Let control be defined via:
 \begin{equation}
 \begin{aligned}
 u^* &= \arg\min_{u, \delta} \quad \|u - u_{\text{vla}}\|^2 + \lambda \delta^2 \\
-\text{s.t.} \quad \nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u) &\geq -\alpha h(\hat{x}) - \epsilon_h - \delta \\
+\text{s.t.} \quad \nabla h(\hat{x})^\top (f(\hat{x}) + g(\hat{x})u) &\geq -\alpha h(\hat{x}) - \alpha\epsilon_h - \delta \\
 U_\text{min} &\le u \le U_\text{max}
 \end{aligned}
 \end{equation}
@@ -275,12 +275,12 @@ where $\epsilon_h = L_h \epsilon + \gamma v_{\max} \tau_{\max}$, and $L_h$ is th
 
 Then for all trajectories $x(t)$ under $u^*$, the barrier satisfies:
 \begin{equation}
-h(x(t)) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}, \quad \forall t \ge 0
+h(x(t)) \ge -\frac{\alpha \epsilon_h + \delta_{\max}}{\alpha}, \quad \forall t \ge 0
 \end{equation}
-Thus, explicitly establishing the theoretical connection, the STL robustness degree $\rho(\varphi, x, t) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}$ provides bounded safety guarantees. This ensures practical safety under bounded uncertainty.
+Thus, explicitly establishing the theoretical connection, the STL robustness degree $\rho(\varphi, x, t) \ge -\frac{\alpha \epsilon_h + \delta_{\max}}{\alpha}$ provides bounded safety guarantees. This ensures practical safety under bounded uncertainty.
 
 \textbf{Proof Sketch (Reviewer-Proof).}
-First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $\gamma v_{\max}\tau_{\max}$. Combining these alongside the bounded QP slack constraint ($\delta \le \delta_{\max}$), $\dot{h}(x,u) \ge -\alpha h(x) - \epsilon_h - \delta_{\max}$. Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_h + \delta_{\max})$ using an integrating factor yields $h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_h + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})$. Under the lower limit condition as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}$. \hfill $\blacksquare$
+First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $\gamma v_{\max}\tau_{\max}$. Combining these alongside the bounded QP slack constraint ($\delta \le \delta_{\max}$), $\dot{h}(x,u) \ge -\alpha h(x) - \alpha\epsilon_h - \delta_{\max}$. Solving the differential inequality $\dot{h} + \alpha h \ge -(\alpha\epsilon_h + \delta_{\max})$ using an integrating factor yields $h(t) \ge e^{-\alpha t} h(0) - \frac{\alpha\epsilon_h + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})$. Under the lower limit condition as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\alpha \epsilon_h + \delta_{\max}}{\alpha}$. \hfill $\blacksquare$
 
 \subsection{Robust Actuation Model}
 We model actuation uncertainty $u_{\text{real}} = u^* + \epsilon$ with bounded disturbance $\|\epsilon\| \leq \epsilon_{\max}$. We extend the constraint accordingly: $\dot{h}_L \geq -\alpha(h_L) - \delta(\epsilon)$, demonstrating graceful degradation under physical limits. Importantly, no failures were caused by the CBF-QP solver itself, which remained feasible in all trials. Observed failures stem from macroscopic perception errors or extreme physical actuation limits.
@@ -649,28 +649,30 @@ Real-world Sim-to-Real validation is deferred to future work, where additional c
 \textbf{Theorem (Delay-Robust Practical Forward Invariance):}
 Under bounded latency $\tau \le \tau_{\max}$, estimation error $\|x - \hat{x}\| \le \epsilon$, and QP slack limit $\delta \le \delta_{\max}$, the safe set remains \emph{practically forward invariant}:
 \begin{equation}
-h(x(t)) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}, \quad \forall t
+h(x(t)) \ge -\frac{\alpha \epsilon_h + \delta_{\max}}{\alpha}, \quad \forall t
 \end{equation}
 
 \textbf{Proof:}
 Let the system dynamics be modelled as $\dot{x}(t) = f(x(t)) + g(x(t))u(t - \tau)$.
 First, the error decomposition is given by $\dot{h}(x,u) = \dot{h}(\hat{x},u) + \Delta_h$ with $|\Delta_h| \le L_h \epsilon$. Second, delay-induced drift limits physical deviation such that $\|\Delta x_\tau\| \le v_{\max} \tau_{\max}$, implying an additional degradation bounded by $\gamma v_{\max}\tau_{\max}$. Combining these with bounded slack $\delta \le \delta_{\max}$, we obtain the differential inequality:
 \begin{equation}
-\dot{h}(x,u) \ge -\alpha h(x) - (\epsilon_h + \delta_{\max})
+\dot{h}(x,u) \ge -\alpha h(x) - (\alpha\epsilon_h + \delta_{\max})
 \end{equation}
-Solving the differential inequality $\dot{h} + \alpha h \ge -(\epsilon_h + \delta_{\max})$ using an integrating factor yields:
+Solving the differential inequality $\dot{h} + \alpha h \ge -(\alpha\epsilon_h + \delta_{\max})$ using an integrating factor yields:
 \begin{equation}
-h(t) \ge e^{-\alpha t} h(0) - \frac{\epsilon_h + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})
+h(t) \ge e^{-\alpha t} h(0) - \frac{\alpha\epsilon_h + \delta_{\max}}{\alpha}(1 - e^{-\alpha t})
 \end{equation}
-Evaluating the lower limit as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\epsilon_h + \delta_{\max}}{\alpha}$. Consequently, this establishes practical forward invariance under bounded uncertainty. $\blacksquare$
+Evaluating the lower limit as $t \to \infty$, we obtain the guaranteed envelope lower bound $h(t) \ge -\frac{\alpha \epsilon_h + \delta_{\max}}{\alpha}$. Consequently, this establishes practical forward invariance under bounded uncertainty. $\blacksquare$
 
 ---
 
 \section{Additional Ablations}
 
-\begin{table}[h]
+\begin{table*}[ht]
 \centering
-\begin{tabular}{@{}lccc@{}}
+\caption{Ablation study establishing the contribution of each component.}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{@{}l c c c@{}}
 \toprule
 \textbf{Variant} & \textbf{SVR} & \textbf{TTP} & \textbf{DMR} \\
 \midrule
@@ -680,8 +682,8 @@ w/o SBF & 0.18 & 0.2 & 0.30 \\
 w/o latency term & 0.35 & 0.1 & 0.50 \\ % SVR spikes at tau > 100ms
 \bottomrule
 \end{tabular}
-\caption{Ablation study establishing the contribution of each component.}
-\end{table}
+}
+\end{table*}
 
 \section{Reviewer Rebuttal (Anticipated Concerns)}
 
